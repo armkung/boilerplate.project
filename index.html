@@ -1,0 +1,102 @@
+<html>
+	<head>
+	<% styles.forEach( function ( file ) { %>
+    <link rel="stylesheet" type="text/css" href="<%= file %>" /><% }); %>
+		
+		<style type="text/css">
+		     body,html { 
+		     	width: 100%;
+      			height: 100%; 
+      			margin: 0; 
+      			padding: 0; 
+      		}
+      		#canvas{
+				background-color: black; 			
+      		}
+      		#textbox{
+      			position: absolute;
+      			/*display: none;*/
+      			z-index: 9;
+      			/*background-color: gray;*/
+      		}
+			.draw-pad{				
+				height: 80%;
+			}
+			.chat-box{
+				background-color: gray;
+				height: 80%;
+			}
+		</style>
+	</head>
+
+
+	<body ng-app="socket" ng-controller="MainCtrl">
+
+		<script type="text/ng-template" id="hand_write.html">
+			<div class="draw-pad">
+				<div>
+					<button ng-click="animate()">Animate</button>
+					<button ng-click="drag()">Toggle Drag</button>
+					<button ng-click="clear()">Clear</button>
+				</div>
+				<div id="canvas"></div>
+			</div>
+		</script>
+
+		<script type="text/ng-template" id="text_write.html">
+			<div class="draw-pad">
+				<div>
+					<button ng-click="animate()">Animate</button>
+					<button ng-click="drag()">Toggle Drag</button>
+					<button ng-click="clear()">Clear</button>
+				</div>
+				<input id="textbox" ng-model="text">
+				<div id="canvas"></div>
+			</div>
+		</script>
+
+		<script type="text/ng-template" id="chat.html">
+			<div>
+				<div class="chat-box">
+					<div ng-repeat="msg in msgs">
+						{{msg}}
+					</div>
+				</div>
+				<button ng-click="sendMsg()">Send</button>
+				<input type="text" ng-model="text">
+				<div id="emo_pad" class="popover" >
+					
+				</div>
+				<button ng-click="show()" id="emo_btn" data-placement='top' rel="popover">
+				Emoticon</button>
+			</div>
+		</script>
+
+		<script type="text/ng-template" id="menu.html">
+			<div>
+				<div>
+					<button ng-click="connect()">Connect</button>		
+					<button ng-click="disconnect()">Disconnect</button>
+				</div>
+				<div>
+					<input type="text" ng-model="room">
+					<button ng-click="create()">Create Room</button>
+					<button ng-click="close()">Close Room</button>
+				</div>
+			</div>
+		</script>
+
+
+		<div class="container">
+			<div class="row">
+				<menu></menu>
+				<ng-view class="col-lg-8"></ng-view>
+				<chat class="col-lg-4"></chat>
+			</div>
+		</div>
+
+	<% scripts.forEach( function ( file ) { %>
+    <script type="text/javascript" src="<%= file %>"></script><% }); %>
+    
+	</body>
+</html>
