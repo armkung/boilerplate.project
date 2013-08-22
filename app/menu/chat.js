@@ -1,7 +1,6 @@
 app.controller('ChatCtrl', function($scope, Socket) {
 	$scope.msgs = [];
 	$scope.text = "";
-
 	$scope.sendMsg = function() {
 		// console.log($scope.text);
 		Socket.emit("send:msg", {
@@ -9,6 +8,7 @@ app.controller('ChatCtrl', function($scope, Socket) {
 		});
 		$scope.text = "";
 	};
+
 	$scope.init = function() {
 		Socket.on("send:msg", function(data) {
 			// console.log(data);
@@ -23,4 +23,11 @@ app.controller('ChatCtrl', function($scope, Socket) {
 		});
 	};
 	$scope.init();
+
+	$scope.$watch('img',function(){
+		$scope.msgs.push($scope.img);
+		Socket.emit("send:msg", {
+			msg: $scope.img
+		});
+	})
 });
