@@ -1,119 +1,115 @@
-app.service("HandWriter", function($rootScope, Canvas, DrawManager, Room) {
-	var self = this;
-	var cs = Canvas.canvas;
-	var isSeed = true,
-		isDraw = false;
+app.directive("handWriter", function(Canvas, DrawManager, Room, DataManager) {
+	return {
+		restrict: 'A',
+		scope: {
+			tool: '@'
+		},
+		controller: function($scope, $attrs) {
+			var type = "pos";
+			var cs = Canvas.canvas;
 
-	var tools = {
-		DRAG: 0,
-		CLEAR: 1,
-		DRAW: 2
-	};
-	var current;
+			DataManager.getData(type, function(data) {
+				draw(data, $scope.tool == DrawManager.tools.DRAG);
+			});
 
-	this.Tools = tools;
-	this.draw = function(data) {
-		if (data.id) {
-			if (Room.users.indexOf(data.id) == -1) {
-				Room.users.push(data.id);
-				DrawManager.newGroup(data.id);
-			}
-		} else {
-			if (data.isSeed) {
-				DrawManager.newGroup();
-			}
-		}
-
-		DrawManager.setCurrent(data.id);
-		DrawManager.drawBrush(data.x, data.y, data.isSeed);
-		if (current == tools.DRAG) {
-			DrawManager.canGroupDrag(true);
-		}
-	};
-
-	this.setTool = function(tool) {
-		var onDown, onMove, onUp;
-		current = tool;
-		switch (tool) {
-			case tools.DRAW:
-
-				onDown = function() {
-					isDraw = true;
-					isSeed = true;
-				};
-
-				onMove = function() {
-					if (isDraw) {
-						var pos = Canvas.getPosition();
-						var obj = {
-							x: pos.x,
-							y: pos.y
-						};
-						if (isSeed) {
-							obj.isSeed = isSeed;
-						}
-						self.draw(obj);
-						$rootScope.$emit('send_data', obj);
-						isSeed = false;
+			function draw(data, canDrag) {
+				if (data.id) {
+					if (Room.users.indexOf(data.id) == -1) {
+						Room.users.push(data.id);
+						DrawManager.newGroup(data.id);
 					}
-				};
+				} else {
+					if (data.isSeed) {
+						DrawManager.newGroup();
+					}
+				}
 
-				onUp = function() {
+				DrawManager.setCurrent(data.id);
+				DrawManager.drawBrush(data.x, data.y, data.isSeed);
+				if (canDrag) {
+					DrawManager.canGroupDrag(true);
+				}
+			}
+
+			$scope.$watch('tool', function() {
+				var onDown, onMove, onUp;
+				var isSeed = true,
 					isDraw = false;
-					isSeed = true;
-				};
-				DrawManager.canGroupDrag(false);
-				break;
-			case tools.DRAG:
-				DrawManager.canGroupDrag(true);
-				break;
-			case tools.CLEAR:
-				Canvas.clear();
-				break;
+
+				cs.unbind();
+				switch ($scope.tool) {
+					case DrawManager.tools.DRAW:
+
+						onDown = function() {
+							isDraw = true;
+							isSeed = true;
+						};
+
+						onMove = function() {
+							if (isDraw) {
+								var pos = Canvas.getPosition();
+								var obj = {
+									x: pos.x,
+									y: pos.y
+								};
+								if (isSeed) {
+									obj.isSeed = isSeed;
+								}
+								isSeed = false;
+								draw(obj);
+								DataManager.setData(type, obj);
+							}
+						};
+
+						onUp = function() {
+							isDraw = false;
+							isSeed = true;
+						};
+						DrawManager.canGroupDrag(false);
+
+						cs.bind("mousedown touchstart", onDown);
+						cs.bind("mousemove touchmove", onMove);
+						cs.bind("mouseup touchend touchcancel", onUp);
+						break;
+					case DrawManager.tools.DRAG:
+						DrawManager.canGroupDrag(true);
+
+						break;
+					case DrawManager.tools.CLEAR:
+						Canvas.clear();
+						break;
+				}
+			});
 		}
-		cs.unbind();
-		cs.bind("mousedown touchstart", onDown);
-		cs.bind("mousemove touchmove", onMove);
-		cs.bind("mouseup touchend touchcancel", onUp);
 	};
 });
 
-app.controller('HandWriteCtrl', function($rootScope, $scope, $timeout, DataManager, Room, HandWriter) {
-	var type = "pos";
-	DataManager.getData(type, function(data) {
-		HandWriter.draw(data);
-	});
+app.controller('HandWriteCtrl', function($scope, $timeout, DrawManager) {
 
-	$scope.tool = HandWriter.Tools.DRAW;
+	$scope.tool = DrawManager.tools.DRAW;
 	$scope.animate = function() {
-		var delay = 10;
-		DataManager.loadData(type, {
-			room: Room.room
-		}, function(data) {
-			var i = 0;
+		// var delay = 10;
+		// DataManager.loadData(type, {
+		// 	room: Room.room
+		// }, function(data) {
+		// 	var i = 0;
 
-			function draw() {
-				if (i < data.length) {
-					var pos = data[i];
-					HandWriter.draw(pos);
-					$timeout(draw, delay);
-					i++;
-				}
-			}
-			draw();
-		});
+		// 	function draw() {
+		// 		if (i < data.length) {
+		// 			var pos = data[i];
+		// 			HandWriter.draw(pos);
+		// 			$timeout(draw, delay);
+		// 			i++;
+		// 		}
+		// 	}
+		// 	draw();
+		// });
 	};
 	$scope.drag = function() {
-		$scope.tool = $scope.tool == HandWriter.Tools.DRAW ? HandWriter.Tools.DRAG : HandWriter.Tools.DRAW;
+		$scope.tool = $scope.tool == DrawManager.tools.DRAW ? DrawManager.tools.DRAG : DrawManager.tools.DRAW;
 	};
 	$scope.clear = function() {
-		$scope.tool = HandWriter.Tools.CLEAR;
+		$scope.tool = DrawManager.tools.CLEAR;
 	};
 
-	$scope.$watch('tool', function() {
-		HandWriter.setTool($scope.tool);
-	});
-	$rootScope.$on('send_data', function(e, data) {
-		DataManager.setData(type, data);
-	});
 });

@@ -78,7 +78,8 @@ app.service("DrawManager", function(Canvas) {
 	this.tools = {
 		DRAG: "0",
 		CLEAR: "1",
-		TEXT: "2"
+		TEXT: "2",
+		DRAW: "3"
 	};
 	this.lineOption = {
 		points: [0, 0, 0, 0],
