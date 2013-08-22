@@ -51,7 +51,8 @@
 					<button ng-click="clear()">Clear</button>
 				</div>
 				<input id="textbox" ng-model="text">
-				<div id="canvas"></div>
+				<div id="canvas" text-writer id="canvas" tool="{{tool}}" text="{{text}}">
+				</div>
 			</div>
 		</script>
 

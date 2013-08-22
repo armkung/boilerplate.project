@@ -75,6 +75,11 @@ app.factory("DataManager", function(Canvas, Socket) {
 
 app.service("DrawManager", function(Canvas) {
 	var self = this;
+	this.tools = {
+		DRAG: "0",
+		CLEAR: "1",
+		TEXT: "2"
+	};
 	this.lineOption = {
 		points: [0, 0, 0, 0],
 		stroke: 'white',
@@ -152,7 +157,6 @@ app.service("Canvas", function($rootScope) {
 	var self = this;
 	var cs = $("#canvas");
 	var container = cs.parent();
-
 	this.canvas = cs;
 	this.width = container.width();
 	this.height = container.height();
