@@ -1,4 +1,4 @@
-app.directive("handWriter", function(DrawManager, Room, DataManager) {
+app.directive("handWriter", function($rootScope, $timeout, DrawManager, Room, DataManager) {
 	return {
 		restrict: 'A',
 		scope: {
@@ -30,12 +30,11 @@ app.directive("handWriter", function(DrawManager, Room, DataManager) {
 				}
 			}
 
-			$scope.$watch('tool', function() {
-
+			var isSeed = true,
+				isDraw = false;
+			$rootScope.$on('tool', function(e, tool) {
 				var callback = {};
-				var isSeed = true,
-					isDraw = false;
-				switch ($scope.tool) {
+				switch (tool) {
 					case DrawManager.tools.DRAW:
 						callback.onDown = function() {
 							isDraw = true;
@@ -61,31 +60,50 @@ app.directive("handWriter", function(DrawManager, Room, DataManager) {
 							isDraw = false;
 							isSeed = true;
 						};
-
 						DrawManager.canGroupDrag(false);
-						DrawManager.setBind(callback);
 						break;
 					case DrawManager.tools.DRAG:
 						DrawManager.canGroupDrag(true);
-						DrawManager.setBind(callback);
+						break;
+					case DrawManager.tools.ANIMATE:
+						if (!isDraw) {
+							var delay = 10;
+							isDraw = true;
+							DataManager.loadData(type, {
+								room: Room.room
+							}, function(data) {
+								var i = 0;
+								(function animate() {
+									if (i < data.length) {
+										var pos = data[i];
+										draw(pos);
+										$timeout(animate, delay);
+										i++;
+									} else {
+										isDraw = false;
+									}
+								})();
+							});
+						}
 						break;
 					default:
-						DrawManager.setEvent($scope.tool);
+						DrawManager.setEvent(tool, callback);
 				}
+				DrawManager.setBind(callback);
 			});
+			$rootScope.$broadcast('tool', DrawManager.tools.DRAW);
 		}
 	};
 });
 
-app.controller('HandWriteCtrl', function($scope, $timeout, DrawManager) {
+app.controller('HandWriteCtrl', function($scope, $rootScope, DrawManager) {
 
-	$scope.tool = DrawManager.tools.DRAW;
 	$scope.tools = [];
 	angular.forEach(DrawManager.tools, function(value, key) {
 		$scope.tools.push(value);
 	});
 	$scope.changeTool = function(index) {
-		$scope.tool = $scope.tools[index];
+		$rootScope.$broadcast('tool', $scope.tools[index]);
 	}
 	$scope.animate = function() {
 		// var delay = 10;

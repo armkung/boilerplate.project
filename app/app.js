@@ -65,8 +65,10 @@ app.factory("DataManager", function(Canvas, Socket) {
 		},
 		loadData: function(type, data, callback) {
 			Socket.emit("load:" + type, data, function(data) {
-				data.x *= Canvas.width;
-				data.y *= Canvas.height;
+				angular.forEach(data, function(data, key) {
+					data.x *= Canvas.width;
+					data.y *= Canvas.height;
+				});
 				callback(data);
 			});
 		}
@@ -80,7 +82,8 @@ app.service("DrawManager", function(Canvas) {
 		CLEAR: "Clear",
 		TEXT: "Text",
 		DRAW: "Draw",
-		COLOR: "Color"
+		COLOR: "Color",
+		ANIMATE: "Animate"
 	};
 	this.lineOption = {
 		points: [0, 0, 0, 0],
@@ -96,8 +99,9 @@ app.service("DrawManager", function(Canvas) {
 	this.groupOption = {
 
 	};
-
-	var layer = Canvas.getLayer(self.groupOption);
+	var stage = Canvas.getStage();
+	var layer = new Kinetic.Layer();
+	stage.add(layer);
 	var current = layer;
 
 	var line, text;
@@ -155,10 +159,12 @@ app.service("DrawManager", function(Canvas) {
 		});
 	};
 
-	this.setEvent = function(tool) {
+	this.setEvent = function(tool, callback) {
 		switch (tool) {
 			case self.tools.CLEAR:
-				Canvas.clear();
+				layer.remove();
+				layer = new Kinetic.Layer();
+				stage.add(layer);
 				break;
 			case self.tools.COLOR:
 				var color = '#' + Math.floor(Math.random() * 16777215).toString(16);
@@ -202,12 +208,6 @@ app.service("Canvas", function($rootScope) {
 		height: self.height
 	});
 
-	var layer = new Kinetic.Layer();
-	stage.add(layer);
-
-	this.getLayer = function() {
-		return layer;
-	};
 	this.getStage = function() {
 		return stage;
 	};
@@ -219,11 +219,6 @@ app.service("Canvas", function($rootScope) {
 		} else if (touchPos && touchPos.x && touchPos.y) {
 			return touchPos;
 		}
-	};
-	this.clear = function() {
-		layer.remove();
-		layer = new Kinetic.Layer();
-		stage.add(layer);
 	};
 
 });
