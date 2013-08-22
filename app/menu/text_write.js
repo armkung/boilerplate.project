@@ -1,4 +1,4 @@
-app.directive("textWriter", function(Canvas, Input, DrawManager, Room, DataManager) {
+app.directive("textWriter", function(Input, DrawManager, Room, DataManager) {
 	return {
 		restrict: 'A',
 		scope: {
@@ -7,8 +7,7 @@ app.directive("textWriter", function(Canvas, Input, DrawManager, Room, DataManag
 		},
 		controller: function($scope, $attrs) {
 			var type = "text";
-			var cs = Canvas.canvas,
-				txt = Input.input;
+			var txt = Input.input;
 			var pos;
 
 			function draw(data, canDrag) {
@@ -34,29 +33,28 @@ app.directive("textWriter", function(Canvas, Input, DrawManager, Room, DataManag
 					Input.hide();
 				}
 			});
+
 			$scope.$watch('tool', function() {
-				var onDown;
+				var callback = {};
 				switch ($scope.tool) {
 					case DrawManager.tools.TEXT:
-						onDown = function() {
-							pos = Canvas.getPosition();
+						callback.onDown = function(data) {
+							pos = data;
 							Input.show(pos.x, pos.y);
 						};
 						DrawManager.canDrag(false);
+						DrawManager.setBind(callback);
 						break;
 					case DrawManager.tools.DRAG:
-						onDown = function() {
+						callback.onDown = function() {
 							Input.hide();
 						};
 						DrawManager.canDrag(true);
-						break;
-					case DrawManager.tools.CLEAR:
-						Canvas.clear();
+						DrawManager.setBind(callback);
 						break;
 					default:
+						DrawManager.setEvent($scope.tool);
 				}
-				cs.unbind();
-				cs.bind("mousedown touchstart", onDown);
 			});
 
 		}

@@ -153,6 +153,34 @@ app.service("DrawManager", function(Canvas) {
 			group.setDraggable(canDrag);
 		});
 	};
+
+	this.setEvent = function(tool) {
+		switch (tool) {
+			case DrawManager.tools.CLEAR:
+				Canvas.clear();
+				break;
+		}
+	};
+
+	this.setBind = function(callback) {
+		var cs = Canvas.canvas;
+		cs.unbind();
+		if (callback.onDown) {
+			cs.bind("mousedown touchstart", function() {
+				callback.onDown(Canvas.getPosition());
+			});
+		}
+		if (callback.onMove) {
+			cs.bind("mousemove touchmove", function() {
+				callback.onMove(Canvas.getPosition());
+			});
+		}
+		if (callback.onUp) {
+			cs.bind("mouseup touchend touchcancel", function() {
+				callback.onUp(Canvas.getPosition());
+			});
+		}
+	};
 });
 app.service("Canvas", function($rootScope) {
 	var self = this;
@@ -180,9 +208,9 @@ app.service("Canvas", function($rootScope) {
 	this.getPosition = function() {
 		var mousePos = stage.getMousePosition();
 		var touchPos = stage.getTouchPosition();
-		if (mousePos.x && mousePos.y) {
+		if (mousePos && mousePos.x && mousePos.y) {
 			return mousePos;
-		} else if (touchPos.x && touchPos.y) {
+		} else if (touchPos && touchPos.x && touchPos.y) {
 			return touchPos;
 		}
 	};

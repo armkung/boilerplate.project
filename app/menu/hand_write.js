@@ -1,4 +1,4 @@
-app.directive("handWriter", function(Canvas, DrawManager, Room, DataManager) {
+app.directive("handWriter", function(DrawManager, Room, DataManager) {
 	return {
 		restrict: 'A',
 		scope: {
@@ -6,7 +6,6 @@ app.directive("handWriter", function(Canvas, DrawManager, Room, DataManager) {
 		},
 		controller: function($scope, $attrs) {
 			var type = "pos";
-			var cs = Canvas.canvas;
 
 			DataManager.getData(type, function(data) {
 				draw(data, $scope.tool == DrawManager.tools.DRAG);
@@ -32,22 +31,18 @@ app.directive("handWriter", function(Canvas, DrawManager, Room, DataManager) {
 			}
 
 			$scope.$watch('tool', function() {
-				var onDown, onMove, onUp;
+				var callback = {};
 				var isSeed = true,
 					isDraw = false;
-
-				cs.unbind();
 				switch ($scope.tool) {
 					case DrawManager.tools.DRAW:
-
-						onDown = function() {
+						callback.onDown = function() {
 							isDraw = true;
 							isSeed = true;
 						};
 
-						onMove = function() {
+						callback.onMove = function(pos) {
 							if (isDraw) {
-								var pos = Canvas.getPosition();
 								var obj = {
 									x: pos.x,
 									y: pos.y
@@ -61,23 +56,19 @@ app.directive("handWriter", function(Canvas, DrawManager, Room, DataManager) {
 							}
 						};
 
-						onUp = function() {
+						callback.onUp = function() {
 							isDraw = false;
 							isSeed = true;
 						};
-						DrawManager.canGroupDrag(false);
 
-						cs.bind("mousedown touchstart", onDown);
-						cs.bind("mousemove touchmove", onMove);
-						cs.bind("mouseup touchend touchcancel", onUp);
+						DrawManager.canGroupDrag(false);
+						DrawManager.setBind(callback);
 						break;
 					case DrawManager.tools.DRAG:
 						DrawManager.canGroupDrag(true);
-
 						break;
-					case DrawManager.tools.CLEAR:
-						Canvas.clear();
-						break;
+					default:
+						DrawManager.setEvent($scope.tool);
 				}
 			});
 		}
