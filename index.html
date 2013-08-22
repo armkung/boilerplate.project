@@ -48,9 +48,7 @@
 		<script type="text/ng-template" id="hand_write.html">
 			<div class="draw-pad">
 				<div>
-					<button ng-click="animate()">Animate</button>
-					<button ng-click="drag()">Toggle Drag</button>
-					<button ng-click="clear()">Clear</button>
+					<button ng-repeat="t in tools" ng-click="changeTool($index)">{{t}}</button>
 				</div>
 				<div id="canvas" hand-writer tool="{{tool}}"></div>
 			</div>
@@ -59,9 +57,7 @@
 		<script type="text/ng-template" id="text_write.html">
 			<div class="draw-pad">
 				<div>
-					<button ng-click="animate()">Animate</button>
-					<button ng-click="drag()">Toggle Drag</button>
-					<button ng-click="clear()">Clear</button>
+					<button ng-repeat="t in tools" ng-click="changeTool($index)">{{t}}</button>
 				</div>
 					<input id="textbox" ng-model="text">
 					<div id="canvas" text-writer tool="{{tool}}" text="{{text}}">

@@ -63,15 +63,11 @@ app.directive("textWriter", function(Input, DrawManager, Room, DataManager) {
 
 app.controller('TextWriteCtrl', function($scope, $timeout, DrawManager) {
 	$scope.tool = DrawManager.tools.TEXT;
-
-	$scope.drag = function() {
-		$scope.tool = $scope.tool == DrawManager.tools.TEXT ? DrawManager.tools.DRAG : DrawManager.tools.TEXT;
-	};
-	$scope.animate = function() {
-
-	};
-
-	$scope.clear = function() {
-		$scope.tool = DrawManager.tools.CLEAR;
-	};
+	$scope.tools = [];
+	angular.forEach(DrawManager.tools, function(value, key) {
+		$scope.tools.push(value);
+	});
+	$scope.changeTool = function(index) {
+		$scope.tool = $scope.tools[index];
+	}
 });

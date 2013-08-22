@@ -4,7 +4,7 @@ app.directive("handWriter", function(DrawManager, Room, DataManager) {
 		scope: {
 			tool: '@'
 		},
-		controller: function($scope, $attrs) {
+		link: function($scope, $attrs) {
 			var type = "pos";
 
 			DataManager.getData(type, function(data) {
@@ -31,6 +31,7 @@ app.directive("handWriter", function(DrawManager, Room, DataManager) {
 			}
 
 			$scope.$watch('tool', function() {
+
 				var callback = {};
 				var isSeed = true,
 					isDraw = false;
@@ -66,6 +67,7 @@ app.directive("handWriter", function(DrawManager, Room, DataManager) {
 						break;
 					case DrawManager.tools.DRAG:
 						DrawManager.canGroupDrag(true);
+						DrawManager.setBind(callback);
 						break;
 					default:
 						DrawManager.setEvent($scope.tool);
@@ -78,6 +80,13 @@ app.directive("handWriter", function(DrawManager, Room, DataManager) {
 app.controller('HandWriteCtrl', function($scope, $timeout, DrawManager) {
 
 	$scope.tool = DrawManager.tools.DRAW;
+	$scope.tools = [];
+	angular.forEach(DrawManager.tools, function(value, key) {
+		$scope.tools.push(value);
+	});
+	$scope.changeTool = function(index) {
+		$scope.tool = $scope.tools[index];
+	}
 	$scope.animate = function() {
 		// var delay = 10;
 		// DataManager.loadData(type, {
@@ -95,12 +104,6 @@ app.controller('HandWriteCtrl', function($scope, $timeout, DrawManager) {
 		// 	}
 		// 	draw();
 		// });
-	};
-	$scope.drag = function() {
-		$scope.tool = $scope.tool == DrawManager.tools.DRAW ? DrawManager.tools.DRAG : DrawManager.tools.DRAW;
-	};
-	$scope.clear = function() {
-		$scope.tool = DrawManager.tools.CLEAR;
 	};
 
 });

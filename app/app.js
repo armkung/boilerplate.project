@@ -76,10 +76,11 @@ app.factory("DataManager", function(Canvas, Socket) {
 app.service("DrawManager", function(Canvas) {
 	var self = this;
 	this.tools = {
-		DRAG: "0",
-		CLEAR: "1",
-		TEXT: "2",
-		DRAW: "3"
+		DRAG: "Drag",
+		CLEAR: "Clear",
+		TEXT: "Text",
+		DRAW: "Draw",
+		COLOR: "Color"
 	};
 	this.lineOption = {
 		points: [0, 0, 0, 0],
@@ -156,8 +157,13 @@ app.service("DrawManager", function(Canvas) {
 
 	this.setEvent = function(tool) {
 		switch (tool) {
-			case DrawManager.tools.CLEAR:
+			case self.tools.CLEAR:
 				Canvas.clear();
+				break;
+			case self.tools.COLOR:
+				var color = '#' + Math.floor(Math.random() * 16777215).toString(16);
+				self.lineOption.stroke = color;
+				self.textOption.fill = color;
 				break;
 		}
 	};
@@ -277,11 +283,11 @@ app.directive('emoticon', function() {
 		controller: function($scope) {
 			$scope.url = "assets/emoticon/";
 			$scope.emotions = [];
-			for(var i=1;i<=9;i++){
-				$scope.emotions.push(i+".gif");
+			for (var i = 1; i <= 9; i++) {
+				$scope.emotions.push(i + ".gif");
 			}
-			$scope.select = function(index){
-				$scope.emotion = $scope.url+$scope.emotions[index];
+			$scope.select = function(index) {
+				$scope.emotion = $scope.url + $scope.emotions[index];
 			}
 		}
 	};
