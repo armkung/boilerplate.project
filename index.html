@@ -43,7 +43,7 @@
 	</head>
 
 
-	<body ng-app="socket" ng-controller="MainCtrl">
+	<body ng-app="socket">
 
 		<script type="text/ng-template" id="hand_write.html">
 			<div class="draw-pad">
@@ -85,6 +85,8 @@
 		<script type="text/ng-template" id="menu.html">
 			<div>
 				<div>
+					<select ng-model="room" ng-options="room for room in rooms"></select>
+					<button ng-click="list()">List</button>		
 					<button ng-click="connect()">Connect</button>		
 					<button ng-click="disconnect()">Disconnect</button>
 				</div>

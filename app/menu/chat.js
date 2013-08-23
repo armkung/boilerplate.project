@@ -28,5 +28,5 @@ app.controller('ChatCtrl', function($scope, Socket) {
 		Socket.emit("send:msg", {
 			msg: $scope.img
 		});
-	})
+	});
 });

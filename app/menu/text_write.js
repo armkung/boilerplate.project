@@ -41,12 +41,12 @@ app.directive("textWriter", function($rootScope, Input, DrawManager, Room, DataM
 					pos = data;
 					Input.show(pos.x, pos.y);
 				}
-			}
+			};
 			callback.dragObject = {
 				call: function() {
 					Input.hide();
 				}
-			}
+			};
 
 			$scope.$watch('tool', function(tool) {
 				DrawManager.setTool(tool, callback);
@@ -72,8 +72,8 @@ app.controller('TextWriteCtrl', function($scope, $rootScope, DrawManager) {
 	});
 	$scope.changeTool = function(index) {
 		$scope.tool = $scope.tools[index];
-	}
+	};
 	$scope.changeAttr = function(index) {
 		$rootScope.$broadcast('attr', $scope.attrs[index]);
-	}
+	};
 });

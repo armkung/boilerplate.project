@@ -55,7 +55,7 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, Room, Da
 					isDraw = false;
 					isSeed = true;
 				}
-			}
+			};
 			callback.animate = {
 				call: function() {
 					if (!isDraw) {
@@ -78,7 +78,7 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, Room, Da
 						});
 					}
 				}
-			}
+			};
 
 			$scope.$watch('tool', function(tool) {
 				DrawManager.setTool(tool, callback);
@@ -105,9 +105,9 @@ app.controller('HandWriteCtrl', function($scope, $rootScope, DrawManager) {
 	});
 	$scope.changeTool = function(index) {
 		$scope.tool = $scope.tools[index];
-	}
+	};
 	$scope.changeAttr = function(index) {
 		$rootScope.$broadcast('attr', $scope.attrs[index]);
-	}
+	};
 
 });

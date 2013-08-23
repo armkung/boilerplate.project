@@ -211,7 +211,7 @@ app.service("DrawManager", function(Canvas) {
 				self.textOption.fill = callback.color;
 				break;
 		}
-	}
+	};
 	this.setBind = function(callback) {
 		var cs = Canvas.canvas;
 		cs.unbind();
@@ -304,7 +304,7 @@ app.directive('menu', function() {
 	return {
 		restrict: 'E',
 		templateUrl: 'menu.html',
-		controller: 'MainCtrl'
+		controller: 'MenuCtrl'
 	};
 });
 
@@ -323,7 +323,7 @@ app.directive('emoticon', function() {
 			}
 			$scope.select = function(index) {
 				$scope.emotion = $scope.url + $scope.emotions[index];
-			}
+			};
 		}
 	};
 });
