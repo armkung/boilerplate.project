@@ -77,18 +77,7 @@ app.factory("DataManager", function(Canvas, Socket) {
 
 app.service("DrawManager", function(Canvas) {
 	var self = this;
-	this.tools = {
-		DRAG_GROUP: "Group Drag",
-		DRAG_OBJECT: "Drag",
-		CLEAR: "Clear",
-		TEXT: "Text",
-		DRAW: "Draw",
-		ANIMATE: "Animate"
-	};
-	this.attrs = {
-		COLOR_LINE: "Line Color",
-		COLOR_TEXT: "Text Color"
-	};
+
 	this.lineOption = {
 		points: [0, 0, 0, 0],
 		stroke: 'white',
@@ -164,14 +153,31 @@ app.service("DrawManager", function(Canvas) {
 		});
 	};
 
+
+});
+app.service("DrawFactory", function(Canvas, DrawManager) {
+	var self = this;
+	this.tools = {
+		DRAG_GROUP: "Group Drag",
+		DRAG_OBJECT: "Drag",
+		CLEAR: "Clear",
+		TEXT: "Text",
+		DRAW: "Draw",
+		ANIMATE: "Animate"
+	};
+	this.attrs = {
+		COLOR_LINE: "Line Color",
+		COLOR_TEXT: "Text Color"
+	};
+	
 	this.setTool = function(tool, callback) {
 		switch (tool) {
 			case self.tools.DRAW:
-				self.canGroupDrag(false);
+				DrawManager.canGroupDrag(false);
 				self.setBind(callback.draw);
 				break;
 			case self.tools.TEXT:
-				self.canDrag(false);
+				DrawManager.canDrag(false);
 				self.setBind(callback.text);
 				break;
 			case self.tools.ANIMATE:
@@ -184,14 +190,14 @@ app.service("DrawManager", function(Canvas) {
 				if (callback.dragGroup && callback.dragGroup.call) {
 					callback.dragGroup.call();
 				}
-				self.canGroupDrag(true);
+				DrawManager.canGroupDrag(true);
 				self.setBind(callback.dragGroup);
 				break;
 			case self.tools.DRAG_OBJECT:
 				if (callback.dragObject && callback.dragObject.call) {
 					callback.dragObject.call();
 				}
-				self.canDrag(true);
+				DrawManager.canDrag(true);
 				self.setBind(callback.dragObject);
 				break;
 			case self.tools.CLEAR:
@@ -233,7 +239,7 @@ app.service("DrawManager", function(Canvas) {
 			}
 		}
 	};
-});
+})
 app.service("Canvas", function($rootScope) {
 	var self = this;
 	var cs = $("#canvas");

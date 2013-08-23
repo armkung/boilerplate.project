@@ -1,4 +1,4 @@
-app.directive("handWriter", function($rootScope, $timeout, DrawManager, Room, DataManager) {
+app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFactory, Room, DataManager) {
 	return {
 		restrict: 'A',
 		scope: {
@@ -8,7 +8,7 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, Room, Da
 			var type = "pos";
 
 			DataManager.getData(type, function(data) {
-				draw(data, $scope.tool == DrawManager.tools.DRAG);
+				draw(data, $scope.tool == DrawFactory.tools.DRAG);
 			});
 
 			function draw(data, canDrag) {
@@ -29,78 +29,38 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, Room, Da
 					DrawManager.canGroupDrag(true);
 				}
 			}
-			var callback = {};
-			var isSeed = true,
-				isDraw = false;
-			callback.draw = {
-				onDown: function() {
-					isDraw = true;
-					isSeed = true;
-				},
-				onMove: function(pos) {
-					if (isDraw) {
-						var obj = {
-							x: pos.x,
-							y: pos.y
-						};
-						if (isSeed) {
-							obj.isSeed = isSeed;
-						}
-						isSeed = false;
-						draw(obj);
-						DataManager.setData(type, obj);
-					}
-				},
-				onUp: function() {
-					isDraw = false;
-					isSeed = true;
-				}
-			};
-			callback.animate = {
-				call: function() {
-					if (!isDraw) {
-						var delay = 10;
-						isDraw = true;
-						DataManager.loadData(type, {
-							room: Room.room
-						}, function(data) {
-							var i = 0;
-							(function animate() {
-								if (i < data.length) {
-									var pos = data[i];
-									draw(pos);
-									$timeout(animate, delay);
-									i++;
-								} else {
-									isDraw = false;
-								}
-							})();
-						});
-					}
-				}
-			};
+
+			DrawFactory.setDraw(function(pos) {
+				draw(pos);
+				DataManager.setData(type, pos);
+			});
+			DataManager.loadData(type, {
+				room: Room.room
+			}, function(data) {
+				DrawFactory.setAnimate(data, draw);
+			});
 
 			$scope.$watch('tool', function(tool) {
-				DrawManager.setTool(tool, callback);
+				DrawFactory.setTool(tool);
 			});
 			$rootScope.$on('attr', function(e, attr) {
 				var callback = {};
 				callback.color = '#' + Math.floor(Math.random() * 16777215).toString(16);
-				DrawManager.setAttr(attr, callback);
+				DrawFactory.setAttr(attr, callback);
 			});
 		}
 	};
 });
 
-app.controller('HandWriteCtrl', function($scope, $rootScope, DrawManager) {
+app.controller('HandWriteCtrl', function($scope, $rootScope, DrawFactory) {
 
 	$scope.tools = [];
 	$scope.attrs = [];
-	$scope.tool = DrawManager.tools.DRAW;
-	angular.forEach(DrawManager.tools, function(value, key) {
+	$scope.tool = DrawFactory.tools.DRAW;
+	angular.forEach(DrawFactory.tools, function(value, key) {
 		$scope.tools.push(value);
 	});
-	angular.forEach(DrawManager.attrs, function(value, key) {
+	angular.forEach(DrawFactory.attrs, function(value, key) {
 		$scope.attrs.push(value);
 	});
 	$scope.changeTool = function(index) {

@@ -1,4 +1,4 @@
-app.directive("textWriter", function($rootScope, Input, DrawManager, Room, DataManager) {
+app.directive("textWriter", function($rootScope, Input, DrawManager, DrawFactory, Room, DataManager) {
 	return {
 		restrict: 'A',
 		scope: {
@@ -18,7 +18,7 @@ app.directive("textWriter", function($rootScope, Input, DrawManager, Room, DataM
 			}
 
 			DataManager.getData(type, function(data) {
-				draw(data, $scope.tool == DrawManager.tools.DRAG);
+				draw(data, $scope.tool == DrawFactory.tools.DRAG);
 			});
 
 			txt.bind('keydown', function(e) {
@@ -34,40 +34,34 @@ app.directive("textWriter", function($rootScope, Input, DrawManager, Room, DataM
 				}
 			});
 
-
-			var callback = {};
-			callback.text = {
-				onDown: function(data) {
-					pos = data;
-					Input.show(pos.x, pos.y);
-				}
-			};
-			callback.dragObject = {
-				call: function() {
-					Input.hide();
-				}
-			};
+			DrawFactory.setText(function(data) {
+				pos = data;
+				Input.show(pos.x, pos.y);
+			});
+			DrawFactory.setDragObject(function() {
+				Input.hide();
+			});
 
 			$scope.$watch('tool', function(tool) {
-				DrawManager.setTool(tool, callback);
+				DrawFactory.setTool(tool);
 			});
 			$rootScope.$on('attr', function(e, attr) {
 				var callback = {};
 				callback.color = '#' + Math.floor(Math.random() * 16777215).toString(16);
-				DrawManager.setAttr(attr, callback);
+				DrawFactory.setAttr(attr, callback);
 			});
 		}
 	};
 });
 
-app.controller('TextWriteCtrl', function($scope, $rootScope, DrawManager) {
+app.controller('TextWriteCtrl', function($scope, $rootScope, DrawFactory) {
 	$scope.tools = [];
 	$scope.attrs = [];
-	$scope.tool = DrawManager.tools.TEXT;
-	angular.forEach(DrawManager.tools, function(value, key) {
+	$scope.tool = DrawFactory.tools.TEXT;
+	angular.forEach(DrawFactory.tools, function(value, key) {
 		$scope.tools.push(value);
 	});
-	angular.forEach(DrawManager.attrs, function(value, key) {
+	angular.forEach(DrawFactory.attrs, function(value, key) {
 		$scope.attrs.push(value);
 	});
 	$scope.changeTool = function(index) {
