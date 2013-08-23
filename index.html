@@ -49,6 +49,7 @@
 			<div class="draw-pad">
 				<div>
 					<button ng-repeat="t in tools" ng-click="changeTool($index)">{{t}}</button>
+					<button ng-repeat="a in attrs" ng-click="changeAttr($index)">{{a}}</button>
 				</div>
 				<div id="canvas" hand-writer tool="{{tool}}"></div>
 			</div>
@@ -58,6 +59,7 @@
 			<div class="draw-pad">
 				<div>
 					<button ng-repeat="t in tools" ng-click="changeTool($index)">{{t}}</button>
+					<button ng-repeat="a in attrs" ng-click="changeAttr($index)">{{a}}</button>
 				</div>
 					<input id="textbox" ng-model="text">
 					<div id="canvas" text-writer tool="{{tool}}" text="{{text}}">

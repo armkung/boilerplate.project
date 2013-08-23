@@ -1,4 +1,4 @@
-app.directive("textWriter", function(Input, DrawManager, Room, DataManager) {
+app.directive("textWriter", function($rootScope, Input, DrawManager, Room, DataManager) {
 	return {
 		restrict: 'A',
 		scope: {
@@ -34,40 +34,46 @@ app.directive("textWriter", function(Input, DrawManager, Room, DataManager) {
 				}
 			});
 
-			$scope.$watch('tool', function() {
-				var callback = {};
-				switch ($scope.tool) {
-					case DrawManager.tools.TEXT:
-						callback.onDown = function(data) {
-							pos = data;
-							Input.show(pos.x, pos.y);
-						};
-						DrawManager.canDrag(false);
-						DrawManager.setBind(callback);
-						break;
-					case DrawManager.tools.DRAG:
-						callback.onDown = function() {
-							Input.hide();
-						};
-						DrawManager.canDrag(true);
-						DrawManager.setBind(callback);
-						break;
-					default:
-						DrawManager.setEvent($scope.tool);
-				}
-			});
 
+			var callback = {};
+			callback.text = {
+				onDown: function(data) {
+					pos = data;
+					Input.show(pos.x, pos.y);
+				}
+			}
+			callback.dragObject = {
+				call: function() {
+					Input.hide();
+				}
+			}
+
+			$scope.$watch('tool', function(tool) {
+				DrawManager.setTool(tool, callback);
+			});
+			$rootScope.$on('attr', function(e, attr) {
+				var callback = {};
+				callback.color = '#' + Math.floor(Math.random() * 16777215).toString(16);
+				DrawManager.setAttr(attr, callback);
+			});
 		}
 	};
 });
 
-app.controller('TextWriteCtrl', function($scope, $timeout, DrawManager) {
-	$scope.tool = DrawManager.tools.TEXT;
+app.controller('TextWriteCtrl', function($scope, $rootScope, DrawManager) {
 	$scope.tools = [];
+	$scope.attrs = [];
+	$scope.tool = DrawManager.tools.TEXT;
 	angular.forEach(DrawManager.tools, function(value, key) {
 		$scope.tools.push(value);
 	});
+	angular.forEach(DrawManager.attrs, function(value, key) {
+		$scope.attrs.push(value);
+	});
 	$scope.changeTool = function(index) {
 		$scope.tool = $scope.tools[index];
+	}
+	$scope.changeAttr = function(index) {
+		$rootScope.$broadcast('attr', $scope.attrs[index]);
 	}
 });

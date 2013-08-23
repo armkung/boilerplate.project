@@ -78,12 +78,16 @@ app.factory("DataManager", function(Canvas, Socket) {
 app.service("DrawManager", function(Canvas) {
 	var self = this;
 	this.tools = {
-		DRAG: "Drag",
+		DRAG_GROUP: "Group Drag",
+		DRAG_OBJECT: "Drag",
 		CLEAR: "Clear",
 		TEXT: "Text",
 		DRAW: "Draw",
-		COLOR: "Color",
 		ANIMATE: "Animate"
+	};
+	this.attrs = {
+		COLOR_LINE: "Line Color",
+		COLOR_TEXT: "Text Color"
 	};
 	this.lineOption = {
 		points: [0, 0, 0, 0],
@@ -105,6 +109,7 @@ app.service("DrawManager", function(Canvas) {
 	var current = layer;
 
 	var line, text;
+
 	this.initBrush = function(x, y) {
 		line = new Kinetic.Line(self.lineOption);
 		line.getPoints()[0].x = x;
@@ -159,38 +164,73 @@ app.service("DrawManager", function(Canvas) {
 		});
 	};
 
-	this.setEvent = function(tool, callback) {
+	this.setTool = function(tool, callback) {
 		switch (tool) {
+			case self.tools.DRAW:
+				self.canGroupDrag(false);
+				self.setBind(callback.draw);
+				break;
+			case self.tools.TEXT:
+				self.canDrag(false);
+				self.setBind(callback.text);
+				break;
+			case self.tools.ANIMATE:
+				if (callback.animate && callback.animate.call) {
+					callback.animate.call();
+				}
+				self.setBind(callback.animate);
+				break;
+			case self.tools.DRAG_GROUP:
+				if (callback.dragGroup && callback.dragGroup.call) {
+					callback.dragGroup.call();
+				}
+				self.canGroupDrag(true);
+				self.setBind(callback.dragGroup);
+				break;
+			case self.tools.DRAG_OBJECT:
+				if (callback.dragObject && callback.dragObject.call) {
+					callback.dragObject.call();
+				}
+				self.canDrag(true);
+				self.setBind(callback.dragObject);
+				break;
 			case self.tools.CLEAR:
 				layer.remove();
 				layer = new Kinetic.Layer();
 				stage.add(layer);
 				break;
-			case self.tools.COLOR:
-				var color = '#' + Math.floor(Math.random() * 16777215).toString(16);
-				self.lineOption.stroke = color;
-				self.textOption.fill = color;
-				break;
+
 		}
 	};
-
+	this.setAttr = function(attr, callback) {
+		switch (attr) {
+			case self.attrs.COLOR_LINE:
+				self.lineOption.stroke = callback.color;
+				break;
+			case self.attrs.COLOR_TEXT:
+				self.textOption.fill = callback.color;
+				break;
+		}
+	}
 	this.setBind = function(callback) {
 		var cs = Canvas.canvas;
 		cs.unbind();
-		if (callback.onDown) {
-			cs.bind("mousedown touchstart", function() {
-				callback.onDown(Canvas.getPosition());
-			});
-		}
-		if (callback.onMove) {
-			cs.bind("mousemove touchmove", function() {
-				callback.onMove(Canvas.getPosition());
-			});
-		}
-		if (callback.onUp) {
-			cs.bind("mouseup touchend touchcancel", function() {
-				callback.onUp(Canvas.getPosition());
-			});
+		if (callback) {
+			if (callback.onDown) {
+				cs.bind("mousedown touchstart", function() {
+					callback.onDown(Canvas.getPosition());
+				});
+			}
+			if (callback.onMove) {
+				cs.bind("mousemove touchmove", function() {
+					callback.onMove(Canvas.getPosition());
+				});
+			}
+			if (callback.onUp) {
+				cs.bind("mouseup touchend touchcancel", function() {
+					callback.onUp(Canvas.getPosition());
+				});
+			}
 		}
 	};
 });
