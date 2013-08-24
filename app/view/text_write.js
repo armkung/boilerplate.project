@@ -5,11 +5,12 @@ app.directive("textWriter", function($rootScope, Input, DrawManager, DrawFactory
 			text: '@',
 			tool: '@'
 		},
-		link: function($scope, $attrs) {
+		link: function($scope, $attrs, $element) {
 			var type = "text";
 			var txt = Input.init();
 			var pos;
-			DrawManager.init("canvas");
+			DrawManager.init($element.id);
+
 			function draw(data, canDrag) {
 				DrawManager.newGroup();
 				DrawManager.setCurrent();
@@ -54,7 +55,7 @@ app.directive("textWriter", function($rootScope, Input, DrawManager, DrawFactory
 			$rootScope.$on('attr', function(e, attr) {
 				var callback = {};
 				callback.color = '#' + Math.floor(Math.random() * 16777215).toString(16);
-				callback.size = Math.floor(Math.random()*10)+4;
+				callback.size = Math.floor(Math.random() * 10) + 4;
 				DrawFactory.setAttr(attr, callback);
 			});
 		}

@@ -8,9 +8,6 @@ app.config(['$routeProvider',
 		$routeProvider.when('/draw', {
 			templateUrl: 'hand_write.tpl.html',
 			controller: 'HandWriteCtrl'
-		}).when('/text', {
-			templateUrl: 'text_write.tpl.html',
-			controller: 'TextWriteCtrl'
 		}).when('/home', {
 			templateUrl: 'home.tpl.html',
 			controller: 'HomeCtrl'
@@ -104,12 +101,12 @@ app.service("Canvas", function($rootScope) {
 		// if (id in obj) {
 		// 	stage = obj.id;
 		// } else {
-			stage = new Kinetic.Stage({
-				container: id,
-				width: self.width,
-				height: self.height
-			});
-			// obj.id = stage;
+		stage = new Kinetic.Stage({
+			container: id,
+			width: self.width,
+			height: self.height
+		});
+		// obj.id = stage;
 		// }
 		// clone(old, stage);
 		return stage;
@@ -138,9 +135,13 @@ app.service("Canvas", function($rootScope) {
 app.service("Input", function() {
 	var txt;
 
-	this.init = function() {
+	this.init = function(calback) {
 		txt = $("#textbox")
-		return txt;
+		txt.bind('keydown', function(e) {
+			if (e.keyCode == 13) {
+				calback();
+			}
+		});
 	};
 	this.clear = function() {
 		txt.val("");
