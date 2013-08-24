@@ -6,7 +6,7 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 		},
 		link: function($scope, $attrs) {
 			var type = "pos";
-			DrawManager.init();
+			DrawManager.init("draw");
 			DataManager.getData(type, function(data) {
 				draw(data, $scope.tool == DrawFactory.tools.DRAG);
 			});

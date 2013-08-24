@@ -18,11 +18,16 @@ app.service("DrawManager", function(Canvas) {
 
 	var stage, layer, current;
 	var line, text;
-
-	layer = new Kinetic.Layer();
-	current = layer;
-	this.init = function() {
-		stage = Canvas.init();
+	var obj = {};
+	this.init = function(id) {
+		stage = Canvas.init(id);
+		if (id in obj) {
+			layer = obj[id];
+		} else {
+			layer = new Kinetic.Layer();
+			obj[id] = layer;
+		}
+		current = layer;
 		stage.add(layer);
 	};
 	this.initBrush = function(x, y) {
@@ -61,18 +66,18 @@ app.service("DrawManager", function(Canvas) {
 			current = child[n - 1];
 		}
 	};
-	this.setStrokeColor = function(color){
+	this.setStrokeColor = function(color) {
 		self.lineOption.stroke = color;
 		self.textOption.fill = color;
 	};
-	this.setFillColor = function(color){
+	this.setFillColor = function(color) {
 		self.lineOption.stroke = color;
 		self.textOption.fill = color;
 	};
-	this.setSize = function(size){
+	this.setSize = function(size) {
 		var ratio = 6;
 		self.lineOption.strokeWidth = size;
-		self.textOption.fontSize = size*ratio;
+		self.textOption.fontSize = size * ratio;
 	};
 	this.newGroup = function(id) {
 		self.groupOption.id = id ? id : '';

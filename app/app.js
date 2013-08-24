@@ -93,29 +93,35 @@ app.factory("DataManager", function(Canvas, Socket) {
 app.service("Canvas", function($rootScope) {
 	var self = this;
 	var stage;
-	this.init = function() {
-		var cs = $("#canvas");
+	var obj = {};
+	this.init = function(id) {
+		var cs = $("#" + id);
 		var container = cs.parent();
 		self.canvas = cs;
 		self.width = container.width();
 		self.height = container.height();
-		var old = stage;
-		stage = new Kinetic.Stage({
-			container: 'canvas',
-			width: self.width,
-			height: self.height
-		});
-		clone(old, stage);
+		// var old = stage;
+		// if (id in obj) {
+		// 	stage = obj.id;
+		// } else {
+			stage = new Kinetic.Stage({
+				container: id,
+				width: self.width,
+				height: self.height
+			});
+			// obj.id = stage;
+		// }
+		// clone(old, stage);
 		return stage;
 
-		function clone(old, stage) {
-			if (old) {
-				var layers = old.getChildren();
-				for (var i = 0; i < layers.length; i++) {
-					stage.add(layers[i]);
-				}
-			}
-		}
+		// function clone(old, stage) {
+		// 	if (old) {
+		// 		var layers = old.getChildren();
+		// 		for (var i = 0; i < layers.length; i++) {
+		// 			stage.add(layers[i]);
+		// 		}
+		// 	}
+		// }
 	};
 
 	this.getPosition = function() {

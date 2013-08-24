@@ -9,7 +9,7 @@ app.directive("textWriter", function($rootScope, Input, DrawManager, DrawFactory
 			var type = "text";
 			var txt = Input.init();
 			var pos;
-			DrawManager.init();
+			DrawManager.init("canvas");
 			function draw(data, canDrag) {
 				DrawManager.newGroup();
 				DrawManager.setCurrent();

@@ -11,7 +11,7 @@
       			margin: 0; 
       			padding: 0; 
       		}
-      		#canvas{
+      		.canvas{
 				background-color: black; 			
       		}
       		#textbox{
@@ -52,7 +52,7 @@
 					<button ng-repeat="t in tools" ng-click="changeTool($index)">{{t}}</button>
 					<button ng-repeat="a in attrs" ng-click="changeAttr($index)">{{a}}</button>
 				</div>
-				<div id="canvas" hand-writer tool="{{tool}}"></div>
+				<div id="draw" class="canvas" hand-writer tool="{{tool}}"></div>
 			</div>
 		</script>
 
@@ -63,7 +63,7 @@
 					<button ng-repeat="a in attrs" ng-click="changeAttr($index)">{{a}}</button>
 				</div>
 					<input id="textbox" ng-model="text">
-					<div id="canvas" text-writer tool="{{tool}}" text="{{text}}">
+					<div id="canvas" class="canvas" text-writer tool="{{tool}}" text="{{text}}">
 				</div>
 			</div>
 		</script>
