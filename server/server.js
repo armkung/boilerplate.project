@@ -138,11 +138,11 @@ io.sockets.on('connection', function(socket) {
 	socket.on('send:pos', function(data) {
 		socket.get('roomName', function(err, room) {
 			if (room != null) {
-				if (data.isSeed) {
+				if (data.pos.isSeed) {
 					console.log("Room : '" + room + "' broadcast pos at ")
-					console.log("x : " + data.x + ", y : " + data.y)
+					console.log("x : " + data.pos.x + ", y : " + data.pos.y)
 				}
-				logger.logPos(room, data);
+				logger.logPos(room, data.pos);
 
 				data.id = socket.id;
 				socket.broadcast.to(room).emit('send:pos', data);

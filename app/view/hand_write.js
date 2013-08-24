@@ -25,19 +25,20 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 
 
 			function draw(data, canDrag) {
+				var pos = data.pos;
 				if (data.id) {
 					if (Room.users.indexOf(data.id) == -1) {
 						Room.users.push(data.id);
 						DrawManager.newGroup(data.id);
 					}
 				} else {
-					if (data.isSeed) {
+					if (pos.isSeed) {
 						DrawManager.newGroup();
 					}
 				}
 
 				DrawManager.setCurrent(data.id);
-				DrawManager.drawBrush(data.x, data.y, data.isSeed);
+				DrawManager.drawBrush(pos.x, pos.y, pos.isSeed);
 				if (canDrag) {
 					DrawManager.canGroupDrag(canDrag);
 				}
@@ -53,7 +54,11 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 			}
 
 			DataManager.getData(typePos, function(data) {
-				draw(data, $scope.tool == DrawFactory.tools.DRAG);
+				switch (data.type) {
+					case DrawFactory.DRAW:
+						draw(data, $scope.tool == DrawFactory.tools.DRAG);
+					break;
+				}
 			});
 			DataManager.getData(typeText, function(data) {
 				text(data, $scope.tool == DrawFactory.tools.DRAG);
@@ -71,8 +76,11 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 				$rootScope.$apply();
 			});
 			DrawFactory.setDraw(function(pos) {
-				draw(pos);
-				DataManager.setData(typePos, pos);
+				var obj = {};
+				obj.pos = pos;
+				obj.type = DrawFactory.DRAW;
+				draw(obj);
+				DataManager.setData(typePos, obj);
 			});
 			$scope.$watch('tool', function() {
 				Input.hide();
