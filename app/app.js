@@ -58,6 +58,7 @@ app.factory("Room", function() {
 	};
 });
 app.factory("DataManager", function(Canvas, Socket) {
+	var obj = {};
 	return {
 		setData: function(type, data) {
 			data.x /= Canvas.width;
@@ -65,12 +66,16 @@ app.factory("DataManager", function(Canvas, Socket) {
 			Socket.emit("send:" + type, data);
 		},
 		getData: function(type, callback) {
-			Socket.remove("send:" + type);
-			Socket.on("send:" + type, function(data) {
-				data.x *= Canvas.width;
-				data.y *= Canvas.height;
-				callback(data);
-			});
+			// Socket.remove("send:" + type);
+			if (!(type in obj)) {
+				obj[type] = callback;
+				Socket.on("send:" + type, function(data) {
+					data.x *= Canvas.width;
+					data.y *= Canvas.height;
+					callback(data);
+				});
+			}
+
 		},
 		loadData: function(type, data, callback) {
 			Socket.emit("load:" + type, data, function(data) {
@@ -94,15 +99,25 @@ app.service("Canvas", function($rootScope) {
 		self.canvas = cs;
 		self.width = container.width();
 		self.height = container.height();
+		var old = stage;
 		stage = new Kinetic.Stage({
 			container: 'canvas',
 			width: self.width,
 			height: self.height
 		});
-	};
-	this.getStage = function() {
+		clone(old, stage);
 		return stage;
+
+		function clone(old, stage) {
+			if (old) {
+				var layers = old.getChildren();
+				for (var i = 0; i < layers.length; i++) {
+					stage.add(layers[i]);
+				}
+			}
+		}
 	};
+
 	this.getPosition = function() {
 		var mousePos = stage.getMousePosition();
 		var touchPos = stage.getTouchPosition();
@@ -115,31 +130,24 @@ app.service("Canvas", function($rootScope) {
 
 });
 app.service("Input", function() {
-	var txt = $("#textbox");
+	var txt;
 
-	this.input = txt;
-	this.text = txt.val();
-	this.position = function(x, y) {
-		txt.css({
-			"left": x,
-			"top": y
-		});
+	this.init = function() {
+		txt = $("#textbox")
+		return txt;
 	};
 	this.clear = function() {
 		txt.val("");
 	};
 	this.hide = function() {
 		this.clear();
-		txt.css({
-			"display": "none"
-		});
+		txt.hide();
 	};
 	this.show = function(x, y) {
 		txt.css({
-			"left": x,
-			"top": y,
-			"display": "inline"
+			left: x,
+			top: y
 		});
+		txt.show();
 	};
-	this.hide();
 });

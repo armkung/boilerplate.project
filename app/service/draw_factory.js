@@ -9,8 +9,8 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 		ANIMATE: "Animate"
 	};
 	this.attrs = {
-		COLOR_LINE: "Line Color",
-		COLOR_TEXT: "Text Color"
+		COLOR_STROKE: "Color",
+		SIZE: "Size"
 	};
 	var event = {};
 	this.action = event;
@@ -123,11 +123,11 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 	};
 	this.setAttr = function(attr, callback) {
 		switch (attr) {
-			case self.attrs.COLOR_LINE:
-				DrawManager.lineOption.stroke = callback.color;
+			case self.attrs.COLOR_STROKE:
+				DrawManager.setStrokeColor(callback.color);
 				break;
-			case self.attrs.COLOR_TEXT:
-				DrawManager.textOption.fill = callback.color;
+			case self.attrs.SIZE:
+				DrawManager.setSize(callback.size);
 				break;
 		}
 	};

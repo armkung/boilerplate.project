@@ -19,12 +19,11 @@ app.service("DrawManager", function(Canvas) {
 	var stage, layer, current;
 	var line, text;
 
+	layer = new Kinetic.Layer();
+	current = layer;
 	this.init = function() {
-		Canvas.init();
-		stage = Canvas.getStage();
-		layer = new Kinetic.Layer();
+		stage = Canvas.init();
 		stage.add(layer);
-		current = layer;
 	};
 	this.initBrush = function(x, y) {
 		line = new Kinetic.Line(self.lineOption);
@@ -49,7 +48,7 @@ app.service("DrawManager", function(Canvas) {
 		op.y = y;
 		op.text = txt;
 		text = new Kinetic.Text(op);
-		layer.add(text);
+		current.add(text);
 		layer.batchDraw();
 	};
 
@@ -61,6 +60,19 @@ app.service("DrawManager", function(Canvas) {
 			var n = child.length;
 			current = child[n - 1];
 		}
+	};
+	this.setStrokeColor = function(color){
+		self.lineOption.stroke = color;
+		self.textOption.fill = color;
+	};
+	this.setFillColor = function(color){
+		self.lineOption.stroke = color;
+		self.textOption.fill = color;
+	};
+	this.setSize = function(size){
+		var ratio = 6;
+		self.lineOption.strokeWidth = size;
+		self.textOption.fontSize = size*ratio;
 	};
 	this.newGroup = function(id) {
 		self.groupOption.id = id ? id : '';

@@ -45,6 +45,7 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 			$rootScope.$on('attr', function(e, attr) {
 				var callback = {};
 				callback.color = '#' + Math.floor(Math.random() * 16777215).toString(16);
+				callback.size = Math.floor(Math.random()*10)+4;
 				DrawFactory.setAttr(attr, callback);
 			});
 		}
