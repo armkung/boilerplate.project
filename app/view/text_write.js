@@ -9,7 +9,7 @@ app.directive("textWriter", function($rootScope, Input, DrawManager, DrawFactory
 			var type = "text";
 			var txt = Input.input;
 			var pos;
-
+			DrawManager.init();
 			function draw(data, canDrag) {
 				DrawManager.drawText(data.text, data.x, data.y);
 				if (canDrag) {
@@ -51,23 +51,5 @@ app.directive("textWriter", function($rootScope, Input, DrawManager, DrawFactory
 				DrawFactory.setAttr(attr, callback);
 			});
 		}
-	};
-});
-
-app.controller('TextWriteCtrl', function($scope, $rootScope, DrawFactory) {
-	$scope.tools = [];
-	$scope.attrs = [];
-	$scope.tool = DrawFactory.tools.TEXT;
-	angular.forEach(DrawFactory.tools, function(value, key) {
-		$scope.tools.push(value);
-	});
-	angular.forEach(DrawFactory.attrs, function(value, key) {
-		$scope.attrs.push(value);
-	});
-	$scope.changeTool = function(index) {
-		$scope.tool = $scope.tools[index];
-	};
-	$scope.changeAttr = function(index) {
-		$rootScope.$broadcast('attr', $scope.attrs[index]);
 	};
 });

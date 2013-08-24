@@ -1,87 +1,3 @@
-app.service("DrawManager", function(Canvas) {
-	var self = this;
-
-	this.lineOption = {
-		points: [0, 0, 0, 0],
-		stroke: 'white',
-		strokeWidth: 5,
-		lineCap: 'round',
-		lineJoin: 'round'
-	};
-	this.textOption = {
-		fontSize: 30,
-		fill: 'white'
-	};
-	this.groupOption = {
-
-	};
-	var stage = Canvas.getStage();
-	var layer = new Kinetic.Layer();
-	stage.add(layer);
-	var current = layer;
-
-	var line, text;
-
-	this.initBrush = function(x, y) {
-		line = new Kinetic.Line(self.lineOption);
-		line.getPoints()[0].x = x;
-		line.getPoints()[0].y = y;
-		line.getPoints()[1].x = x;
-		line.getPoints()[1].y = y;
-		current.add(line);
-	};
-	this.drawBrush = function(x, y, isSeed) {
-		if (!isSeed) {
-			line.getPoints()[1].x = x;
-			line.getPoints()[1].y = y;
-			layer.batchDraw();
-		}
-		self.initBrush(x, y);
-	};
-
-	this.drawText = function(txt, x, y) {
-		var op = self.textOption;
-		op.x = x;
-		op.y = y;
-		op.text = txt;
-		text = new Kinetic.Text(op);
-		layer.add(text);
-		layer.batchDraw();
-	};
-
-	this.setCurrent = function(id) {
-		if (id) {
-			current = layer.get('#' + id)[0];
-		} else {
-			var child = layer.get('#');
-			var n = child.length;
-			current = child[n - 1];
-		}
-	};
-	this.newGroup = function(id) {
-		self.groupOption.id = id ? id : '';
-		group = new Kinetic.Group(self.groupOption);
-		layer.add(group);
-	};
-	this.canDrag = function(canDrag) {
-		var objs = current.getChildren();
-		angular.forEach(objs, function(obj, key) {
-			obj.setDraggable(canDrag);
-		});
-	};
-	this.canGroupDrag = function(canDrag) {
-		var groups = layer.get('Group');
-		angular.forEach(groups, function(group, key) {
-			group.setDraggable(canDrag);
-		});
-	};
-	this.clear = function() {
-		layer.remove();
-		layer = new Kinetic.Layer();
-		stage.add(layer);
-	}
-
-});
 app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 	var self = this;
 	this.tools = {
@@ -97,6 +13,7 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 		COLOR_TEXT: "Text Color"
 	};
 	var event = {};
+	this.action = event;
 	this.setDraw = function(draw) {
 		var isSeed = true,
 			isDraw = false;
@@ -123,7 +40,7 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 				isSeed = true;
 			}
 		};
-	}
+	};
 	this.setAnimate = function(data, draw) {
 		var delay = 10;
 		var isDraw = false;
@@ -235,4 +152,4 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 			}
 		}
 	};
-})
+});

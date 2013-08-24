@@ -15,7 +15,7 @@
       		}
       		#textbox{
       			position: absolute;
-      			/*display: none;*/
+      			display: none;
       			z-index: 9;
       			/*background-color: gray;*/
       		}
@@ -45,7 +45,7 @@
 
 	<body ng-app="socket">
 
-		<script type="text/ng-template" id="hand_write.html">
+		<script type="text/ng-template" id="hand_write.tpl.html">
 			<div class="draw-pad">
 				<div>
 					<button ng-repeat="t in tools" ng-click="changeTool($index)">{{t}}</button>
@@ -55,7 +55,7 @@
 			</div>
 		</script>
 
-		<script type="text/ng-template" id="text_write.html">
+		<script type="text/ng-template" id="text_write.tpl.html">
 			<div class="draw-pad">
 				<div>
 					<button ng-repeat="t in tools" ng-click="changeTool($index)">{{t}}</button>
@@ -67,22 +67,7 @@
 			</div>
 		</script>
 
-		<script type="text/ng-template" id="chat.html">
-			<div>
-				<div class="chat-box">
-					<div ng-repeat="msg in msgs">
-						<img ng-src="{{msg}}" class="emotion">
-					</div>
-				</div>
-				<!-- <button ng-click="sendMsg()">Send</button>
-				<input type="text" ng-model="text"> -->
-				<div class="emoticon-box">
-					<emoticon emotion="img"></emoticon>
-				</div
-			</div>
-		</script>
-
-		<script type="text/ng-template" id="menu.html">
+		<script type="text/ng-template" id="home.tpl.html">
 			<div>
 				<div>
 					<select ng-model="room" ng-options="room for room in rooms"></select>
@@ -98,17 +83,17 @@
 			</div>
 		</script>
 
-		<script type="text/ng-template" id="emoticon.html">
-			<div>
-			<img ng-repeat="emo in emotions" ng-src="{{url+emo}}" ng-click="select($index)" class="emoticon">			
+		<script type="text/ng-template" id="emoticon.tpl.html">		
+			<div>		
+			<img ng-repeat="emo in emotions" ng-src="{{url+emo}}" ng-click="select($index)" class="emoticon">				
 			</div>
 		</script>
 
 		<div class="container">
 			<div class="row">
-				<menu></menu>
-				<ng-view class="col-lg-8"></ng-view>
-				<chat class="col-lg-4"></chat>
+				<menu class="col-lg-2"></menu>
+				<ng-view class="col-lg-7"></ng-view>
+				<chat class="col-lg-3"></chat>
 			</div>
 		</div>
 

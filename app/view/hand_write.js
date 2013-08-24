@@ -6,7 +6,7 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 		},
 		link: function($scope, $attrs) {
 			var type = "pos";
-
+			DrawManager.init();
 			DataManager.getData(type, function(data) {
 				draw(data, $scope.tool == DrawFactory.tools.DRAG);
 			});
@@ -34,14 +34,13 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 				draw(pos);
 				DataManager.setData(type, pos);
 			});
-			DataManager.loadData(type, {
-				room: Room.room
-			}, function(data) {
-				DrawFactory.setAnimate(data, draw);
-			});
-
-			$scope.$watch('tool', function(tool) {
-				DrawFactory.setTool(tool);
+			// DataManager.loadData(type, {
+			// 	room: Room.room
+			// }, function(data) {
+			// 	DrawFactory.setAnimate(data, draw);
+			// });
+			$scope.$watch('tool', function() {
+				DrawFactory.setTool($scope.tool);
 			});
 			$rootScope.$on('attr', function(e, attr) {
 				var callback = {};
@@ -50,24 +49,4 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 			});
 		}
 	};
-});
-
-app.controller('HandWriteCtrl', function($scope, $rootScope, DrawFactory) {
-
-	$scope.tools = [];
-	$scope.attrs = [];
-	$scope.tool = DrawFactory.tools.DRAW;
-	angular.forEach(DrawFactory.tools, function(value, key) {
-		$scope.tools.push(value);
-	});
-	angular.forEach(DrawFactory.attrs, function(value, key) {
-		$scope.attrs.push(value);
-	});
-	$scope.changeTool = function(index) {
-		$scope.tool = $scope.tools[index];
-	};
-	$scope.changeAttr = function(index) {
-		$rootScope.$broadcast('attr', $scope.attrs[index]);
-	};
-
 });
