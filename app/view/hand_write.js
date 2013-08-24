@@ -24,7 +24,7 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 			DrawManager.init($element.id);
 
 
-			function draw(data, canDrag) {
+			function draw(data) {
 				var pos = data.pos;
 				if (data.id) {
 					if (Room.users.indexOf(data.id) == -1) {
@@ -36,32 +36,55 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 						DrawManager.newGroup();
 					}
 				}
-
 				DrawManager.setCurrent(data.id);
+				DrawManager.setStrokeColor(pos.color);
+				DrawManager.setSize(pos.size);
 				DrawManager.drawBrush(pos.x, pos.y, pos.isSeed);
-				if (canDrag) {
-					DrawManager.canGroupDrag(canDrag);
-				}
 			}
 
-			function text(data, canDrag) {
+			function line(data) {
+				var pos = data.pos;
+				if (data.id) {
+					if (Room.users.indexOf(data.id) == -1) {
+						Room.users.push(data.id);
+						DrawManager.newGroup(data.id);
+					}
+				} else {
+					if (pos.isSeed) {
+						DrawManager.newGroup();
+					}
+				}
+				DrawManager.setCurrent(data.id);
+				DrawManager.setStrokeColor(pos.color);
+				DrawManager.setSize(pos.size);
+				DrawManager.drawLine(pos.x, pos.y, pos.isSeed);
+
+			}
+
+			function text(data) {
 				DrawManager.newGroup();
 				DrawManager.setCurrent();
 				DrawManager.drawText(data.text, data.x, data.y);
-				if (canDrag) {
-					DrawManager.canGroupDrag(canDrag);
-				}
 			}
 
 			DataManager.getData(typePos, function(data) {
 				switch (data.type) {
-					case DrawFactory.DRAW:
-						draw(data, $scope.tool == DrawFactory.tools.DRAG);
-					break;
+					case DrawFactory.tools.DRAW:
+						draw(data);
+						break;
+					case DrawFactory.tools.LINE:
+						line(data);
+						break;
+				}
+				if ($scope.tool == DrawFactory.tools.DRAG) {
+					DrawManager.canGroupDrag(canDrag);
 				}
 			});
 			DataManager.getData(typeText, function(data) {
-				text(data, $scope.tool == DrawFactory.tools.DRAG);
+				text(data);
+				if ($scope.tool == DrawFactory.tools.DRAG) {
+					DrawManager.canGroupDrag(canDrag);
+				}
 			});
 			DataManager.loadData(typePos, {
 				room: Room.room
@@ -78,10 +101,28 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 			DrawFactory.setDraw(function(pos) {
 				var obj = {};
 				obj.pos = pos;
-				obj.type = DrawFactory.DRAW;
+				obj.type = DrawFactory.tools.DRAW;
+				if (pos.isSeed) {
+					obj.pos.color = DrawManager.lineOption.stroke;
+					obj.pos.size = DrawManager.lineOption.strokeWidth;
+				}
 				draw(obj);
 				DataManager.setData(typePos, obj);
 			});
+			DrawFactory.setLine(function(pos) {
+				var obj = {};
+				obj.pos = pos;
+				obj.type = DrawFactory.tools.LINE;
+				if (pos.isSeed) {
+					obj.pos.color = DrawManager.lineOption.stroke;
+					obj.pos.size = DrawManager.lineOption.strokeWidth;
+				}
+				line(obj);
+				if (pos.isSeed || pos.isUp) {
+					DataManager.setData(typePos, obj);
+				}
+			});
+
 			$scope.$watch('tool', function() {
 				Input.hide();
 				DrawFactory.setTool($scope.tool);

@@ -6,6 +6,7 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 		CLEAR: "Clear",
 		TEXT: "Text",
 		DRAW: "Draw",
+		LINE: "Line",
 		ANIMATE: "Animate"
 	};
 	this.attrs = {
@@ -71,6 +72,34 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 			}
 		};
 	};
+	this.setLine = function(line) {
+		var isSeed = true,
+			isDraw = false,
+			isUp = false;	
+		event.line = {
+			onDown: function() {
+				isSeed = true;
+				isDraw = true;
+			},
+			onMove: function(pos) {
+				if (isDraw || isUp) {
+					var obj = {
+						x: pos.x,
+						y: pos.y
+					};
+					obj.isSeed = isSeed;	
+					obj.isUp = isUp;	
+					line(obj);
+					isSeed = false;
+					isUp = false;
+				}
+			},
+			onUp: function() {				
+				isDraw = false;
+				isUp = true;
+			}
+		};
+	};
 	this.setDragObject = function(drag) {
 		event.dragObject = {
 			call: function() {
@@ -91,6 +120,10 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 			case self.tools.DRAW:
 				DrawManager.canGroupDrag(false);
 				self.setBind(event.draw);
+				break;
+			case self.tools.LINE:
+				DrawManager.canGroupDrag(false);
+				self.setBind(event.line);
 				break;
 			case self.tools.TEXT:
 				DrawManager.canDrag(false);

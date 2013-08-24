@@ -47,6 +47,25 @@ app.service("DrawManager", function(Canvas) {
 		self.initBrush(x, y);
 	};
 
+	this.initLine = function(x, y) {
+		line = new Kinetic.Line(self.lineOption);
+		line.getPoints()[0].x = x;
+		line.getPoints()[0].y = y;
+		line.getPoints()[1].x = x;
+		line.getPoints()[1].y = y;
+		layer.batchDraw();
+		current.add(line);
+	};
+	this.drawLine = function(x, y, isSeed) {
+		if (isSeed) {
+			self.initLine(x, y);
+		} else {
+			line.getPoints()[1].x = x;
+			line.getPoints()[1].y = y;
+			layer.batchDraw();
+		}
+	};
+
 	this.drawText = function(txt, x, y) {
 		var op = self.textOption;
 		op.x = x;
@@ -67,17 +86,23 @@ app.service("DrawManager", function(Canvas) {
 		}
 	};
 	this.setStrokeColor = function(color) {
-		self.lineOption.stroke = color;
-		self.textOption.fill = color;
+		if (color) {
+			self.lineOption.stroke = color;
+			self.textOption.fill = color;
+		}
 	};
 	this.setFillColor = function(color) {
-		self.lineOption.stroke = color;
-		self.textOption.fill = color;
+		if (color) {
+			self.lineOption.stroke = color;
+			self.textOption.fill = color;
+		}
 	};
 	this.setSize = function(size) {
 		var ratio = 6;
-		self.lineOption.strokeWidth = size;
-		self.textOption.fontSize = size * ratio;
+		if (size) {
+			self.lineOption.strokeWidth = size;
+			self.textOption.fontSize = size * ratio;
+		}
 	};
 	this.newGroup = function(id) {
 		self.groupOption.id = id ? id : '';

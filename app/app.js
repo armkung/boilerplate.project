@@ -58,17 +58,16 @@ app.factory("DataManager", function(Canvas, Socket) {
 	var obj = {};
 	return {
 		setData: function(type, data) {
-			data.x /= Canvas.width;
-			data.y /= Canvas.height;
+			data.pos.x /= Canvas.width;
+			data.pos.y /= Canvas.height;
 			Socket.emit("send:" + type, data);
 		},
 		getData: function(type, callback) {
-			// Socket.remove("send:" + type);
 			if (!(type in obj)) {
 				obj[type] = callback;
 				Socket.on("send:" + type, function(data) {
-					data.x *= Canvas.width;
-					data.y *= Canvas.height;
+					data.pos.x *= Canvas.width;
+					data.pos.y *= Canvas.height;
 					callback(data);
 				});
 			}
@@ -76,11 +75,15 @@ app.factory("DataManager", function(Canvas, Socket) {
 		},
 		loadData: function(type, data, callback) {
 			Socket.emit("load:" + type, data, function(data) {
+				var obj = [];
 				angular.forEach(data, function(data, key) {
 					data.x *= Canvas.width;
 					data.y *= Canvas.height;
+					obj.push({
+						pos: data
+					});
 				});
-				callback(data);
+				callback(obj);
 			});
 		}
 	};
@@ -136,7 +139,7 @@ app.service("Input", function() {
 	var txt;
 
 	this.init = function(calback) {
-		txt = $("#textbox")
+		txt = $("#textbox");
 		txt.bind('keydown', function(e) {
 			if (e.keyCode == 13) {
 				calback();
