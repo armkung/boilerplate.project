@@ -6,8 +6,7 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 			tool: '@'
 		},
 		link: function($scope, $attrs, $element) {
-			var typePos = "pos",
-				typeText = "text";
+			var typePos = "pos";
 
 			Input.init(function() {
 				var obj = {};
@@ -16,13 +15,13 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 					x: pos.x,
 					y: pos.y
 				};
+				obj.type = DrawFactory.tools.TEXT;
 				text(obj);
-				DataManager.setData(typeText, obj);
+				DataManager.setData(typePos, obj);
 			});
 			Input.hide();
 
 			DrawManager.init($element.id);
-
 
 			function draw(data) {
 				var pos = data.pos;
@@ -75,17 +74,15 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 					case DrawFactory.tools.LINE:
 						line(data);
 						break;
+					case DrawFactory.tools.TEXT:
+						text(data);
+						break;
 				}
 				if ($scope.tool == DrawFactory.tools.DRAG) {
 					DrawManager.canGroupDrag(canDrag);
 				}
 			});
-			DataManager.getData(typeText, function(data) {
-				text(data);
-				if ($scope.tool == DrawFactory.tools.DRAG) {
-					DrawManager.canGroupDrag(canDrag);
-				}
-			});
+
 			DataManager.loadData(typePos, {
 				room: Room.room
 			}, function(data) {

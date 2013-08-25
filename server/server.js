@@ -156,7 +156,7 @@ io.sockets.on('connection', function(socket) {
 			var json = logger.load(data.room);
 			var pos = JSON.parse(json).pos;
 
-			console.log("Send Pos Back")
+			// console.log("Send Pos Back")
 			// console.log(pos)
 			callback(pos);
 		} catch (e) {
@@ -164,16 +164,16 @@ io.sockets.on('connection', function(socket) {
 		}
 	});
 
-	socket.on('send:text', function(data) {
-		socket.get('roomName', function(err, room) {
-			if (room != null) {
-				data.id = socket.id;
-				socket.broadcast.to(room).emit('send:text', data);
-				console.log("Send text : " + data.text)
-			}
-		});
+	// socket.on('send:text', function(data) {
+	// 	socket.get('roomName', function(err, room) {
+	// 		if (room != null) {
+	// 			data.id = socket.id;
+	// 			socket.broadcast.to(room).emit('send:text', data);
+	// 			console.log("Send text : " + data.pos.text)
+	// 		}
+	// 	});
 
-	});
+	// });
 
 	socket.on('send:msg', function(data) {
 		socket.get('roomName', function(err, room) {
