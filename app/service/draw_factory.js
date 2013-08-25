@@ -13,12 +13,12 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 		COLOR_STROKE: "Color",
 		SIZE: "Size"
 	};
-	var event = {};
-	this.action = event;
+	var listener = {};
+
 	this.setDraw = function(draw) {
 		var isSeed = true,
 			isDraw = false;
-		event.draw = {
+		listener.draw = {
 			onDown: function() {
 				isDraw = true;
 				isSeed = true;
@@ -45,7 +45,7 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 	this.setAnimate = function(data, draw) {
 		var delay = 10;
 		var isDraw = false;
-		event.animate = {
+		listener.animate = {
 			call: function() {
 				if (!isDraw) {
 					isDraw = true;
@@ -66,7 +66,7 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 		};
 	};
 	this.setText = function(text) {
-		event.text = {
+		listener.text = {
 			onDown: function(data) {
 				text(data);
 			}
@@ -75,8 +75,8 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 	this.setLine = function(line) {
 		var isSeed = true,
 			isDraw = false,
-			isUp = false;	
-		event.line = {
+			isUp = false;
+		listener.line = {
 			onDown: function() {
 				isSeed = true;
 				isDraw = true;
@@ -87,28 +87,28 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 						x: pos.x,
 						y: pos.y
 					};
-					obj.isSeed = isSeed;	
-					obj.isUp = isUp;	
+					obj.isSeed = isSeed;
+					obj.isUp = isUp;
 					line(obj);
 					isSeed = false;
 					isUp = false;
 				}
 			},
-			onUp: function() {				
+			onUp: function() {
 				isDraw = false;
 				isUp = true;
 			}
 		};
 	};
 	this.setDragObject = function(drag) {
-		event.dragObject = {
+		listener.dragObject = {
 			call: function() {
 				drag();
 			}
 		};
 	};
 	this.setDragGroup = function(drag) {
-		event.dragGroup = {
+		listener.dragGroup = {
 			call: function() {
 				drag();
 			}
@@ -119,35 +119,35 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 		switch (tool) {
 			case self.tools.DRAW:
 				DrawManager.canGroupDrag(false);
-				self.setBind(event.draw);
+				setBind(listener.draw);
 				break;
 			case self.tools.LINE:
 				DrawManager.canGroupDrag(false);
-				self.setBind(event.line);
+				setBind(listener.line);
 				break;
 			case self.tools.TEXT:
 				DrawManager.canDrag(false);
-				self.setBind(event.text);
+				setBind(listener.text);
 				break;
 			case self.tools.ANIMATE:
-				if (event.animate && event.animate.call) {
-					event.animate.call();
+				if (listener.animate && listener.animate.call) {
+					listener.animate.call();
 				}
-				self.setBind(event.animate);
+				setBind(listener.animate);
 				break;
 			case self.tools.DRAG_GROUP:
-				if (event.dragGroup && event.dragGroup.call) {
-					event.dragGroup.call();
+				if (listener.dragGroup && listener.dragGroup.call) {
+					listener.dragGroup.call();
 				}
 				DrawManager.canGroupDrag(true);
-				self.setBind(event.dragGroup);
+				setBind(listener.dragGroup);
 				break;
 			case self.tools.DRAG_OBJECT:
-				if (event.dragObject && event.dragObject.call) {
-					event.dragObject.call();
+				if (listener.dragObject && listener.dragObject.call) {
+					listener.dragObject.call();
 				}
 				DrawManager.canDrag(true);
-				self.setBind(event.dragObject);
+				setBind(listener.dragObject);
 				break;
 			case self.tools.CLEAR:
 				DrawManager.clear();
@@ -164,7 +164,8 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 				break;
 		}
 	};
-	this.setBind = function(callback) {
+
+	function setBind(callback) {
 		var cs = Canvas.canvas;
 		cs.unbind();
 		if (callback) {

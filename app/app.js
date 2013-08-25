@@ -44,7 +44,7 @@ app.factory('Socket', function($rootScope) {
 			socket.disconnect();
 		},
 		remove: function(event) {
-			socket.removeListener(event);
+			socket.removeAllListeners(event);
 		}
 	};
 });
@@ -63,17 +63,19 @@ app.factory("DataManager", function(Canvas, Socket) {
 			Socket.emit("send:" + type, data);
 		},
 		getData: function(type, callback) {
-			if (!(type in obj)) {
-				obj[type] = callback;
+			// if (!(type in obj)) {
+				// obj[type] = callback;
+				Socket.remove("send:" + type);
 				Socket.on("send:" + type, function(data) {
 					data.pos.x *= Canvas.width;
 					data.pos.y *= Canvas.height;
 					callback(data);
 				});
-			}
+			// }
 
 		},
 		loadData: function(type, data, callback) {
+			Socket.remove("load:" + type);
 			Socket.emit("load:" + type, data, function(data) {
 				var obj = [];
 				angular.forEach(data, function(data, key) {
