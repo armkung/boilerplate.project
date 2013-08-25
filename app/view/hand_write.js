@@ -10,14 +10,14 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 				typeText = "text";
 
 			Input.init(function() {
-				var obj = {
+				var obj = {};
+				obj.pos = {
 					text: $scope.text,
 					x: pos.x,
 					y: pos.y
 				};
 				text(obj);
 				DataManager.setData(typeText, obj);
-				Input.hide();
 			});
 			Input.hide();
 
@@ -64,7 +64,7 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 			function text(data) {
 				DrawManager.newGroup();
 				DrawManager.setCurrent();
-				DrawManager.drawText(data.text, data.x, data.y);
+				DrawManager.drawText(data.pos.text, data.pos.x, data.pos.y);
 			}
 
 			DataManager.getData(typePos, function(data) {

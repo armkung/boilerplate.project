@@ -55,7 +55,7 @@ app.factory("Room", function() {
 	};
 });
 app.factory("DataManager", function(Canvas, Socket) {
-	var obj = {};
+
 	return {
 		setData: function(type, data) {
 			data.pos.x /= Canvas.width;
@@ -63,15 +63,13 @@ app.factory("DataManager", function(Canvas, Socket) {
 			Socket.emit("send:" + type, data);
 		},
 		getData: function(type, callback) {
-			// if (!(type in obj)) {
-				// obj[type] = callback;
-				Socket.remove("send:" + type);
-				Socket.on("send:" + type, function(data) {
-					data.pos.x *= Canvas.width;
-					data.pos.y *= Canvas.height;
-					callback(data);
-				});
-			// }
+			Socket.remove("send:" + type);
+			Socket.on("send:" + type, function(data) {
+				data.pos.x *= Canvas.width;
+				data.pos.y *= Canvas.height;
+				callback(data);
+			});
+
 
 		},
 		loadData: function(type, data, callback) {
@@ -102,28 +100,12 @@ app.service("Canvas", function($rootScope) {
 		self.canvas = cs;
 		self.width = container.width();
 		self.height = container.height();
-		// var old = stage;
-		// if (id in obj) {
-		// 	stage = obj.id;
-		// } else {
 		stage = new Kinetic.Stage({
 			container: id,
 			width: self.width,
 			height: self.height
 		});
-		// obj.id = stage;
-		// }
-		// clone(old, stage);
 		return stage;
-
-		// function clone(old, stage) {
-		// 	if (old) {
-		// 		var layers = old.getChildren();
-		// 		for (var i = 0; i < layers.length; i++) {
-		// 			stage.add(layers[i]);
-		// 		}
-		// 	}
-		// }
 	};
 
 	this.getPosition = function() {
@@ -138,6 +120,7 @@ app.service("Canvas", function($rootScope) {
 
 });
 app.service("Input", function() {
+	var self = this;
 	var txt;
 
 	this.init = function(calback) {
@@ -145,14 +128,12 @@ app.service("Input", function() {
 		txt.bind('keydown', function(e) {
 			if (e.keyCode == 13) {
 				calback();
+				self.hide();
 			}
 		});
 	};
-	this.clear = function() {
-		txt.val("");
-	};
 	this.hide = function() {
-		this.clear();
+		txt.val("");
 		txt.hide();
 	};
 	this.show = function(x, y) {

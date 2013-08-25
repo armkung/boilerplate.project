@@ -185,5 +185,5 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 				});
 			}
 		}
-	};
+	}
 });
