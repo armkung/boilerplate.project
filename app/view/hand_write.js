@@ -7,20 +7,6 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 		},
 		link: function($scope, $attrs, $element) {
 			var typePos = "pos";
-
-			Input.init(function() {
-				var obj = {};
-				obj.pos = {
-					text: $scope.text,
-					x: pos.x,
-					y: pos.y
-				};
-				obj.type = DrawFactory.tools.TEXT;
-				text(obj);
-				DataManager.setData(typePos, obj);
-			});
-			Input.hide();
-
 			DrawManager.init($element.id);
 
 			function draw(data) {
@@ -37,7 +23,7 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 				}
 				DrawManager.setCurrent(data.id);
 				DrawManager.setStrokeColor(pos.color);
-				DrawManager.setSize(pos.size);
+				DrawManager.setStrokeSize(pos.size);
 				DrawManager.drawBrush(pos.x, pos.y, pos.isSeed);
 			}
 
@@ -55,18 +41,28 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 				}
 				DrawManager.setCurrent(data.id);
 				DrawManager.setStrokeColor(pos.color);
-				DrawManager.setSize(pos.size);
+				DrawManager.setStrokeSize(pos.size);
 				DrawManager.drawLine(pos.x, pos.y, pos.isSeed);
 
 			}
 
 			function text(data) {
+				var pos = data.pos;
 				DrawManager.newGroup();
 				DrawManager.setCurrent();
-				DrawManager.drawText(data.pos.text, data.pos.x, data.pos.y);
+				DrawManager.setFillColor(pos.color);
+				DrawManager.setFontSize(pos.size);
+				DrawManager.drawText(pos.text, pos.x, pos.y);
 			}
 
+			var strokeColor, fillColor, strokeSize, fontSize;
 			DataManager.getData(typePos, function(data) {
+				if (data.pos.isSeed) {
+					strokeColor = DrawManager.getStrokeColor();
+					fillColor = DrawManager.getFillColor();
+					strokeSize = DrawManager.getStrokeSize();
+					fontSize = DrawManager.getFontSize();
+				}
 				switch (data.type) {
 					case DrawFactory.tools.DRAW:
 						draw(data);
@@ -78,10 +74,33 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 						text(data);
 						break;
 				}
+				if (data.pos.isUp) {
+					DrawManager.setStrokeColor(strokeColor);
+					DrawManager.setFillColor(fillColor);
+					DrawManager.setStrokeSize(strokeSize);
+					DrawManager.setFontSize(fontSize);
+				}
 				if ($scope.tool == DrawFactory.tools.DRAG) {
 					DrawManager.canGroupDrag(canDrag);
 				}
 			});
+
+			Input.init(function() {
+				var obj = {};
+				obj.pos = {
+					text: $scope.text,
+					x: pos.x,
+					y: pos.y
+				};
+				obj.type = DrawFactory.tools.TEXT;
+				obj.pos.color = DrawManager.getFillColor();
+				obj.pos.size = DrawManager.getFontSize();
+				obj.pos.isSeed = true;
+				obj.pos.isUp = true;
+				text(obj);
+				DataManager.setData(typePos, obj);
+			});
+			Input.hide();
 
 			DataManager.loadData(typePos, {
 				room: Room.room
@@ -100,8 +119,8 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 				obj.pos = pos;
 				obj.type = DrawFactory.tools.DRAW;
 				if (pos.isSeed) {
-					obj.pos.color = DrawManager.lineOption.stroke;
-					obj.pos.size = DrawManager.lineOption.strokeWidth;
+					obj.pos.color = DrawManager.getStrokeColor();
+					obj.pos.size = DrawManager.getStrokeSize();
 				}
 				draw(obj);
 				DataManager.setData(typePos, obj);
@@ -111,8 +130,8 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 				obj.pos = pos;
 				obj.type = DrawFactory.tools.LINE;
 				if (pos.isSeed) {
-					obj.pos.color = DrawManager.lineOption.stroke;
-					obj.pos.size = DrawManager.lineOption.strokeWidth;
+					obj.pos.color = DrawManager.getStrokeColor();
+					obj.pos.size = DrawManager.getStrokeSize();
 				}
 				line(obj);
 				if (pos.isSeed || pos.isUp) {
@@ -126,8 +145,10 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 			});
 			$rootScope.$on('attr', function(e, attr) {
 				var callback = {};
-				callback.color = '#' + Math.floor(Math.random() * 16777215).toString(16);
-				callback.size = Math.floor(Math.random() * 10) + 4;
+				callback.strokeColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+				callback.fillColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+				callback.strokeSize = Math.floor(Math.random() * 10) + 4;
+				callback.fontSize = Math.floor(Math.random() * 20) + 28;
 				DrawFactory.setAttr(attr, callback);
 			});
 		}

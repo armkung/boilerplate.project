@@ -10,38 +10,13 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 		ANIMATE: "Animate"
 	};
 	this.attrs = {
-		COLOR_STROKE: "Color",
-		SIZE: "Size"
+		COLOR_STROKE: "Line Color",
+		COLOR_FILL: "Text Color",
+		SIZE_STROKE: "Line Size",
+		SIZE_FONT: "Text Size"
 	};
 	var listener = {};
 
-	this.setDraw = function(draw) {
-		var isSeed = true,
-			isDraw = false;
-		listener.draw = {
-			onDown: function() {
-				isDraw = true;
-				isSeed = true;
-			},
-			onMove: function(pos) {
-				if (isDraw) {
-					var obj = {
-						x: pos.x,
-						y: pos.y
-					};
-					if (isSeed) {
-						obj.isSeed = isSeed;
-					}
-					isSeed = false;
-					draw(obj);
-				}
-			},
-			onUp: function() {
-				isDraw = false;
-				isSeed = true;
-			}
-		};
-	};
 	this.setAnimate = function(data, draw) {
 		var delay = 10;
 		var isDraw = false;
@@ -72,6 +47,40 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 			}
 		};
 	};
+	this.setDraw = function(draw) {
+		var isSeed = true,
+			isDraw = false,
+			isUp = false;
+		listener.draw = {
+			onDown: function() {
+				isDraw = true;
+				isUp = false;
+				isSeed = true;
+			},
+			onMove: function(pos) {
+				if (isDraw || isUp) {
+					var obj = {
+						x: pos.x,
+						y: pos.y
+					};
+					if (isSeed && !isUp) {
+						obj.isSeed = isSeed;
+					}
+					if (isUp) {
+						obj.isUp = isUp;
+					}
+					draw(obj);
+					isSeed = false;
+					isUp = false;
+				}
+			},
+			onUp: function() {
+				isDraw = false;
+				isSeed = true;
+				isUp = true;
+			}
+		};
+	};
 	this.setLine = function(line) {
 		var isSeed = true,
 			isDraw = false,
@@ -80,6 +89,7 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 			onDown: function() {
 				isSeed = true;
 				isDraw = true;
+				isUp = false;
 			},
 			onMove: function(pos) {
 				if (isDraw || isUp) {
@@ -87,8 +97,12 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 						x: pos.x,
 						y: pos.y
 					};
-					obj.isSeed = isSeed;
-					obj.isUp = isUp;
+					if (isSeed && !isUp) {
+						obj.isSeed = isSeed;
+					}
+					if (isUp) {
+						obj.isUp = isUp;
+					}
 					line(obj);
 					isSeed = false;
 					isUp = false;
@@ -96,6 +110,7 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 			},
 			onUp: function() {
 				isDraw = false;
+				isSeed = true;
 				isUp = true;
 			}
 		};
@@ -157,10 +172,16 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 	this.setAttr = function(attr, callback) {
 		switch (attr) {
 			case self.attrs.COLOR_STROKE:
-				DrawManager.setStrokeColor(callback.color);
+				DrawManager.setStrokeColor(callback.strokeColor);
 				break;
-			case self.attrs.SIZE:
-				DrawManager.setSize(callback.size);
+			case self.attrs.COLOR_FILL:
+				DrawManager.setFillColor(callback.fillColor);
+				break;
+			case self.attrs.SIZE_STROKE:
+				DrawManager.setStrokeSize(callback.strokeSize);
+				break;
+			case self.attrs.SIZE_FONT:
+				DrawManager.setFontSize(callback.fontSize);
 				break;
 		}
 	};

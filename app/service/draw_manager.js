@@ -1,24 +1,28 @@
 app.service("DrawManager", function(Canvas) {
 	var self = this;
 
-	this.lineOption = {
+	this.strokeColor = 'white';
+	this.fillColor = 'white';
+	this.strokeSize = 5;
+	this.fontSize = 30;
+	var lineOption = {
 		points: [0, 0, 0, 0],
 		stroke: 'white',
 		strokeWidth: 5,
 		lineCap: 'round',
 		lineJoin: 'round'
 	};
-	this.textOption = {
+	var textOption = {
 		fontSize: 30,
 		fill: 'white'
 	};
-	this.groupOption = {
+	var groupOption = {
 
 	};
 
 	var stage, layer, current;
 	var line, text;
-	var obj = {};
+	var obj = {};	
 	this.init = function(id) {
 		stage = Canvas.init(id);
 		if (id in obj) {
@@ -31,7 +35,7 @@ app.service("DrawManager", function(Canvas) {
 		stage.add(layer);
 	};
 	this.initBrush = function(x, y) {
-		line = new Kinetic.Line(self.lineOption);
+		line = new Kinetic.Line(lineOption);
 		line.getPoints()[0].x = x;
 		line.getPoints()[0].y = y;
 		line.getPoints()[1].x = x;
@@ -48,7 +52,7 @@ app.service("DrawManager", function(Canvas) {
 	};
 
 	this.initLine = function(x, y) {
-		line = new Kinetic.Line(self.lineOption);
+		line = new Kinetic.Line(lineOption);
 		line.getPoints()[0].x = x;
 		line.getPoints()[0].y = y;
 		line.getPoints()[1].x = x;
@@ -67,7 +71,7 @@ app.service("DrawManager", function(Canvas) {
 	};
 
 	this.drawText = function(txt, x, y) {
-		var op = self.textOption;
+		var op = textOption;
 		op.x = x;
 		op.y = y;
 		op.text = txt;
@@ -87,26 +91,43 @@ app.service("DrawManager", function(Canvas) {
 	};
 	this.setStrokeColor = function(color) {
 		if (color) {
-			self.lineOption.stroke = color;
-			self.textOption.fill = color;
+			self.strokeColor = color;
+			lineOption.stroke = color;
 		}
 	};
 	this.setFillColor = function(color) {
 		if (color) {
-			self.lineOption.stroke = color;
-			self.textOption.fill = color;
+			self.fillColor = color;
+			textOption.fill = color;
 		}
 	};
-	this.setSize = function(size) {
-		var ratio = 6;
+	this.setStrokeSize = function(size) {
 		if (size) {
-			self.lineOption.strokeWidth = size;
-			self.textOption.fontSize = size * ratio;
+			self.strokeSize = size;
+			lineOption.strokeWidth = size;
 		}
+	};
+	this.setFontSize = function(size) {
+		if (size) {
+			self.fontSize = size;
+			textOption.fontSize = size;
+		}
+	};
+	this.getStrokeColor = function(){
+		return self.strokeColor;
+	};
+	this.getFillColor = function(){
+		return self.fillColor;
+	};
+	this.getStrokeSize = function(){
+		return self.strokeSize;
+	};
+	this.getFontSize = function(){
+		return self.fontSize;
 	};
 	this.newGroup = function(id) {
-		self.groupOption.id = id ? id : '';
-		group = new Kinetic.Group(self.groupOption);
+		groupOption.id = id ? id : '';
+		group = new Kinetic.Group(groupOption);
 		layer.add(group);
 	};
 	this.canDrag = function(canDrag) {
