@@ -69,7 +69,9 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 					if (isUp) {
 						obj.isUp = isUp;
 					}
-					draw(obj);
+					if (!isUp) {
+						draw(obj);
+					}
 					isSeed = false;
 					isUp = false;
 				}
@@ -103,7 +105,9 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 					if (isUp) {
 						obj.isUp = isUp;
 					}
-					line(obj);
+					if (!isUp) {
+						line(obj);
+					}
 					isSeed = false;
 					isUp = false;
 				}
