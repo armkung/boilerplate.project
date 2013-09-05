@@ -1,11 +1,17 @@
-app.directive('slide', function($compile, $http,DrawManager) {
+app.directive('slide', function($compile, $http, DrawManager) {
 	return {
 		restrict: 'E',
 		template: '<iframe id="slide" ng-src="{{url}}"></iframe>',
 		scope: {
 			url: '@'
 		},
-		link: function(scope, iElement, DataManager, SlideManager) {
+		link: function(scope, iElement, DrawManager, SlideManager) {
+			DrawManager.init('mirror');
+			// SlideManager.init();
+			// scope.url = SlideManager.url;
+			// scope.$watch(SlideManager.url, function() {
+
+			// });
 			// scope.$watch('url', function() {
 			// 	if (scope.url) {
 			// 		console.log($('#slide'));

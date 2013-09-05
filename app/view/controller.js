@@ -42,10 +42,19 @@ app.controller('SlideCtrl', function($scope, $http, $rootScope, DrawFactory) {
 	$http.jsonp(url).success(function(data) {
 		$scope.url = data.url;
 	});
+	var id = "#slide=";
+	var index = 1;
+	
+	$scope.nextIndex = function() {
+		$scope.index = id + (++index);
+	};
+	$scope.prevIndex = function() {
+		$scope.index = id + (--index);
+	};
 
 	$scope.tools = [];
 	$scope.attrs = [];
-	$scope.tool = DrawFactory.tools.DRAW;
+	$scope.tool = DrawFactory.tools.DRAG_GROUP;
 	angular.forEach(DrawFactory.tools, function(value, key) {
 		$scope.tools.push(value);
 	});

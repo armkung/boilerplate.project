@@ -97,12 +97,16 @@
 				<button ng-repeat="t in tools" ng-click="changeTool($index)">{{t}}</button>
 				<button ng-repeat="a in attrs" ng-click="changeAttr($index)">{{a}}</button>
 			</div>
+			<div>
+				<button ng-click="nextIndex()">Next</button>
+				<button ng-click="prevIndex()">Prev</button>
+			</div>
 			<div class="draw-pad">
 				<input id="textbox" ng-model="text">
-				<div id="draw" hand-writer tool="{{tool}}" text="{{text}}"></div>
+				<div id="mirror" hand-writer tool="{{tool}}" text="{{text}}"></div>
 			</div>
 			<div class="slide-pad">
-				<slide url="{{url}}"></slide>
+				<slide url="{{url+index}}"></slide>
 			</div>
 		</script>
 
