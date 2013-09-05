@@ -35,6 +35,31 @@ app.controller('TextWriteCtrl', function($scope, $rootScope, DrawFactory) {
 	};
 });
 
+app.controller('SlideCtrl', function($scope, $http, $rootScope, DrawFactory) {
+	var host = "http://www.greedmonkey.com/kreang/index.php/";
+	var slide = "test/print_file/1-oQjVefFucKtYkHP1dgLQdt3G6OsTTnjXvAw1EyZ8Lc";
+	var url = host + slide + "?callback=JSON_CALLBACK";
+	$http.jsonp(url).success(function(data) {
+		$scope.url = data.url;
+	});
+
+	$scope.tools = [];
+	$scope.attrs = [];
+	$scope.tool = DrawFactory.tools.DRAW;
+	angular.forEach(DrawFactory.tools, function(value, key) {
+		$scope.tools.push(value);
+	});
+	angular.forEach(DrawFactory.attrs, function(value, key) {
+		$scope.attrs.push(value);
+	});
+	$scope.changeTool = function(index) {
+		$scope.tool = $scope.tools[index];
+	};
+	$scope.changeAttr = function(index) {
+		$rootScope.$broadcast('attr', $scope.attrs[index]);
+	};
+});
+
 app.controller('HomeCtrl', function($scope, Room, Socket, Restangular) {
 	$scope.user = String.fromCharCode(Math.random() * 26 + 97);
 	$scope.room = "";
