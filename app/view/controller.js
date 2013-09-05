@@ -35,21 +35,23 @@ app.controller('TextWriteCtrl', function($scope, $rootScope, DrawFactory) {
 	};
 });
 
-app.controller('SlideCtrl', function($scope, $http, $rootScope, DrawFactory) {
-	var host = "http://www.greedmonkey.com/kreang/index.php/";
-	var slide = "test/print_file/1-oQjVefFucKtYkHP1dgLQdt3G6OsTTnjXvAw1EyZ8Lc";
-	var url = host + slide + "?callback=JSON_CALLBACK";
-	$http.jsonp(url).success(function(data) {
-		$scope.url = data.url;
-	});
-	var id = "#slide=";
-	var index = 1;
-	
+app.controller('SlideCtrl', function($scope, $http, $rootScope, DrawFactory, SlideManager) {
+	// var host = "http://www.greedmonkey.com/kreang/index.php/";
+	// var slide = "test/print_file/1-oQjVefFucKtYkHP1dgLQdt3G6OsTTnjXvAw1EyZ8Lc";
+	// var url = host + slide + "?callback=JSON_CALLBACK";
+	// $http.jsonp(url).success(function(data) {
+	// 	$scope.url = data.url;
+	// });
+	// var id = "#slide=";
+	// var index = 1;
+
 	$scope.nextIndex = function() {
-		$scope.index = id + (++index);
+		// $scope.index = id + (++index);
+		SlideManager.next();
 	};
 	$scope.prevIndex = function() {
-		$scope.index = id + (--index);
+		// $scope.index = id + (--index);
+		SlideManager.prev();
 	};
 
 	$scope.tools = [];

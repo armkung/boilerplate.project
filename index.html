@@ -20,7 +20,7 @@
       			z-index: 9;
       			/*background-color: gray;*/
       		}
-      		#pad{
+      		#pad{      			
       			height: 80%;
       		}
       		.slide-pad{
@@ -106,7 +106,7 @@
 				<div id="mirror" hand-writer tool="{{tool}}" text="{{text}}"></div>
 			</div>
 			<div class="slide-pad">
-				<slide url="{{url+index}}"></slide>
+				<slide></slide>
 			</div>
 		</script>
 
@@ -136,7 +136,7 @@
 			<div class="row">
 				<menu class="well col-lg-1"></menu>
 				<div class="well col-lg-8">
-					<div id="pad">
+					<div id="pad" class="container">
 						<ng-view></ng-view>
 					</div>
 				</div>
