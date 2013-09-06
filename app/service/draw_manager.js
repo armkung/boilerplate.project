@@ -22,9 +22,9 @@ app.service("DrawManager", function(Canvas) {
 
 	var stage, layer, current;
 	var line, text;
-	var obj = {};	
+	var obj = {};
 	this.init = function(id) {
-		stage = Canvas.init(id);
+		stage = Canvas.init(id.split("-")[0]);
 		if (id in obj) {
 			layer = obj[id];
 		} else {

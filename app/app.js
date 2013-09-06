@@ -80,7 +80,7 @@ app.factory("DataManager", function(Canvas, Socket) {
 					break;
 				case "slide":
 					Socket.on("send:" + type, function(data) {
-						
+
 						callback(data);
 					});
 					break;
@@ -111,15 +111,17 @@ app.service("Canvas", function() {
 	var obj = {};
 	this.init = function(id) {
 		var cs = $("#" + id);
-		var container = cs.parent();
-		self.canvas = cs;
-		self.width = container.width();
-		self.height = container.height();
-		stage = new Kinetic.Stage({
-			container: id,
-			width: self.width,
-			height: self.height
-		});
+		if (cs) {
+			var container = cs.parent();
+			self.canvas = cs;
+			self.width = container.width();
+			self.height = container.height();
+			stage = new Kinetic.Stage({
+				container: id,
+				width: self.width,
+				height: self.height
+			});
+		}
 		return stage;
 	};
 
