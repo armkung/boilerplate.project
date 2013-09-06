@@ -11,6 +11,9 @@ app.config(['$routeProvider',
 		}).when('/home', {
 			templateUrl: 'home.tpl.html',
 			controller: 'HomeCtrl'
+		}).when('/slide', {
+			templateUrl: 'slide.tpl.html',
+			controller: 'SlideCtrl'
 		}).otherwise({
 			redirectTo: '/draw'
 		});
@@ -57,6 +60,9 @@ app.factory("Room", function() {
 app.factory("DataManager", function(Canvas, Socket) {
 
 	return {
+		types: {
+			POS: "pos"
+		},
 		setData: function(type, data) {
 			data.pos.x /= Canvas.width;
 			data.pos.y /= Canvas.height;
@@ -64,12 +70,21 @@ app.factory("DataManager", function(Canvas, Socket) {
 		},
 		getData: function(type, callback) {
 			Socket.remove("send:" + type);
-			Socket.on("send:" + type, function(data) {
-				data.pos.x *= Canvas.width;
-				data.pos.y *= Canvas.height;
-				callback(data);
-			});
-
+			switch (type) {
+				case "pos":
+					Socket.on("send:" + type, function(data) {
+						data.pos.x *= Canvas.width;
+						data.pos.y *= Canvas.height;
+						callback(data);
+					});
+					break;
+				case "slide":
+					Socket.on("send:" + type, function(data) {
+						
+						callback(data);
+					});
+					break;
+			}
 
 		},
 		loadData: function(type, data, callback) {
@@ -90,7 +105,7 @@ app.factory("DataManager", function(Canvas, Socket) {
 });
 
 
-app.service("Canvas", function($rootScope) {
+app.service("Canvas", function() {
 	var self = this;
 	var stage;
 	var obj = {};

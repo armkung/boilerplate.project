@@ -31,3 +31,14 @@ app.directive('menu', function() {
 		templateUrl: 'main/menu.tpl.html'
 	};
 });
+
+app.directive('fitSize', function() {
+	return {
+		restrict: 'AC',
+		link: function(scope,iElement){
+			console.log($(iElement).height()+" "+$('#pad').height());
+			$(iElement).width($('#pad').width());
+			$(iElement).height($('#pad').height());
+		}
+	};
+});
