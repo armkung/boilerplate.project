@@ -156,11 +156,9 @@ io.sockets.on('connection', function(socket) {
 			var json = logger.load(data.room);
 			var pos = JSON.parse(json).pos;
 
-			// console.log("Send Pos Back")
-			// console.log(pos)
 			callback(pos);
 		} catch (e) {
-			console.log(e.message);
+			// console.log(e.message);
 		}
 	});
 
@@ -180,7 +178,16 @@ io.sockets.on('connection', function(socket) {
 			if (room != null) {
 				io.sockets. in (room).emit('send:msg', data.msg);
 				logger.logMsg(room, data.msg);
-				console.log("Send msg : " + data.msg)
+				console.log("Send msg : " + data.msg);
+			}
+		});
+	});
+
+	socket.on('send:slide', function(data) {
+		socket.get('roomName', function(err, room) {
+			if (room != null) {
+				io.sockets. in (room).emit('send:slide', data);
+				console.log("Send slide : " + data.url + data.index);
 			}
 		});
 	});

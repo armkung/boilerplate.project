@@ -83,11 +83,16 @@ app.service("DrawManager", function(Canvas) {
 	this.setCurrent = function(id) {
 		if (id) {
 			current = layer.get('#' + id)[0];
+			if(!current){
+				self.newGroup(id);
+				current = layer.get('#' + id)[0];
+			}
 		} else {
 			var child = layer.get('#');
 			var n = child.length;
 			current = child[n - 1];
 		}
+		
 	};
 	this.setStrokeColor = function(color) {
 		if (color) {

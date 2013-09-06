@@ -64,8 +64,10 @@ app.factory("DataManager", function(Canvas, Socket) {
 			POS: "pos"
 		},
 		setData: function(type, data) {
-			data.pos.x /= Canvas.width;
-			data.pos.y /= Canvas.height;
+			if (data.pos) {
+				data.pos.x /= Canvas.width;
+				data.pos.y /= Canvas.height;
+			}
 			Socket.emit("send:" + type, data);
 		},
 		getData: function(type, callback) {
