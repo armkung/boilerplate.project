@@ -55,7 +55,18 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 				DrawManager.drawText(pos.text, pos.x, pos.y);
 			}
 
-			function drag(data) {
+			function dragGroup(data) {
+				var pos = data.pos;
+				if (data.id) {
+					addGroup(data.id);
+				}
+				// console.log(data)
+				// console.log(DrawManager.getCurrentGroup(data.id))		
+				DrawManager.setCurrent(data.id);
+				DrawManager.setCurrentPosition(data.n, pos.x, pos.y);
+			}
+
+			function dragObject(data) {
 				var pos = data.pos;
 				if (data.id) {
 					addGroup(data.id);
@@ -85,8 +96,11 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 						text(data);
 						break;
 					case DrawFactory.tools.DRAG_GROUP:
-						drag(data);
+						dragGroup(data);
 						break;
+					case DrawFactory.tools.DRAG_OBJECT:
+						dragObject(data);
+						break;	
 				}
 				if (data.pos.isUp) {
 					DrawManager.setStrokeColor(strokeColor);
@@ -94,8 +108,8 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 					DrawManager.setStrokeSize(strokeSize);
 					DrawManager.setFontSize(fontSize);
 				}
-				if ($scope.tool == DrawFactory.tools.DRAG) {
-					DrawManager.canGroupDrag(canDrag);
+				if ($scope.tool == DrawFactory.tools.DRAG_GROUP) {
+					DrawManager.canGroupDrag(true);
 				}
 			});
 
@@ -124,6 +138,14 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 
 
 			DrawFactory.setDragGroup(function(data) {
+				var obj = {};
+				obj.pos = data.getPosition();
+				// data.setId(data._id);
+				obj.n = data.getId();
+				obj.type = DrawFactory.tools.DRAG_GROUP;
+				DataManager.setData(typePos, obj);
+			});
+			DrawFactory.setDragObject(function(data) {
 				var obj = {};
 				obj.pos = data.getPosition();
 				// data.setId(data._id);

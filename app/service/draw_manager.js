@@ -157,10 +157,10 @@ app.service("DrawManager", function(Canvas) {
 		layer.batchDraw();
 	};
 	this.canDrag = function(canDrag) {
-		// var objs = current.getChildren();
-		// angular.forEach(objs, function(obj, key) {
-		// 	obj.setDraggable(canDrag);
-		// });
+		var objs = layer.get('#')[0].getChildren();
+		angular.forEach(objs, function(obj, key) {
+			obj.setDraggable(canDrag);
+		});
 	};
 	this.canGroupDrag = function(canDrag) {
 		var groups = layer.getChildren();

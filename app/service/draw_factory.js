@@ -166,12 +166,12 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 				});
 				break;
 			case self.tools.DRAG_OBJECT:
-				// DrawManager.canGroupDrag(false);
-				// DrawManager.canDrag(true);
-				// var current = DrawManager.getCurrentGroup();
-				// angular.forEach(current, function(obj, key) {
-				// 	setBind(listener.dragObject, obj);
-				// });
+				DrawManager.canGroupDrag(false);
+				DrawManager.canDrag(true);
+				var current = DrawManager.getCurrentGroup();
+				angular.forEach(current, function(obj, key) {
+					setBind(listener.dragObject, obj);
+				});
 
 				break;
 			case self.tools.CLEAR:
