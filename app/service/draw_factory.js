@@ -172,7 +172,6 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 				angular.forEach(current, function(obj, key) {
 					setBind(listener.dragObject, obj);
 				});
-
 				break;
 			case self.tools.CLEAR:
 				DrawManager.clear();

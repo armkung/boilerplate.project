@@ -28,7 +28,9 @@ app.directive('slide', function(DrawManager, SlideManager, DataManager) {
 			function changeSlide(url, index) {
 				DrawManager.init(id + '-' + index);
 				scope.url = url + index;
+
 			}
+
 		}
 	};
 });

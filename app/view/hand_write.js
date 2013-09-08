@@ -5,9 +5,9 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 			text: '@',
 			tool: '@'
 		},
-		link: function($scope, $attrs, $element) {
+		link: function(scope, iAttr, iElement) {
 			var typePos = "pos";
-			DrawManager.init($element.id);
+			DrawManager.init(iElement.id);
 
 			function addGroup(id) {
 				if (Room.users.indexOf(id) == -1) {
@@ -95,7 +95,7 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 					DrawManager.setStrokeSize(strokeSize);
 					DrawManager.setFontSize(fontSize);
 				}
-				if ($scope.tool == DrawFactory.tools.DRAG_GROUP) {
+				if (scope.tool == DrawFactory.tools.DRAG_GROUP) {
 					DrawManager.canGroupDrag(true);
 				}
 			});
@@ -103,7 +103,7 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 			Input.init(function() {
 				var obj = {};
 				obj.pos = {
-					text: $scope.text,
+					text: scope.text,
 					x: pos.x,
 					y: pos.y
 				};
@@ -167,10 +167,10 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 					DataManager.setData(typePos, obj);
 				}
 			});
-
-			$scope.$watch('tool', function() {
+			
+			scope.$watch('tool', function() {
 				Input.hide();
-				DrawFactory.setTool($scope.tool);
+				DrawFactory.setTool(scope.tool);
 			});
 			$rootScope.$on('attr', function(e, attr) {
 				var callback = {};

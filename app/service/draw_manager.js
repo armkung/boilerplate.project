@@ -17,7 +17,7 @@ app.service("DrawManager", function(Canvas) {
 		fill: 'white'
 	};
 	var groupOption = {
-
+		// dragOnTop: false
 	};
 
 	var stage, layer, current;
@@ -33,6 +33,7 @@ app.service("DrawManager", function(Canvas) {
 		}
 		self.newGroup();
 		self.setCurrent();
+		console.log(stage)
 		stage.add(layer);
 	};
 	this.initBrush = function(x, y, isSeed) {
@@ -47,7 +48,6 @@ app.service("DrawManager", function(Canvas) {
 			current.add(group);
 		}
 		group.add(line);
-		// current.add(line);
 	};
 	this.drawBrush = function(x, y, isSeed) {
 		if (!isSeed) {
@@ -136,9 +136,12 @@ app.service("DrawManager", function(Canvas) {
 		}
 	};
 	this.newGroup = function(id) {
-		groupOption.id = id ? id : '';
-		var group = new Kinetic.Group(groupOption);
-		layer.add(group);
+		id = id ? id : '';
+		if (layer.get('#' + id).length == 0) {
+			groupOption.id = id;
+			var group = new Kinetic.Group(groupOption);
+			layer.add(group);
+		}
 	};
 	this.getGroup = function() {
 		return layer.getChildren();
@@ -154,7 +157,7 @@ app.service("DrawManager", function(Canvas) {
 		layer.batchDraw();
 	};
 	this.canDrag = function(canDrag) {
-		var objs = self.getCurrentGroup();
+		var objs = self.getCurrentGroup();		
 		angular.forEach(objs, function(obj, key) {
 			obj.setDraggable(canDrag);
 		});
@@ -162,7 +165,9 @@ app.service("DrawManager", function(Canvas) {
 	this.canGroupDrag = function(canDrag) {
 		var groups = self.getGroup();
 		angular.forEach(groups, function(group, key) {
-			group.setDraggable(canDrag);
+			if (group.getId() != '') {
+				group.setDraggable(canDrag);
+			}
 		});
 	};
 	this.clear = function() {

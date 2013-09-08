@@ -80,19 +80,6 @@
 			</div>
 		</script>
 
-		<script type="text/ng-template" id="text_write.tpl.html">
-			<div class="draw-pad" fit-size>
-				<div>
-					<button ng-repeat="t in tools" ng-click="changeTool($index)">{{t}}</button>
-					<button ng-repeat="a in attrs" ng-click="changeAttr($index)">{{a}}</button>
-				</div>
-				<div>
-					<input id="textbox" ng-model="text">
-					<div id="canvas" class="canvas" text-writer tool="{{tool}}" text="{{text}}">
-				</div>
-			</div>
-		</script>
-
 		<script type="text/ng-template" id="slide.tpl.html">
 			<div>
 				<button ng-repeat="t in tools" ng-click="changeTool($index)">{{t}}</button>

@@ -17,24 +17,6 @@ app.controller('HandWriteCtrl', function($scope, $rootScope, DrawFactory) {
 
 });
 
-app.controller('TextWriteCtrl', function($scope, $rootScope, DrawFactory) {
-	$scope.tools = [];
-	$scope.attrs = [];
-	$scope.tool = DrawFactory.tools.TEXT;
-	angular.forEach(DrawFactory.tools, function(value, key) {
-		$scope.tools.push(value);
-	});
-	angular.forEach(DrawFactory.attrs, function(value, key) {
-		$scope.attrs.push(value);
-	});
-	$scope.changeTool = function(index) {
-		$scope.tool = $scope.tools[index];
-	};
-	$scope.changeAttr = function(index) {
-		$rootScope.$broadcast('attr', $scope.attrs[index]);
-	};
-});
-
 app.controller('SlideCtrl', function($scope, $rootScope, DrawFactory, SlideManager) {
 	$scope.nextIndex = function() {
 		SlideManager.next();
@@ -45,7 +27,7 @@ app.controller('SlideCtrl', function($scope, $rootScope, DrawFactory, SlideManag
 
 	$scope.tools = [];
 	$scope.attrs = [];
-	$scope.tool = DrawFactory.tools.DRAG_GROUP;
+	$scope.tool = DrawFactory.tools.DRAG_OBJECT;
 	angular.forEach(DrawFactory.tools, function(value, key) {
 		$scope.tools.push(value);
 	});
