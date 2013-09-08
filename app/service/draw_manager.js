@@ -31,16 +31,23 @@ app.service("DrawManager", function(Canvas) {
 			layer = new Kinetic.Layer();
 			obj[id] = layer;
 		}
-		current = layer;
+		self.newGroup();
+		self.setCurrent();
 		stage.add(layer);
 	};
-	this.initBrush = function(x, y) {
+	this.initBrush = function(x, y, isSeed) {
 		line = new Kinetic.Line(lineOption);
 		line.getPoints()[0].x = x;
 		line.getPoints()[0].y = y;
 		line.getPoints()[1].x = x;
 		line.getPoints()[1].y = y;
-		current.add(line);
+		if (isSeed) {
+			groupOption.id = current.getChildren().length;
+			group = new Kinetic.Group(groupOption);
+			current.add(group);
+		}
+		group.add(line);
+		// current.add(line);
 	};
 	this.drawBrush = function(x, y, isSeed) {
 		if (!isSeed) {
@@ -48,7 +55,7 @@ app.service("DrawManager", function(Canvas) {
 			line.getPoints()[1].y = y;
 			layer.batchDraw();
 		}
-		self.initBrush(x, y);
+		self.initBrush(x, y, isSeed);
 	};
 
 	this.initLine = function(x, y) {
@@ -80,20 +87,6 @@ app.service("DrawManager", function(Canvas) {
 		layer.batchDraw();
 	};
 
-	this.setCurrent = function(id) {
-		if (id) {
-			current = layer.get('#' + id)[0];
-			if(!current){
-				self.newGroup(id);
-				current = layer.get('#' + id)[0];
-			}
-		} else {
-			var child = layer.get('#');
-			var n = child.length;
-			current = child[n - 1];
-		}
-		
-	};
 	this.setStrokeColor = function(color) {
 		if (color) {
 			self.strokeColor = color;
@@ -118,31 +111,56 @@ app.service("DrawManager", function(Canvas) {
 			textOption.fontSize = size;
 		}
 	};
-	this.getStrokeColor = function(){
+	this.getStrokeColor = function() {
 		return self.strokeColor;
 	};
-	this.getFillColor = function(){
+	this.getFillColor = function() {
 		return self.fillColor;
 	};
-	this.getStrokeSize = function(){
+	this.getStrokeSize = function() {
 		return self.strokeSize;
 	};
-	this.getFontSize = function(){
+	this.getFontSize = function() {
 		return self.fontSize;
+	};
+
+	this.setCurrent = function(id) {
+		if (id) {
+			current = layer.get('#' + id)[0];
+			if (!current) {
+				self.newGroup(id);
+				current = layer.get('#' + id)[0];
+			}
+		} else {
+			current = layer.get('#')[0];
+		}
 	};
 	this.newGroup = function(id) {
 		groupOption.id = id ? id : '';
-		group = new Kinetic.Group(groupOption);
+		var group = new Kinetic.Group(groupOption);
 		layer.add(group);
 	};
+	this.getGroup = function() {
+		return layer.getChildren();
+	};
+	this.getCurrentGroup = function(id) {
+		id = id ? id : '';
+		return layer.get('#' + id)[0].getChildren();
+	};
+	this.setCurrentPosition = function(n, x, y) {
+		var obj = current.getChildren()[n];
+		obj.setX(x);
+		obj.setY(y);
+		layer.batchDraw();
+	};
 	this.canDrag = function(canDrag) {
-		var objs = current.getChildren();
+		var objs = self.getCurrentGroup();
 		angular.forEach(objs, function(obj, key) {
 			obj.setDraggable(canDrag);
 		});
 	};
 	this.canGroupDrag = function(canDrag) {
-		var groups = layer.get('Group');
+		var groups = self.getGroup();
 		angular.forEach(groups, function(group, key) {
 			group.setDraggable(canDrag);
 		});
