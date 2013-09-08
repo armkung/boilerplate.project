@@ -31,16 +31,23 @@ app.service("DrawManager", function(Canvas) {
 			layer = new Kinetic.Layer();
 			obj[id] = layer;
 		}
-		current = layer;
+		self.newGroup();
+		self.setCurrent();
 		stage.add(layer);
 	};
-	this.initBrush = function(x, y) {
+	this.initBrush = function(x, y, isSeed) {
 		line = new Kinetic.Line(lineOption);
 		line.getPoints()[0].x = x;
 		line.getPoints()[0].y = y;
 		line.getPoints()[1].x = x;
 		line.getPoints()[1].y = y;
-		current.add(line);
+		if (isSeed) {
+			groupOption.id = self.getCurrentGroup().length;
+			group = new Kinetic.Group(groupOption);
+			current.add(group);
+		}
+		group.add(line);
+		// current.add(line);
 	};
 	this.drawBrush = function(x, y, isSeed) {
 		if (!isSeed) {
@@ -48,7 +55,7 @@ app.service("DrawManager", function(Canvas) {
 			line.getPoints()[1].y = y;
 			layer.batchDraw();
 		}
-		self.initBrush(x, y);
+		self.initBrush(x, y, isSeed);
 	};
 
 	this.initLine = function(x, y) {
@@ -83,7 +90,7 @@ app.service("DrawManager", function(Canvas) {
 	this.setCurrent = function(id) {
 		if (id) {
 			current = layer.get('#' + id)[0];
-			if(!current){
+			if (!current) {
 				self.newGroup(id);
 				current = layer.get('#' + id)[0];
 			}
@@ -92,7 +99,7 @@ app.service("DrawManager", function(Canvas) {
 			var n = child.length;
 			current = child[n - 1];
 		}
-		
+
 	};
 	this.setStrokeColor = function(color) {
 		if (color) {
@@ -118,22 +125,28 @@ app.service("DrawManager", function(Canvas) {
 			textOption.fontSize = size;
 		}
 	};
-	this.getStrokeColor = function(){
+	this.getStrokeColor = function() {
 		return self.strokeColor;
 	};
-	this.getFillColor = function(){
+	this.getFillColor = function() {
 		return self.fillColor;
 	};
-	this.getStrokeSize = function(){
+	this.getStrokeSize = function() {
 		return self.strokeSize;
 	};
-	this.getFontSize = function(){
+	this.getFontSize = function() {
 		return self.fontSize;
 	};
 	this.newGroup = function(id) {
 		groupOption.id = id ? id : '';
 		group = new Kinetic.Group(groupOption);
 		layer.add(group);
+	};
+	this.getGroup = function() {
+		return layer.get('Group');
+	};
+	this.getCurrentGroup = function(id) {
+		return layer.get('#' + id);
 	};
 	this.canDrag = function(canDrag) {
 		var objs = current.getChildren();
@@ -142,10 +155,10 @@ app.service("DrawManager", function(Canvas) {
 		});
 	};
 	this.canGroupDrag = function(canDrag) {
-		var groups = layer.get('Group');
-		angular.forEach(groups, function(group, key) {
-			group.setDraggable(canDrag);
-		});
+		// var groups = current.get('Group');
+		// angular.forEach(groups, function(group, key) {
+		current.setDraggable(canDrag);
+		// });
 	};
 	this.clear = function() {
 		layer.remove();
