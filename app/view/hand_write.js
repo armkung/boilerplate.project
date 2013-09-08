@@ -55,24 +55,11 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 				DrawManager.drawText(pos.text, pos.x, pos.y);
 			}
 
-			function dragGroup(data) {
+			function drag(data) {
 				var pos = data.pos;
 				if (data.id) {
 					addGroup(data.id);
-				}
-				// console.log(data)
-				// console.log(DrawManager.getCurrentGroup(data.id))		
-				DrawManager.setCurrent(data.id);
-				DrawManager.setCurrentPosition(data.n, pos.x, pos.y);
-			}
-
-			function dragObject(data) {
-				var pos = data.pos;
-				if (data.id) {
-					addGroup(data.id);
-				}
-				// console.log(data)
-				// console.log(DrawManager.getCurrentGroup(data.id))		
+				}	
 				DrawManager.setCurrent(data.id);
 				DrawManager.setCurrentPosition(data.n, pos.x, pos.y);
 			}
@@ -96,10 +83,10 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 						text(data);
 						break;
 					case DrawFactory.tools.DRAG_GROUP:
-						dragGroup(data);
+						drag(data);
 						break;
 					case DrawFactory.tools.DRAG_OBJECT:
-						dragObject(data);
+						drag(data);
 						break;	
 				}
 				if (data.pos.isUp) {
@@ -140,7 +127,6 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 			DrawFactory.setDragGroup(function(data) {
 				var obj = {};
 				obj.pos = data.getPosition();
-				// data.setId(data._id);
 				obj.n = data.getId();
 				obj.type = DrawFactory.tools.DRAG_GROUP;
 				DataManager.setData(typePos, obj);
@@ -148,7 +134,6 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 			DrawFactory.setDragObject(function(data) {
 				var obj = {};
 				obj.pos = data.getPosition();
-				// data.setId(data._id);
 				obj.n = data.getId();
 				obj.type = DrawFactory.tools.DRAG_GROUP;
 				DataManager.setData(typePos, obj);

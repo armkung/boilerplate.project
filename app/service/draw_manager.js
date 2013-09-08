@@ -141,30 +141,26 @@ app.service("DrawManager", function(Canvas) {
 		layer.add(group);
 	};
 	this.getGroup = function() {
-		return layer.get('Group');
+		return layer.getChildren();
 	};
 	this.getCurrentGroup = function(id) {
 		id = id ? id : '';
 		return layer.get('#' + id)[0].getChildren();
 	};
 	this.setCurrentPosition = function(n, x, y) {
-		// console.log(current)
-		var obj = current.get('#' + n)[0];
-		// angular.forEach(objs, function(obj, key) {
-			obj.setX(x);
-			obj.setY(y);
-		// });
+		var obj = current.getChildren()[n];
+		obj.setX(x);
+		obj.setY(y);
 		layer.batchDraw();
 	};
 	this.canDrag = function(canDrag) {
-		var objs = layer.get('#')[0].getChildren();
+		var objs = self.getCurrentGroup();
 		angular.forEach(objs, function(obj, key) {
 			obj.setDraggable(canDrag);
 		});
 	};
 	this.canGroupDrag = function(canDrag) {
-		var groups = layer.getChildren();
-		console.log(groups)
+		var groups = self.getGroup();
 		angular.forEach(groups, function(group, key) {
 			group.setDraggable(canDrag);
 		});
