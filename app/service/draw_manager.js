@@ -148,23 +148,23 @@ app.service("DrawManager", function(Canvas) {
 		return layer.get('#' + id)[0].getChildren();
 	};
 	this.setCurrentPosition = function(n, x, y) {
-		var objs = current.get('#' + n)[0].getChildren();
-		console.log(objs)
-		angular.forEach(objs, function(obj, key) {
-			obj.setX(obj.getX() + x);
-			obj.setY(obj.getY() + y);
-		});
+		// console.log(current)
+		var obj = current.get('#' + n)[0];
+		// angular.forEach(objs, function(obj, key) {
+			obj.setX(x);
+			obj.setY(y);
+		// });
 		layer.batchDraw();
-		// console.log(x + " " + y);
 	};
 	this.canDrag = function(canDrag) {
-		var objs = current.getChildren();
-		angular.forEach(objs, function(obj, key) {
-			obj.setDraggable(canDrag);
-		});
+		// var objs = current.getChildren();
+		// angular.forEach(objs, function(obj, key) {
+		// 	obj.setDraggable(canDrag);
+		// });
 	};
 	this.canGroupDrag = function(canDrag) {
-		var groups = current.get('Group');
+		var groups = layer.getChildren();
+		console.log(groups)
 		angular.forEach(groups, function(group, key) {
 			group.setDraggable(canDrag);
 		});

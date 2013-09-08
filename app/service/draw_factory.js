@@ -120,38 +120,35 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 	};
 	this.setDragObject = function(drag) {
 		listener.dragObject = {
-			call: function() {
-				drag();
+			onDragEnd: function(data) {				
+				drag(data);
 			}
 		};
 	};
 	this.setDragGroup = function(drag) {
-		var x, y;
 		listener.dragGroup = {
-			onDragStart: function(data) {
-				x = data.getX();
-				y = data.getY();
-			},
-			onDragEnd: function(data) {
-				data.setX(data.getX() - x)
-				data.setY(data.getY() - y);
+			onDragEnd: function(data) {				
 				drag(data);
 			}
 		};
 	};
 
 	this.setTool = function(tool) {
+		unsetBind();
 		switch (tool) {
 			case self.tools.DRAW:
+				DrawManager.canDrag(false);
 				DrawManager.canGroupDrag(false);
 				setBind(listener.draw);
 				break;
 			case self.tools.LINE:
+				DrawManager.canDrag(false);
 				DrawManager.canGroupDrag(false);
 				setBind(listener.line);
 				break;
 			case self.tools.TEXT:
 				DrawManager.canDrag(false);
+				DrawManager.canGroupDrag(false);
 				setBind(listener.text);
 				break;
 			case self.tools.ANIMATE:
@@ -161,6 +158,7 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 				setBind(listener.animate);
 				break;
 			case self.tools.DRAG_GROUP:
+				DrawManager.canDrag(false);
 				DrawManager.canGroupDrag(true);
 				var current = DrawManager.getCurrentGroup();
 				angular.forEach(current, function(group, key) {
@@ -168,11 +166,12 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 				});
 				break;
 			case self.tools.DRAG_OBJECT:
-				if (listener.dragObject && listener.dragObject.call) {
-					listener.dragObject.call();
-				}
-				DrawManager.canDrag(true);
-				setBind(listener.dragObject);
+				// DrawManager.canGroupDrag(false);
+				// DrawManager.canDrag(true);
+				// var current = DrawManager.getCurrentGroup();
+				// angular.forEach(current, function(obj, key) {
+				// 	setBind(listener.dragObject, obj);
+				// });
 
 				break;
 			case self.tools.CLEAR:
@@ -196,11 +195,13 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 				break;
 		}
 	};
-
-	function setBind(callback, element) {
+	function unsetBind(){
 		var cs = Canvas.canvas;
 		cs.unbind();
+	}
+	function setBind(callback, element) {
 		if (callback) {
+			var cs = Canvas.canvas;
 			if (callback.onDown) {
 				cs.bind("mousedown touchstart", function() {
 					callback.onDown(Canvas.getPosition());
