@@ -9,17 +9,17 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 			var typePos = "pos";
 			DrawManager.init($element.id);
 
+			function addGroup(id) {
+				if (Room.users.indexOf(id) == -1) {
+					Room.users.push(id);
+					DrawManager.newGroup(id);
+				}
+			}
+
 			function draw(data) {
 				var pos = data.pos;
 				if (data.id) {
-					if (Room.users.indexOf(data.id) == -1) {
-						Room.users.push(data.id);
-						DrawManager.newGroup(data.id);
-					}
-				} else {
-					// if (pos.isSeed) {
-					// 	DrawManager.newGroup();
-					// }
+					addGroup(data.id);
 				}
 				DrawManager.setCurrent(data.id);
 				DrawManager.setStrokeColor(pos.color);
@@ -56,9 +56,14 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 			}
 
 			function drag(data) {
-				console.log("aaaa")
-				console.log(DrawManager.getGroup())
-				console.log(data.n)
+				var pos = data.pos;
+				if (data.id) {
+					addGroup(data.id);
+				}
+				// console.log(data)
+				// console.log(DrawManager.getCurrentGroup(data.id))		
+				DrawManager.setCurrent(data.id);
+				DrawManager.setCurrentPosition(data.n, pos.x, pos.y);
 			}
 
 			var strokeColor, fillColor, strokeSize, fontSize;
@@ -120,12 +125,9 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 
 			DrawFactory.setDragGroup(function(data) {
 				var obj = {};
-				obj.pos = {
-					x: data.getX(),
-					y: data.getY()
-				};
+				obj.pos = data.getPosition();
 				// data.setId(data._id);
-				// obj.n = data.getId();
+				obj.n = data.getId();
 				obj.type = DrawFactory.tools.DRAG_GROUP;
 				DataManager.setData(typePos, obj);
 			});

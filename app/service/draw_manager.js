@@ -42,7 +42,7 @@ app.service("DrawManager", function(Canvas) {
 		line.getPoints()[1].x = x;
 		line.getPoints()[1].y = y;
 		if (isSeed) {
-			groupOption.id = self.getCurrentGroup().length;
+			groupOption.id = current.getChildren().length;
 			group = new Kinetic.Group(groupOption);
 			current.add(group);
 		}
@@ -87,20 +87,6 @@ app.service("DrawManager", function(Canvas) {
 		layer.batchDraw();
 	};
 
-	this.setCurrent = function(id) {
-		if (id) {
-			current = layer.get('#' + id)[0];
-			if (!current) {
-				self.newGroup(id);
-				current = layer.get('#' + id)[0];
-			}
-		} else {
-			var child = layer.get('#');
-			var n = child.length;
-			current = child[n - 1];
-		}
-
-	};
 	this.setStrokeColor = function(color) {
 		if (color) {
 			self.strokeColor = color;
@@ -137,16 +123,39 @@ app.service("DrawManager", function(Canvas) {
 	this.getFontSize = function() {
 		return self.fontSize;
 	};
+
+	this.setCurrent = function(id) {
+		if (id) {
+			current = layer.get('#' + id)[0];
+			if (!current) {
+				self.newGroup(id);
+				current = layer.get('#' + id)[0];
+			}
+		} else {
+			current = layer.get('#')[0];
+		}
+	};
 	this.newGroup = function(id) {
 		groupOption.id = id ? id : '';
-		group = new Kinetic.Group(groupOption);
+		var group = new Kinetic.Group(groupOption);
 		layer.add(group);
 	};
 	this.getGroup = function() {
 		return layer.get('Group');
 	};
 	this.getCurrentGroup = function(id) {
-		return layer.get('#' + id);
+		id = id ? id : '';
+		return layer.get('#' + id)[0].getChildren();
+	};
+	this.setCurrentPosition = function(n, x, y) {
+		var objs = current.get('#' + n)[0].getChildren();
+		console.log(objs)
+		angular.forEach(objs, function(obj, key) {
+			obj.setX(obj.getX() + x);
+			obj.setY(obj.getY() + y);
+		});
+		layer.batchDraw();
+		// console.log(x + " " + y);
 	};
 	this.canDrag = function(canDrag) {
 		var objs = current.getChildren();
@@ -155,10 +164,10 @@ app.service("DrawManager", function(Canvas) {
 		});
 	};
 	this.canGroupDrag = function(canDrag) {
-		// var groups = current.get('Group');
-		// angular.forEach(groups, function(group, key) {
-		current.setDraggable(canDrag);
-		// });
+		var groups = current.get('Group');
+		angular.forEach(groups, function(group, key) {
+			group.setDraggable(canDrag);
+		});
 	};
 	this.clear = function() {
 		layer.remove();

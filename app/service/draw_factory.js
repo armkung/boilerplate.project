@@ -126,8 +126,15 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 		};
 	};
 	this.setDragGroup = function(drag) {
+		var x, y;
 		listener.dragGroup = {
+			onDragStart: function(data) {
+				x = data.getX();
+				y = data.getY();
+			},
 			onDragEnd: function(data) {
+				data.setX(data.getX() - x)
+				data.setY(data.getY() - y);
 				drag(data);
 			}
 		};
@@ -155,7 +162,7 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 				break;
 			case self.tools.DRAG_GROUP:
 				DrawManager.canGroupDrag(true);
-				var current = DrawManager.getGroup();
+				var current = DrawManager.getCurrentGroup();
 				angular.forEach(current, function(group, key) {
 					setBind(listener.dragGroup, group);
 				});
@@ -208,6 +215,14 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 				cs.bind("mouseup touchend touchcancel", function() {
 					callback.onUp(Canvas.getPosition());
 				});
+			}
+			if (callback.onDragStart) {
+				if (element) {
+					var ele = element;
+					ele.on("dragstart", function() {
+						callback.onDragStart(this);
+					});
+				}
 			}
 			if (callback.onDragEnd) {
 				if (element) {
