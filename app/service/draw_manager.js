@@ -33,7 +33,6 @@ app.service("DrawManager", function(Canvas) {
 		}
 		self.newGroup();
 		self.setCurrent();
-		console.log(stage)
 		stage.add(layer);
 	};
 	this.initBrush = function(x, y, isSeed) {

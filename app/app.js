@@ -107,10 +107,11 @@ app.factory("DataManager", function(Canvas, Socket) {
 });
 
 
-app.service("Canvas", function() {
+app.service("Canvas", function($q) {
 	var self = this;
 	var stage;
 	var obj = {};
+	var deferred = $q.defer();
 	this.init = function(id) {
 		var cs = $("#" + id);
 		if (cs) {
@@ -124,9 +125,15 @@ app.service("Canvas", function() {
 				height: self.height
 			});
 		}
+		deferred.resolve(stage);
 		return stage;
 	};
-
+	this.getCurrent = function() {
+		if (stage && !deferred.promise) {
+			deferred.resolve(stage);
+		}
+		return deferred.promise;
+	}
 	this.getPosition = function() {
 		var mousePos = stage.getMousePosition();
 		var touchPos = stage.getTouchPosition();

@@ -1,41 +1,24 @@
-app.directive('chat', function() {
+app.directive('menuLeft', function() {
 	return {
 		restrict: 'E',
-		templateUrl: 'main/chat.tpl.html',
-		controller: 'ChatCtrl'
-	};
-});
-app.directive('emoticon', function() {
-	return {
-		restrict: 'E',
-		templateUrl: 'emoticon.tpl.html',
-		scope: {
-			emotion: '='
-		},
-		controller: function($scope) {
-			$scope.url = "assets/emoticon/";
-			$scope.emotions = [];
-			for (var i = 1; i <= 9; i++) {
-				$scope.emotions.push(i + ".gif");
-			}
-			$scope.select = function(index) {
-				$scope.emotion = $scope.url + $scope.emotions[index];
-			};
-		}
+		templateUrl: 'main/menu_left.tpl.html'
 	};
 });
 
-app.directive('menu', function() {
+app.directive('menuRight', function() {
 	return {
 		restrict: 'E',
-		templateUrl: 'main/menu.tpl.html'
+		templateUrl: 'main/menu_right.tpl.html',
+		controller: function($scope) {
+			$scope.menu = "group";
+		}
 	};
 });
 
 app.directive('fitSize', function() {
 	return {
 		restrict: 'AC',
-		link: function(scope,iElement){
+		link: function(scope, iElement) {
 			$(iElement).width($('#pad').width());
 			$(iElement).height($('#pad').height());
 		}
