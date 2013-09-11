@@ -1,13 +1,16 @@
 <div>
+
 	<ul>
-		<div ng-switch on="menu">
+    <li><a href="#" ng-click="menu = 'group'">Group</a></li>
+    <li><a href="#" ng-click="menu = 'chat'">Chat</a></li>
+	</ul>
+    <div ng-switch on="menu">
           <div ng-switch-when="group">
-          	<group></group>
+            <group></group>
           </div>
           <div ng-switch-when="chat">
-          	<chat></chat>
+            <chat></chat>
           </div>
       </div>
-		
-	</ul>
+    
 </div>

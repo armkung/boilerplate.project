@@ -102,6 +102,9 @@ app.factory("DataManager", function(Canvas, Socket) {
 				});
 				callback(obj);
 			});
+		},
+		removeData: function() {
+
 		}
 	};
 });
@@ -125,7 +128,7 @@ app.service("Canvas", function($q) {
 				width: self.width,
 				height: self.height
 			});
-		}		
+		}
 		deferred.resolve(stage);
 		// return stage;
 	};

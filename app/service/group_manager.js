@@ -1,19 +1,42 @@
 app.service('GroupManager', function($rootScope, Canvas, Room) {
 	var self = this;
-	this.groups = []
 	var layer;
 	var children;
+
+	function getGroupById(id) {
+		return layer.get('#' + id)[0];
+	}
+	// this.groups = [];
 	this.init = function(stage) {
 		layer = stage.get('Layer')[0];
 		children = layer.getChildren();
-		angular.forEach(children, function(group, key) {
-			if (group.getId() != '') {
-				self.groups.push({
-					id: group.getId()
+		// self.groups = [];
+		// angular.forEach(children, function(group, key) {
+		// 	if (group.getId() != '') {
+		// 		self.groups.push({
+		// 			id: group.getId()
+		// 		});
+		// 	}
+		// });
+		self.hideAll();
+	}
+	this.getGroups = function(users) {
+		var groups = [];
+		angular.forEach(children, function(child, key) {
+			var id = child.getId();
+			var group = getGroupById(id);
+			if (users.indexOf(id) != -1) {
+				groups.push({
+					id: id
 				});
+			} else {
+				if (id != '') {
+					group.remove();
+					layer.draw();
+				}
 			}
 		});
-		self.hideAll();
+		return groups;
 	}
 	this.hideAll = function() {
 		angular.forEach(children, function(group, key) {
@@ -21,14 +44,15 @@ app.service('GroupManager', function($rootScope, Canvas, Room) {
 				group.hide();
 			}
 		});
+		layer.draw();
 	}
 	this.show = function(id) {
-		var group = layer.get('#' + id)[0];
+		var group = getGroupById(id);
 		group.show();
 		layer.draw();
 	}
 	this.hide = function(id) {
-		var group = layer.get('#' + id)[0];
+		var group = getGroupById(id);
 		group.hide();
 		layer.draw();
 	}

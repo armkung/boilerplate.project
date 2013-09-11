@@ -60,18 +60,23 @@ app.service("DrawManager", function(Canvas) {
 		self.initBrush(x, y, isSeed);
 	};
 
-	this.initLine = function(x, y) {
+	this.initLine = function(x, y, isSeed) {
 		line = new Kinetic.Line(lineOption);
 		line.getPoints()[0].x = x;
 		line.getPoints()[0].y = y;
 		line.getPoints()[1].x = x;
 		line.getPoints()[1].y = y;
 		layer.batchDraw();
-		current.add(line);
+		if (isSeed) {
+			groupOption.id = current.getChildren().length;
+			group = new Kinetic.Group(groupOption);
+			current.add(group);
+		}
+		group.add(line);
 	};
 	this.drawLine = function(x, y, isSeed) {
 		if (isSeed) {
-			self.initLine(x, y);
+			self.initLine(x, y, isSeed);
 		} else {
 			line.getPoints()[1].x = x;
 			line.getPoints()[1].y = y;

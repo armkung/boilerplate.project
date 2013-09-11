@@ -12,7 +12,7 @@ app.directive('group', function(GroupManager, Room, Canvas) {
 				Canvas.getCurrent().then(function(stage) {
 					if (stage) {
 						GroupManager.init(stage);
-						scope.groups = GroupManager.groups;
+						scope.groups = GroupManager.getGroups(Room.users);
 					}
 				});
 			}, true);

@@ -13,6 +13,7 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 				if (Room.users.indexOf(id) == -1) {
 					Room.users.push(id);
 					DrawManager.newGroup(id);
+					DrawManager.setCurrent(data.id);
 				}
 			}
 
@@ -21,7 +22,6 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 				if (data.id) {
 					addGroup(data.id);
 				}
-				DrawManager.setCurrent(data.id);
 				DrawManager.setStrokeColor(pos.color);
 				DrawManager.setStrokeSize(pos.size);
 				DrawManager.drawBrush(pos.x, pos.y, pos.isSeed);
@@ -30,16 +30,8 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 			function line(data) {
 				var pos = data.pos;
 				if (data.id) {
-					if (Room.users.indexOf(data.id) == -1) {
-						Room.users.push(data.id);
-						DrawManager.newGroup(data.id);
-					}
-				} else {
-					if (pos.isSeed) {
-						DrawManager.newGroup();
-					}
+					addGroup(data.id);
 				}
-				DrawManager.setCurrent(data.id);
 				DrawManager.setStrokeColor(pos.color);
 				DrawManager.setStrokeSize(pos.size);
 				DrawManager.drawLine(pos.x, pos.y, pos.isSeed);

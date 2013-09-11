@@ -46,6 +46,13 @@ app.controller('HomeCtrl', function($scope, Room, Socket, Restangular) {
 	$scope.user = String.fromCharCode(Math.random() * 26 + 97);
 	$scope.room = "";
 	Room.room = $scope.room;
+
+	Socket.on("leave:room", function(user) {
+		var index = Room.users.indexOf(user);
+		if (index != -1) {
+			Room.users.splice(index, 1);
+		}
+	});
 	$scope.list = function() {
 		Socket.emit("list:room", {}, function(rooms) {
 			$scope.rooms = rooms;
@@ -72,6 +79,7 @@ app.controller('HomeCtrl', function($scope, Room, Socket, Restangular) {
 		Socket.emit("close:room");
 	};
 	$scope.disconnect = function() {
+		Socket.emit("leave:room");
 		Socket.disconnect();
 	};
 
