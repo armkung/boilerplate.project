@@ -24,16 +24,19 @@ app.service("DrawManager", function(Canvas) {
 	var line, text;
 	var obj = {};
 	this.init = function(id) {
-		stage = Canvas.init(id.split("-")[0]);
-		if (id in obj) {
-			layer = obj[id];
-		} else {
-			layer = new Kinetic.Layer();
-			obj[id] = layer;
-		}
-		self.newGroup();
-		self.setCurrent();
-		stage.add(layer);
+		Canvas.init(id.split("-")[0]);
+		Canvas.getCurrent().then(function(data) {
+			stage = data;
+			if (id in obj) {
+				layer = obj[id];
+			} else {
+				layer = new Kinetic.Layer();
+				obj[id] = layer;
+			}
+			self.newGroup();
+			self.setCurrent();
+			stage.add(layer);
+		});
 	};
 	this.initBrush = function(x, y, isSeed) {
 		line = new Kinetic.Line(lineOption);
@@ -156,7 +159,7 @@ app.service("DrawManager", function(Canvas) {
 		layer.batchDraw();
 	};
 	this.canDrag = function(canDrag) {
-		var objs = self.getCurrentGroup();		
+		var objs = self.getCurrentGroup();
 		angular.forEach(objs, function(obj, key) {
 			obj.setDraggable(canDrag);
 		});
@@ -173,6 +176,8 @@ app.service("DrawManager", function(Canvas) {
 		layer.remove();
 		layer = new Kinetic.Layer();
 		stage.add(layer);
+		self.newGroup();
+		self.setCurrent();
 	};
 
 });

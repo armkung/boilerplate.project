@@ -113,6 +113,7 @@ app.service("Canvas", function($q) {
 	var obj = {};
 	var deferred = $q.defer();
 	this.init = function(id) {
+		deferred = $q.defer();
 		var cs = $("#" + id);
 		if (cs) {
 			var container = cs.parent();
@@ -124,9 +125,9 @@ app.service("Canvas", function($q) {
 				width: self.width,
 				height: self.height
 			});
-		}
+		}		
 		deferred.resolve(stage);
-		return stage;
+		// return stage;
 	};
 	this.getCurrent = function() {
 		if (stage && !deferred.promise) {
