@@ -13,7 +13,6 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 				if (Room.users.indexOf(id) == -1) {
 					Room.users.push(id);
 					DrawManager.newGroup(id);
-					DrawManager.setCurrent(data.id);
 				}
 			}
 
@@ -21,6 +20,9 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 				var pos = data.pos;
 				if (data.id) {
 					addGroup(data.id);
+				}
+				if (pos.isSeed) {
+					DrawManager.setCurrent(data.id);
 				}
 				DrawManager.setStrokeColor(pos.color);
 				DrawManager.setStrokeSize(pos.size);
@@ -31,6 +33,9 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 				var pos = data.pos;
 				if (data.id) {
 					addGroup(data.id);
+				}
+				if (pos.isSeed) {
+					DrawManager.setCurrent(data.id);
 				}
 				DrawManager.setStrokeColor(pos.color);
 				DrawManager.setStrokeSize(pos.size);
@@ -51,7 +56,7 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 				var pos = data.pos;
 				if (data.id) {
 					addGroup(data.id);
-				}	
+				}
 				DrawManager.setCurrent(data.id);
 				DrawManager.setCurrentPosition(data.n, pos.x, pos.y);
 			}
@@ -74,12 +79,9 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 					case DrawFactory.tools.TEXT:
 						text(data);
 						break;
-					case DrawFactory.tools.DRAG_GROUP:
-						drag(data);
-						break;
 					case DrawFactory.tools.DRAG_OBJECT:
 						drag(data);
-						break;	
+						break;
 				}
 				if (data.pos.isUp) {
 					DrawManager.setStrokeColor(strokeColor);
@@ -115,19 +117,11 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 				DrawFactory.setAnimate(data, draw);
 			});
 
-
-			DrawFactory.setDragGroup(function(data) {
-				var obj = {};
-				obj.pos = data.getPosition();
-				obj.n = data.getId();
-				obj.type = DrawFactory.tools.DRAG_GROUP;
-				DataManager.setData(typePos, obj);
-			});
 			DrawFactory.setDragObject(function(data) {
 				var obj = {};
 				obj.pos = data.getPosition();
 				obj.n = data.getId();
-				obj.type = DrawFactory.tools.DRAG_GROUP;
+				obj.type = DrawFactory.tools.DRAG_OBJECT;
 				DataManager.setData(typePos, obj);
 			});
 			DrawFactory.setText(function(data) {
@@ -159,7 +153,7 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 					DataManager.setData(typePos, obj);
 				}
 			});
-			
+
 			scope.$watch('tool', function() {
 				Input.hide();
 				DrawFactory.setTool(scope.tool);

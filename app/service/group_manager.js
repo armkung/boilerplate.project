@@ -39,12 +39,12 @@ app.service('GroupManager', function($rootScope, Canvas, Room) {
 		return groups;
 	}
 	this.hideAll = function() {
-		angular.forEach(children, function(group, key) {
+		angular.forEach(children, function(group, key) {			
 			if (group.getId() != '') {
 				group.hide();
+				layer.draw();
 			}
 		});
-		layer.draw();
 	}
 	this.show = function(id) {
 		var group = getGroupById(id);

@@ -22,8 +22,9 @@ app.service("DrawManager", function(Canvas) {
 
 	var stage, layer, current;
 	var line, text;
-	var obj = {};
+	var obj = {},index;
 	this.init = function(id) {
+		index = id;
 		Canvas.init(id.split("-")[0]);
 		Canvas.getCurrent().then(function(data) {
 			stage = data;
@@ -179,10 +180,12 @@ app.service("DrawManager", function(Canvas) {
 	};
 	this.clear = function() {
 		layer.remove();
-		layer = new Kinetic.Layer();
-		stage.add(layer);
-		self.newGroup();
-		self.setCurrent();
+		delete obj[index];
+		self.init(index);
+		// layer = new Kinetic.Layer();
+		// stage.add(layer);
+		// self.newGroup();
+		// self.setCurrent();
 	};
 
 });

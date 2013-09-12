@@ -125,13 +125,13 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 			}
 		};
 	};
-	this.setDragGroup = function(drag) {
-		listener.dragGroup = {
-			onDragEnd: function(data) {				
-				drag(data);
-			}
-		};
-	};
+	// this.setDragGroup = function(drag) {
+	// 	listener.dragGroup = {
+	// 		onDragEnd: function(data) {				
+	// 			drag(data);
+	// 		}
+	// 	};
+	// };
 
 	this.setTool = function(tool) {
 		unsetBind();
@@ -160,10 +160,10 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 			case self.tools.DRAG_GROUP:
 				DrawManager.canDrag(false);
 				DrawManager.canGroupDrag(true);
-				var current = DrawManager.getCurrentGroup();
-				angular.forEach(current, function(group, key) {
-					setBind(listener.dragGroup, group);
-				});
+				// var current = DrawManager.getCurrentGroup();
+				// angular.forEach(current, function(group, key) {
+				// 	setBind(listener.dragGroup, group);
+				// });
 				break;
 			case self.tools.DRAG_OBJECT:
 				DrawManager.canGroupDrag(false);
@@ -227,6 +227,7 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 			if (callback.onDragEnd) {
 				if (element) {
 					var ele = element;
+					ele.off("dragend");
 					ele.on("dragend", function() {
 						callback.onDragEnd(this);
 					});
