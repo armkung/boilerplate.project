@@ -70,13 +70,14 @@
 	<body ng-app="socket">
 
 		<script type="text/ng-template" id="hand_write.tpl.html">
+				<canvas id="draw" hand-writer tool="{{tool}}" text="{{text}}"></canvas>
 			<div class="draw-pad" fit-size>
 				<div>
 					<button ng-repeat="t in tools" ng-click="changeTool($index)">{{t}}</button>
 					<button ng-repeat="a in attrs" ng-click="changeAttr($index)">{{a}}</button>
 				</div>
 				<input id="textbox" ng-model="text">
-				<div id="draw" class="canvas" hand-writer tool="{{tool}}" text="{{text}}"></div>
+				<!-- <div id="draw" class="canvas" hand-writer tool="{{tool}}" text="{{text}}"></div> -->
 			</div>
 		</script>
 

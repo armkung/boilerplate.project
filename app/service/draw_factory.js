@@ -16,6 +16,10 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 		SIZE_FONT: "Text Size"
 	};
 	var listener = {};
+	// var canvas = Canvas.getCanvas();
+	// Canvas.getCanvas().then(function(cs) {
+	// 	canvas = cs;
+	// });
 
 	this.setAnimate = function(data, draw) {
 		var delay = 10;
@@ -120,7 +124,7 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 	};
 	this.setDragObject = function(drag) {
 		listener.dragObject = {
-			onDragEnd: function(data) {				
+			onDragEnd: function(data) {
 				drag(data);
 			}
 		};
@@ -137,18 +141,14 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 		unsetBind();
 		switch (tool) {
 			case self.tools.DRAW:
-				DrawManager.canDrag(false);
-				DrawManager.canGroupDrag(false);
-				setBind(listener.draw);
+				DrawManager.setDraw();
 				break;
 			case self.tools.LINE:
-				DrawManager.canDrag(false);
-				DrawManager.canGroupDrag(false);
 				setBind(listener.line);
 				break;
 			case self.tools.TEXT:
-				DrawManager.canDrag(false);
-				DrawManager.canGroupDrag(false);
+				// DrawManager.canDrag(false);
+				// DrawManager.canGroupDrag(false);
 				setBind(listener.text);
 				break;
 			case self.tools.ANIMATE:
@@ -168,10 +168,10 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 			case self.tools.DRAG_OBJECT:
 				DrawManager.canGroupDrag(false);
 				DrawManager.canDrag(true);
-				var current = DrawManager.getCurrentGroup();
-				angular.forEach(current, function(obj, key) {
-					setBind(listener.dragObject, obj);
-				});
+				// var current = DrawManager.getCurrentGroup();
+				// angular.forEach(current, function(obj, key) {
+				// 	setBind(listener.dragObject, obj);
+				// });
 				break;
 			case self.tools.CLEAR:
 				DrawManager.clear();
@@ -194,45 +194,37 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 				break;
 		}
 	};
-	function unsetBind(){
-		var cs = Canvas.canvas;
-		cs.unbind();
+
+	function unsetBind() {
+		Canvas.getCanvas().then(function(canvas) {
+			canvas.isDrawingMode = false;
+			canvas.off("mouse:down");
+			canvas.off("mouse:move");
+			canvas.off("mouse:up");
+		});
 	}
+
 	function setBind(callback, element) {
 		if (callback) {
-			var cs = Canvas.canvas;
-			if (callback.onDown) {
-				cs.bind("mousedown touchstart", function() {
-					callback.onDown(Canvas.getPosition());
-				});
-			}
-			if (callback.onMove) {
-				cs.bind("mousemove touchmove", function() {
-					callback.onMove(Canvas.getPosition());
-				});
-			}
-			if (callback.onUp) {
-				cs.bind("mouseup touchend touchcancel", function() {
-					callback.onUp(Canvas.getPosition());
-				});
-			}
-			if (callback.onDragStart) {
-				if (element) {
-					var ele = element;
-					ele.on("dragstart", function() {
-						callback.onDragStart(this);
+			Canvas.getCanvas().then(function(canvas) {
+
+				var cs = canvas;
+				if (callback.onDown) {
+					cs.on("mouse:down", function(e) {
+						callback.onDown(cs.getPointer(), e);
 					});
 				}
-			}
-			if (callback.onDragEnd) {
-				if (element) {
-					var ele = element;
-					ele.off("dragend");
-					ele.on("dragend", function() {
-						callback.onDragEnd(this);
+				if (callback.onMove) {
+					cs.on("mouse:move", function(e) {
+						callback.onMove(cs.getPointer(), e);
 					});
 				}
-			}
+				if (callback.onUp) {
+					cs.on("mouse:up", function(e) {
+						callback.onUp(cs.getPointer(), e);
+					});
+				}
+			});
 		}
 	}
 });

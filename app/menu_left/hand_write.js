@@ -117,18 +117,18 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 				DrawFactory.setAnimate(data, draw);
 			});
 
-			DrawFactory.setDragObject(function(data) {
-				var obj = {};
-				obj.pos = data.getPosition();
-				obj.n = data.getId();
-				obj.type = DrawFactory.tools.DRAG_OBJECT;
-				DataManager.setData(typePos, obj);
-			});
-			DrawFactory.setText(function(data) {
-				pos = data;
-				Input.show(pos.x, pos.y);
-				$rootScope.$apply();
-			});
+			// DrawFactory.setDragObject(function(data) {
+			// 	var obj = {};
+			// 	obj.pos = data.getPosition();
+			// 	obj.n = data.getId();
+			// 	obj.type = DrawFactory.tools.DRAG_OBJECT;
+			// 	DataManager.setData(typePos, obj);
+			// });
+			// DrawFactory.setText(function(data) {
+			// 	pos = data;
+			// 	Input.show(pos.x, pos.y);
+			// 	$rootScope.$apply();
+			// });
 			DrawFactory.setDraw(function(pos) {
 				var obj = {};
 				obj.pos = pos;

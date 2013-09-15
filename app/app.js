@@ -113,24 +113,57 @@ app.factory("DataManager", function(Canvas, Socket) {
 app.service("Canvas", function($q) {
 	var self = this;
 	var stage;
-	var obj = {};
+	// this.names = {
+	// 	DRAW: "draw",
+	// 	MIRROR: "mirror"
+	// }
+	var obj = {
+		// draw: {},
+		// mirror: {},
+		// test: {}
+	};
 	var deferred = $q.defer();
-	this.init = function(id) {
+	var canvas;
+	// angular.forEach(obj, function(value, key) {
+	// 	canvas = new fabric.Canvas(key);
+	// 	canvas.selection = false;
+	// 	obj[key] = canvas.getObjects();
+	// });
+	// this.id = self.names.DRAW;
+	this.init = function(id){
 		deferred = $q.defer();
-		var cs = $("#" + id);
-		if (cs) {
-			var container = cs.parent();
-			self.canvas = cs;
-			self.width = container.width();
-			self.height = container.height();
-			stage = new Kinetic.Stage({
-				container: id,
-				width: self.width,
-				height: self.height
+		// var id = self.id
+		canvas = new fabric.Canvas(id);
+		canvas.selection = false;
+		if (id in obj) {
+			var children = obj[id].getObjects();
+			console.log(canvas)
+			angular.forEach(children, function(child, key) {
+				canvas.add(child);
 			});
+		} else {
+			obj[id] = canvas;
 		}
-		deferred.resolve(stage);
-		// return stage;
+		deferred.resolve(canvas);
+	};
+	this.getCanvas = function() {
+		// var id = self.id
+		// canvas = new fabric.Canvas(id);
+		// canvas.selection = false;
+		// if (id in obj) {
+		// 	var children = obj[id].getObjects();
+		// 	console.log(canvas)
+		// 	angular.forEach(children, function(child, key) {
+		// 		canvas.add(child);
+		// 	});
+		// } else {
+		// 	obj[id] = canvas;
+		// }
+		// return canvas;
+		if (canvas && !deferred.promise) {
+			deferred.resolve(canvas);
+		}
+		return deferred.promise;
 	};
 	this.getCurrent = function() {
 		if (stage && !deferred.promise) {

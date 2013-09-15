@@ -1,4 +1,4 @@
-app.controller('HandWriteCtrl', function($scope, $rootScope, DrawFactory) {
+app.controller('HandWriteCtrl', function($scope, $rootScope, DrawFactory, Canvas) {
 	$scope.tools = [];
 	$scope.attrs = [];
 	$scope.tool = DrawFactory.tools.DRAW;
