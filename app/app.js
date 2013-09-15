@@ -130,10 +130,17 @@ app.service("Canvas", function($q) {
 	// 	obj[key] = canvas.getObjects();
 	// });
 	// this.id = self.names.DRAW;
-	this.init = function(id){
+	this.init = function(id) {
 		deferred = $q.defer();
 		// var id = self.id
-		canvas = new fabric.Canvas(id);
+		var parent = $('#' + id).parent();
+		$('#' + id)[0].width = parent.width();
+		$('#' + id)[0].height = parent.height();
+		// canvas = new fabric.Canvas(id);
+		canvas = new fabric.Canvas(id, {
+			width: parent.width(),
+			height: parent.height()
+		});
 		canvas.selection = false;
 		if (id in obj) {
 			var children = obj[id].getObjects();
@@ -144,8 +151,17 @@ app.service("Canvas", function($q) {
 		} else {
 			obj[id] = canvas;
 		}
+		self.width = canvas.getWidth();
+		self.height = canvas.getHeight();
 		deferred.resolve(canvas);
 	};
+	// this.setSize = function(w, h) {
+	// 	canvas.set({
+	// 		width: w,
+	// 		height: h
+	// 	});
+	// 	canvas.renderAll();
+	// };
 	this.getCanvas = function() {
 		// var id = self.id
 		// canvas = new fabric.Canvas(id);

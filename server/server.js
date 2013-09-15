@@ -154,7 +154,7 @@ io.sockets.on('connection', function(socket) {
 	socket.on('send:pos', function(data) {
 		socket.get('roomName', function(err, room) {
 			if (room != null) {
-				if (data.pos.isSeed) {
+				if (data.pos && data.pos.isSeed) {
 					console.log("Room : '" + room + "' broadcast pos at ")
 					console.log("x : " + data.pos.x + ", y : " + data.pos.y)
 				}

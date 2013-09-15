@@ -56,34 +56,8 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 			isDraw = false,
 			isUp = false;
 		listener.draw = {
-			onDown: function() {
-				isDraw = true;
-				isUp = false;
-				isSeed = true;
-			},
-			onMove: function(pos) {
-				if (isDraw || isUp) {
-					var obj = {
-						x: pos.x,
-						y: pos.y
-					};
-					if (isSeed && !isUp) {
-						obj.isSeed = isSeed;
-					}
-					if (isUp) {
-						obj.isUp = isUp;
-					}
-					if (!isUp) {
-						draw(obj);
-					}
-					isSeed = false;
-					isUp = false;
-				}
-			},
-			onUp: function() {
-				isDraw = false;
-				isSeed = true;
-				isUp = true;
+			onFinish: function(e) {
+				draw(e.path);
 			}
 		};
 	};
@@ -109,6 +83,7 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 					if (isUp) {
 						obj.isUp = isUp;
 					}
+
 					line(obj);
 
 					isSeed = false;
@@ -141,9 +116,14 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 		unsetBind();
 		switch (tool) {
 			case self.tools.DRAW:
+				// DrawManager.canDrag(false);
+				// DrawManager.canGroupDrag(false);
 				DrawManager.setDraw();
+				setBind(listener.draw);
 				break;
 			case self.tools.LINE:
+				// DrawManager.canDrag(false);
+				// DrawManager.canGroupDrag(false);
 				setBind(listener.line);
 				break;
 			case self.tools.TEXT:
@@ -196,8 +176,8 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 	};
 
 	function unsetBind() {
+		DrawManager.removeDraw();
 		Canvas.getCanvas().then(function(canvas) {
-			canvas.isDrawingMode = false;
 			canvas.off("mouse:down");
 			canvas.off("mouse:move");
 			canvas.off("mouse:up");
@@ -222,6 +202,11 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 				if (callback.onUp) {
 					cs.on("mouse:up", function(e) {
 						callback.onUp(cs.getPointer(), e);
+					});
+				}
+				if (callback.onFinish) {
+					cs.on("path:created", function(e) {
+						callback.onFinish(e);
 					});
 				}
 			});

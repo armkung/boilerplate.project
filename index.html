@@ -32,10 +32,11 @@
       			height: 100%;
       			overflow: hidden;
       		}
-			.draw-pad{		
-				position: absolute;
+      		.draw-pad .mirror{
+      			position: absolute;
 				z-index: 1;
-      			
+      		}
+			.draw-pad{		      		
       			width: 100%;
 				height: 100%;
 			}
@@ -70,14 +71,13 @@
 	<body ng-app="socket">
 
 		<script type="text/ng-template" id="hand_write.tpl.html">
-				<canvas id="draw" hand-writer tool="{{tool}}" text="{{text}}"></canvas>
-			<div class="draw-pad" fit-size>
-				<div>
-					<button ng-repeat="t in tools" ng-click="changeTool($index)">{{t}}</button>
-					<button ng-repeat="a in attrs" ng-click="changeAttr($index)">{{a}}</button>
-				</div>
+			<div class="draw-pad">
+				<canvas id="draw" hand-writer tool="{{tool}}" text="{{text}}" ></canvas>
 				<input id="textbox" ng-model="text">
-				<!-- <div id="draw" class="canvas" hand-writer tool="{{tool}}" text="{{text}}"></div> -->
+			</div>
+			<div>
+				<button ng-repeat="t in tools" ng-click="changeTool($index)">{{t}}</button>
+				<button ng-repeat="a in attrs" ng-click="changeAttr($index)">{{a}}</button>
 			</div>
 		</script>
 
@@ -90,7 +90,7 @@
 				<button ng-click="prevIndex()">Prev</button>
 				<button ng-click="nextIndex()">Next</button>
 			</div>
-			<div class="draw-pad" fit-size>
+			<div class="draw-pad mirror" fit-size>
 				<input id="textbox" ng-model="text">
 				<div id="mirror" hand-writer tool="{{tool}}" text="{{text}}"></div>
 			</div>
