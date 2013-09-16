@@ -52,9 +52,6 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 		};
 	};
 	this.setDraw = function(draw) {
-		var isSeed = true,
-			isDraw = false,
-			isUp = false;
 		listener.draw = {
 			onFinish: function(e) {
 				draw(e.path);
@@ -98,19 +95,35 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 		};
 	};
 	this.setDragObject = function(drag) {
+		var obj;
+		var x1, y1, x2, y2;
 		listener.dragObject = {
-			onDragEnd: function(data) {
-				drag(data);
+			onDown: function(pos, e) {
+				if (e.target) {
+					obj = e.target;
+					x1 = obj.get("left");
+					y1 = obj.get("top");
+				}
+			},
+			onUp: function(pos, e) {
+				if (obj && obj == e.target) {
+					x2 = obj.get("left");
+					y2 = obj.get("top");
+					var data = {};
+					data.pos = {
+						x: x2 - x1,
+						y: y2 - y1
+					};
+					data.scale = {
+						x: obj.get("scaleX"),
+						y: obj.get("scaleY")
+					};
+					data.angle = obj.get("angle");
+					drag(data, obj);
+				}
 			}
 		};
 	};
-	// this.setDragGroup = function(drag) {
-	// 	listener.dragGroup = {
-	// 		onDragEnd: function(data) {				
-	// 			drag(data);
-	// 		}
-	// 	};
-	// };
 
 	this.setTool = function(tool) {
 		unsetBind();
@@ -150,7 +163,7 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 				DrawManager.canDrag(true);
 				// var current = DrawManager.getCurrentGroup();
 				// angular.forEach(current, function(obj, key) {
-				// 	setBind(listener.dragObject, obj);
+				setBind(listener.dragObject);
 				// });
 				break;
 			case self.tools.CLEAR:
@@ -209,7 +222,28 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 						callback.onFinish(e);
 					});
 				}
+				if (callback.onScale) {
+					cs.on("object:scaling", function(e) {
+						callback.onScale(e);
+					});
+				}
+				if (callback.onRotate) {
+					cs.on("object:rotating", function(e) {
+						callback.onRotate(e);
+					});
+				}
+				if (callback.onSelect) {
+					cs.on("object:selected", function(e) {
+						callback.onSelect(e);
+					});
+				}
+				if (callback.onUnSelect) {
+					cs.on("selection:cleared", function(e) {
+						callback.onUnSelect(e);
+					});
+				}
 			});
+
 		}
 	}
 });

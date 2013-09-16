@@ -33,7 +33,7 @@ app.service("DrawManager", function(Canvas) {
 	this.draw = function(data, x, y) {
 		// Canvas.getCanvas().then(function(canvas) {
 		if (current instanceof fabric.Group) {
-			var paths = []
+			var paths = [];
 			angular.forEach(data.path, function(value, key) {
 				paths.push(value.join(" "));
 			});
@@ -62,15 +62,16 @@ app.service("DrawManager", function(Canvas) {
 		// });
 	}
 	this.disableMove = function(obj) {
-		obj.set('selectable' , false);
-		obj.set('hasControls' , false);
-		obj.set('hasRotatingPoint' , false);
-		// canvas.selection = false;
+		canvas.selection = false;
+		obj.set('selectable', false);
+		obj.set('hasControls', false);
+		obj.set('hasBorders', false);
 	};
 	this.enableMove = function(obj) {
-		obj.set('selectable' , true);
-		obj.set('hasControls' , true);
-		// canvas.selection = true;
+		canvas.selection = true;
+		obj.set('selectable', true);
+		obj.set('hasControls', true);
+		obj.set('hasBorders', true);
 	};
 	// this.addGroup = function(){
 
@@ -81,36 +82,36 @@ app.service("DrawManager", function(Canvas) {
 		canvas.freeDrawingBrush.color = drawOption.color;
 		canvas.freeDrawingBrush.width = drawOption.width;
 		// canvas.on("path:created", function(e) {
-			// self.disableMove(e.path);
+		// self.disableMove(e.path);
 		// });
 		// });
-	}
+	};
 	this.removeDraw = function() {
 		// Canvas.getCanvas().then(function(canvas) {
 		canvas.isDrawingMode = false;
 		canvas.off("path:created");
 		// });
-	}
-	this.initLine = function(x, y, isSeed) {
-		line = new fabric.Line([x, y, x, y], lineOption);
-		if (current instanceof fabric.Group) {
-			current.addWithUpdate(line)
-		} else {
-			current.add(line);
-		}
-		self.disableMove(line);
-		// canvas.renderAll();
-
 	};
-	this.drawLine = function(x, y, isSeed) {
+
+	this.drawLine = function(x, y, isSeed, isUp) {
 		if (isSeed) {
-			self.initLine(x, y, isSeed);
+			xPos = x;
+			yPos = y;
 		} else {
-			line.set("x2", x);
-			line.set("y2", y);
-			canvas.calcOffset();			
+			current.remove(line);
+			line = new fabric.Line([xPos, yPos, x, y], lineOption);
+			if (current instanceof fabric.Group) {
+				current.addWithUpdate(line)
+			} else {
+				current.add(line);
+			}
+			self.disableMove(line);
+			canvas.calcOffset();
+			canvas.renderAll();
+			if (isUp) {
+				line = null;
+			}
 		}
-		canvas.renderAll();		
 	};
 
 	this.drawText = function(txt, x, y) {
@@ -192,14 +193,23 @@ app.service("DrawManager", function(Canvas) {
 		// 	layer.add(group);
 		// }
 	};
-	this.getGroup = function() {
-		return layer.getChildren();
-	};
+	this.getIndex = function(obj) {
+		return canvas.getObjects().indexOf(obj);
+	}
 	this.getCurrentGroup = function(id) {
 		// id = id ? id : '';
 		// return layer.get('#' + id)[0].getChildren();
 	};
-	this.setCurrentPosition = function(n, x, y) {
+	this.setCurrentPosition = function(n, pos, scale, angle) {
+		var obj = current.item(n);
+		obj.set({
+			"left": obj.get("left") + pos.x,
+			"top": obj.get("top") + pos.y,
+			"scaleX": scale.x,
+			"scaleY": scale.y,
+			"angle": angle
+		})
+		canvas.renderAll();
 		// var obj = current.getChildren()[n];
 		// obj.setX(x);
 		// obj.setY(y);
@@ -214,10 +224,9 @@ app.service("DrawManager", function(Canvas) {
 			if (!(obj instanceof fabric.Group)) {
 				if (canDrag) {
 					self.enableMove(obj);
-					console.log(obj)
 				} else {
 					self.disableMove(obj);
-				}				
+				}
 			}
 
 		});
