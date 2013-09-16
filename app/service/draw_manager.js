@@ -194,6 +194,7 @@ app.service("DrawManager", function(Canvas) {
 		// }
 	};
 	this.getIndex = function(obj) {
+		console.log(obj);
 		return canvas.getObjects().indexOf(obj);
 	}
 	this.getCurrentGroup = function(id) {
