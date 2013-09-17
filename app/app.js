@@ -75,8 +75,10 @@ app.factory("DataManager", function(Canvas, Socket) {
 			switch (type) {
 				case "pos":
 					Socket.on("send:" + type, function(data) {
-						data.pos.x *= Canvas.width;
-						data.pos.y *= Canvas.height;
+						if (data.pos) {
+							data.pos.x *= Canvas.width;
+							data.pos.y *= Canvas.height;
+						}
 						callback(data);
 					});
 					break;
@@ -122,6 +124,7 @@ app.service("Canvas", function($q) {
 		// mirror: {},
 		// test: {}
 	};
+	var id;
 	var deferred = $q.defer();
 	var canvas;
 	// angular.forEach(obj, function(value, key) {
@@ -130,7 +133,8 @@ app.service("Canvas", function($q) {
 	// 	obj[key] = canvas.getObjects();
 	// });
 	// this.id = self.names.DRAW;
-	this.init = function(id) {
+	this.init = function(name) {
+		id = name;
 		deferred = $q.defer();
 		// var id = self.id
 		var parent = $('#' + id).parent();
@@ -143,18 +147,20 @@ app.service("Canvas", function($q) {
 		});
 		canvas.selection = false;
 		if (id in obj) {
-			var children = obj[id].getObjects();
-			console.log(canvas)
+			var children = obj[id];
 			angular.forEach(children, function(child, key) {
 				canvas.add(child);
 			});
 		} else {
-			obj[id] = canvas;
+			self.saveData();
 		}
 		self.width = canvas.getWidth();
 		self.height = canvas.getHeight();
 		deferred.resolve(canvas);
 	};
+	this.saveData = function() {
+		obj[id] = canvas.getObjects();
+	}
 	// this.setSize = function(w, h) {
 	// 	canvas.set({
 	// 		width: w,

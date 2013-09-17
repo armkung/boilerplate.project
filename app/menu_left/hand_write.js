@@ -71,7 +71,7 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 
 			var strokeColor, fillColor, strokeSize, fontSize;
 			DataManager.getData(typePos, function(data) {
-				if (data.pos.isSeed) {
+				if (data.pos && data.pos.isSeed) {
 					strokeColor = DrawManager.getStrokeColor();
 					fillColor = DrawManager.getFillColor();
 					strokeSize = DrawManager.getStrokeSize();
@@ -91,7 +91,7 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 						drag(data);
 						break;
 				}
-				if (data.pos.isUp) {
+				if (data.pos && data.pos.isUp) {
 					DrawManager.setStrokeColor(strokeColor);
 					DrawManager.setFillColor(fillColor);
 					DrawManager.setStrokeSize(strokeSize);
@@ -153,7 +153,7 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 				// }
 				line(obj);
 				// if (pos.isSeed || pos.isUp) {
-				DataManager.setData(typePos, obj);
+					DataManager.setData(typePos, obj);
 				// }
 			});
 
