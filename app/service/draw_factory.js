@@ -64,9 +64,9 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 			isUp = false;
 		listener.line = {
 			onDown: function() {
+				isUp = isDraw;
+				isDraw = !isDraw;
 				isSeed = true;
-				isDraw = true;
-				isUp = false;
 			},
 			onMove: function(pos) {
 				if (isDraw || isUp) {
@@ -75,23 +75,21 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 						y: pos.y
 					};
 					if (isSeed && !isUp) {
-						obj.isSeed = isSeed;
-					}
+						obj.isSeed = true;
+						isSeed = false;
+					}					
 					if (isUp) {
-						obj.isUp = isUp;
+						obj.isUp = true;
+						isUp = false;
 					}
-
 					line(obj);
-
-					isSeed = false;
-					isUp = false;
 				}
 			},
-			onUp: function() {
-				isDraw = false;
-				isSeed = true;
-				isUp = true;
-			}
+			// onUp: function() {
+			// 	isDraw = false;
+			// 	isSeed = true;
+			// 	isUp = true;
+			// },
 		};
 	};
 	this.setDragObject = function(drag) {
@@ -230,6 +228,11 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 				if (callback.onRotate) {
 					cs.on("object:rotating", function(e) {
 						callback.onRotate(e);
+					});
+				}
+				if (callback.onOver) {
+					cs.on("object:over", function(e) {
+						callback.onOver(e);
 					});
 				}
 				if (callback.onSelect) {

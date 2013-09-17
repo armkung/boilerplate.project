@@ -20,11 +20,12 @@ app.service("DrawManager", function(Canvas) {
 
 	var stage, layer, current;
 	var line, text;
-	var obj = {}, index;
+	var id;
 	var groups = {};
 	var canvas;
-	this.init = function(id) {
-		Canvas.init(id.split("-")[0])
+	this.init = function(name) {
+		id = name.split("-")[0];
+		Canvas.init(id)
 		Canvas.getCanvas().then(function(cs) {
 			canvas = cs;
 			// self.newGroup();
@@ -194,22 +195,32 @@ app.service("DrawManager", function(Canvas) {
 		// }
 	};
 	this.getIndex = function(obj) {
-		console.log(obj);
-		return canvas.getObjects().indexOf(obj);
+		var index = [];
+		if (obj instanceof fabric.Group) {
+			obj.forEachObject(function(obj) {
+				index.push(canvas.getObjects().indexOf(obj));
+
+			});
+		} else {
+			index.push(canvas.getObjects().indexOf(obj));
+		}
+		return index
 	}
 	this.getCurrentGroup = function(id) {
 		// id = id ? id : '';
 		// return layer.get('#' + id)[0].getChildren();
 	};
-	this.setCurrentPosition = function(n, pos, scale, angle) {
-		var obj = current.item(n);
-		obj.set({
-			"left": obj.get("left") + pos.x,
-			"top": obj.get("top") + pos.y,
-			"scaleX": scale.x,
-			"scaleY": scale.y,
-			"angle": angle
-		})
+	this.setCurrentPosition = function(indexs, pos, scale, angle) {
+		angular.forEach(indexs, function(index, key) {
+			var obj = current.item(index);
+			obj.set({
+				"left": obj.get("left") + pos.x,
+				"top": obj.get("top") + pos.y,
+				"scaleX": scale.x,
+				"scaleY": scale.y,
+				"angle": angle
+			});
+		});
 		canvas.renderAll();
 		// var obj = current.getChildren()[n];
 		// obj.setX(x);
@@ -251,9 +262,9 @@ app.service("DrawManager", function(Canvas) {
 		});
 	};
 	this.clear = function() {
-		layer.remove();
-		delete obj[index];
-		self.init(index);
+		canvas.clear();
+		Canvas.removeId(id)
+		self.init(id);
 		// layer = new Kinetic.Layer();
 		// stage.add(layer);
 		// self.newGroup();
