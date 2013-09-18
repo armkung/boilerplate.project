@@ -145,7 +145,7 @@ app.service("Canvas", function($q) {
 			width: parent.width(),
 			height: parent.height()
 		});
-		canvas.selection = false;
+
 		if (id in obj) {
 			var children = obj[id];
 			angular.forEach(children, function(child, key) {

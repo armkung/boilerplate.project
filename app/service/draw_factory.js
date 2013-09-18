@@ -60,51 +60,54 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 	};
 	this.setLine = function(line) {
 		var isSeed = true,
-			isDraw = false,
-			isUp = false;
+			isDraw = false;
 		listener.line = {
 			onDown: function() {
-				isUp = isDraw;
-				isDraw = !isDraw;
+				isDraw = true;
 				isSeed = true;
 			},
 			onMove: function(pos) {
-				if (isDraw || isUp) {
+				if (isDraw) {
 					var obj = {
 						x: pos.x,
 						y: pos.y
 					};
-					if (isSeed && !isUp) {
+					if (isSeed) {
 						obj.isSeed = true;
 						isSeed = false;
-					}					
-					if (isUp) {
-						obj.isUp = true;
-						isUp = false;
 					}
 					line(obj);
 				}
 			},
-			// onUp: function() {
-			// 	isDraw = false;
-			// 	isSeed = true;
-			// 	isUp = true;
-			// },
+			onUp: function(pos) {
+				isDraw = false;
+				var obj = {
+					x: pos.x,
+					y: pos.y
+				};
+				obj.isUp = true;
+				line(obj);
+			},
 		};
 	};
 	this.setDragObject = function(drag) {
-		var obj;
+		var isDrag = false,
+			objDrag;
 		var x1, y1, x2, y2;
 		listener.dragObject = {
 			onDown: function(pos, e) {
+				objDrag = e.target;
 				if (e.target) {
-					obj = e.target;
-					x1 = obj.get("left");
-					y1 = obj.get("top");
+					isDrag = true;
 				}
 			},
-			onUp: function(pos, e) {
-				if (obj && obj == e.target) {
+			onMove: function(e) {
+				var obj = e.target;
+				if (obj && isDrag && objDrag == obj) {
+					if (!x1 && !y1) {
+						x1 = obj.get("left");
+						y1 = obj.get("top");
+					}
 					x2 = obj.get("left");
 					y2 = obj.get("top");
 					var data = {};
@@ -112,14 +115,31 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 						x: x2 - x1,
 						y: y2 - y1
 					};
-					data.scale = {
-						x: obj.get("scaleX"),
-						y: obj.get("scaleY")
-					};
-					data.angle = obj.get("angle");
-					drag(data, obj);
+					drag(obj, data);
+					x1 = x2;
+					y1 = y2;
 				}
 			}
+			// onScale: function(e) {
+			// 	var obj = e.target;
+			// 	var data = {};
+			// 	data.scale = {
+			// 		point: obj.getCenterPoint(),
+			// 		x: obj.get("scaleX"),
+			// 		y: obj.get("scaleY")
+			// 	};
+			// 	drag(obj, data);
+			// }
+			// onRotate: function(e) {
+			// 	var obj = e.target;
+			// 	var data = {};
+			// 	data.angle = {
+			// 		point: obj.getCenterPoint(),
+			// 		angle: obj.get("angle")
+			// 	};
+			// 	drag(obj, data);
+			// }
+
 		};
 	};
 
@@ -218,6 +238,11 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 				if (callback.onFinish) {
 					cs.on("path:created", function(e) {
 						callback.onFinish(e);
+					});
+				}
+				if (callback.onMove) {
+					cs.on("object:moving", function(e) {
+						callback.onMove(e);
 					});
 				}
 				if (callback.onScale) {
