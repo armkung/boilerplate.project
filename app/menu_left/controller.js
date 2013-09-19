@@ -26,7 +26,7 @@ app.controller('SlideCtrl', function($scope, $rootScope, DrawFactory, SlideManag
 
 	$scope.tools = [];
 	$scope.attrs = [];
-	$scope.tool = DrawFactory.tools.DRAG_OBJECT;
+	$scope.tool = DrawFactory.tools.DRAW;
 	angular.forEach(DrawFactory.tools, function(value, key) {
 		$scope.tools.push(value);
 	});

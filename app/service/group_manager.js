@@ -6,11 +6,6 @@ app.service('GroupManager', function($rootScope, Canvas, Room) {
 	this.init = function(cs) {
 		canvas = cs;
 		objs = canvas.getObjects();
-		// angular.forEach(canvas.getObjects(), function(obj, key) {
-		// 	if (obj instanceof fabric.Group) {
-		// 		objs.push(obj);
-		// 	}
-		// });
 		self.hideAll();
 	}
 	this.getGroups = function(users) {
@@ -33,20 +28,6 @@ app.service('GroupManager', function($rootScope, Canvas, Room) {
 			};
 		});
 		canvas.renderAll();
-		// angular.forEach(children, function(child, key) {
-		// 	var id = child.getId();
-		// 	var group = getGroupById(id);
-		// 	if (users.indexOf(id) != -1) {
-		// 		groups.push({
-		// 			id: id
-		// 		});
-		// 	} else {
-		// 		if (id != '') {
-		// 			group.remove();
-		// 			layer.draw();
-		// 		}
-		// 	}
-		// });
 		return groups;
 	}
 	this.hideAll = function() {

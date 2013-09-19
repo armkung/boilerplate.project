@@ -32,7 +32,7 @@
       			height: 100%;
       			overflow: hidden;
       		}
-      		.draw-pad .mirror{
+      		.draw-pad.mirror{
       			position: absolute;
 				z-index: 1;
       		}
@@ -91,8 +91,8 @@
 				<button ng-click="nextIndex()">Next</button>
 			</div>
 			<div class="draw-pad mirror" fit-size>
+				<canvas id="mirror" hand-writer tool="{{tool}}" text="{{text}}" ></canvas>
 				<input id="textbox" ng-model="text">
-				<div id="mirror" hand-writer tool="{{tool}}" text="{{text}}"></div>
 			</div>
 			<div class="slide-pad" fit-size>
 				<slide></slide>
