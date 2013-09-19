@@ -1,4 +1,4 @@
-app.service("DrawManager", function(Canvas) {
+app.service("DrawManager", function(Canvas, $rootScope) {
 	var self = this;
 
 	this.strokeColor = 'black';
@@ -18,11 +18,10 @@ app.service("DrawManager", function(Canvas) {
 		fill: 'white'
 	};
 
-	var stage, layer, current;
 	var line, text;
 	var id;
 	var groups = {};
-	var canvas;
+	var canvas, current;
 	this.init = function(name) {
 		id = name.split("-")[0];
 		Canvas.init(id)
@@ -39,6 +38,19 @@ app.service("DrawManager", function(Canvas) {
 				obj.set('hasRotatingPoint', false);
 			});
 		});
+	};
+	this.disableMove = function(obj) {
+		canvas.selection = false;
+		obj.set('selectable', false);
+		obj.set('hasControls', false);
+		obj.set('hasBorders', false);
+		obj.set('hasRotatingPoint', false);
+	};
+	this.enableMove = function(obj) {
+		canvas.selection = true;
+		obj.set('selectable', true);
+		obj.set('hasBorders', true);
+		// obj.set('hasControls', true);
 	};
 	this.draw = function(data, x, y) {
 		if (current instanceof fabric.Group) {
@@ -65,23 +77,11 @@ app.service("DrawManager", function(Canvas) {
 		}
 		canvas.renderAll();
 	}
-	this.disableMove = function(obj) {
-		canvas.selection = false;
-		obj.set('selectable', false);
-		obj.set('hasControls', false);
-		obj.set('hasBorders', false);
-		obj.set('hasRotatingPoint', false);
-	};
-	this.enableMove = function(obj) {
-		canvas.selection = true;
-		obj.set('selectable', true);
-		obj.set('hasBorders', true);
-		// obj.set('hasControls', true);
-	};
 	this.setDraw = function() {
 		canvas.isDrawingMode = true;
-		canvas.freeDrawingBrush.color = drawOption.color;
-		canvas.freeDrawingBrush.width = drawOption.width;
+		angular.forEach(drawOption, function(value, key) {
+			canvas.freeDrawingBrush[key] = value;
+		});
 	};
 	this.removeDraw = function() {
 		canvas.isDrawingMode = false;
@@ -166,16 +166,6 @@ app.service("DrawManager", function(Canvas) {
 		} else {
 			current = canvas;
 		}
-
-		// if (id) {
-		// 	current = layer.get('#' + id)[0];
-		// 	if (!current) {
-		// 		self.newGroup(id);
-		// 		current = layer.get('#' + id)[0];
-		// 	}
-		// } else {
-		// 	current = layer.get('#')[0];
-		// }
 	};
 	this.newGroup = function(id) {
 		if (id) {
@@ -185,12 +175,6 @@ app.service("DrawManager", function(Canvas) {
 				canvas.add(groups[id]);
 			}
 		}
-		// id = id ? id : '';
-		// if (layer.get('#' + id).length == 0) {
-		// 	groupOption.id = id;
-		// 	var group = new Kinetic.Group(groupOption);
-		// 	layer.add(group);
-		// }
 	};
 	this.getIndex = function(obj) {
 		var index = [];
@@ -302,4 +286,7 @@ app.service("DrawManager", function(Canvas) {
 		self.init(id);
 	};
 
+	$rootScope.$on("$routeChangeStart", function($currentRoute, $previousRoute) {
+		Canvas.saveData();
+	});
 });

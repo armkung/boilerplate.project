@@ -14,9 +14,6 @@ app.controller('HandWriteCtrl', function($scope, $rootScope, DrawFactory, Canvas
 	$scope.changeAttr = function(index) {
 		$rootScope.$broadcast('attr', $scope.attrs[index]);
 	};
-	$scope.$on("$routeChangeStart", function($currentRoute, $previousRoute) {
-		Canvas.saveData();
-	});
 });
 
 app.controller('SlideCtrl', function($scope, $rootScope, DrawFactory, SlideManager) {

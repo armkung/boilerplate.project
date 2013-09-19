@@ -187,22 +187,6 @@ app.service("Canvas", function($q) {
 		}
 		return deferred.promise;
 	};
-	this.getCurrent = function() {
-		if (stage && !deferred.promise) {
-			deferred.resolve(stage);
-		}
-		return deferred.promise;
-	}
-	this.getPosition = function() {
-		var mousePos = stage.getMousePosition();
-		var touchPos = stage.getTouchPosition();
-		if (mousePos && mousePos.x && mousePos.y) {
-			return mousePos;
-		} else if (touchPos && touchPos.x && touchPos.y) {
-			return touchPos;
-		}
-	};
-
 });
 app.service("Input", function() {
 	var self = this;
