@@ -98,19 +98,17 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 			onDown: function(pos, e) {
 				objDrag = e.target;
 				if (e.target) {
+					x1 = objDrag.get("left");
+					y1 = objDrag.get("top");
 					isDrag = true;
 				}
 			},
 			onMove: function(e) {
 				var obj = e.target;
 				if (obj && isDrag && objDrag == obj) {
-					if (!x1 && !y1) {
-						x1 = obj.get("left");
-						y1 = obj.get("top");
-					}
+					var data = {};
 					x2 = obj.get("left");
 					y2 = obj.get("top");
-					var data = {};
 					data.pos = {
 						x: x2 - x1,
 						y: y2 - y1
@@ -119,26 +117,34 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 					x1 = x2;
 					y1 = y2;
 				}
+			},
+			onScale: function(e) {
+				var obj = e.target;
+				var data = {};
+				x2 = obj.get("left");
+				y2 = obj.get("top");
+				data.pos = {
+					x: x2 - x1,
+					y: y2 - y1
+				};
+				data.scale = {
+					x: obj.get("scaleX"),
+					y: obj.get("scaleY")
+				};
+				data.flip = {
+					x: obj.get("flipX"),
+					y: obj.get("flipY")
+				};
+				drag(obj, data);
+				x1 = x2;
+				y1 = y2;
+			},
+			onRotate: function(e) {
+				var obj = e.target;
+				var data = {};
+				data.angle = obj.get("angle");
+				drag(obj, data);
 			}
-			// onScale: function(e) {
-			// 	var obj = e.target;
-			// 	var data = {};
-			// 	data.scale = {
-			// 		point: obj.getCenterPoint(),
-			// 		x: obj.get("scaleX"),
-			// 		y: obj.get("scaleY")
-			// 	};
-			// 	drag(obj, data);
-			// }
-			// onRotate: function(e) {
-			// 	var obj = e.target;
-			// 	var data = {};
-			// 	data.angle = {
-			// 		point: obj.getCenterPoint(),
-			// 		angle: obj.get("angle")
-			// 	};
-			// 	drag(obj, data);
-			// }
 
 		};
 	};

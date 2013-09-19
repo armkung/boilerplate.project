@@ -30,8 +30,8 @@ app.service("DrawManager", function(Canvas) {
 			canvas = cs;
 			canvas.on("object:selected", function(e) {
 				var obj = e.target;
-				obj.set('hasControls', false);
-				obj.set('hasRotatingPoint', false);
+				obj.set('hasControls', true);
+				obj.set('hasRotatingPoint', true);
 			});
 			canvas.on("selection:created", function(e) {
 				var obj = e.target;
@@ -217,17 +217,23 @@ app.service("DrawManager", function(Canvas) {
 					obj.set({
 						"left": obj.get("left") + data.pos.x,
 						"top": obj.get("top") + data.pos.y,
-
 					});
 				}
-				// if (scale) {
-				// 	var center = obj.getCenterPoint();
-				// 	obj.translateToOriginPoint(center, scale.point.x, scale.point.y);
-				// 	obj.set({
-				// 		"scaleX": scale.x,
-				// 		"scaleY": scale.y
-				// 	});
-				// }
+				if (data.scale || data.flip) {
+					// var center = obj.getCenterPoint();
+					// obj.translateToOriginPoint(center, scale.point.x, scale.point.y);
+					obj.set({
+						"scaleX": data.scale.x,
+						"scaleY": data.scale.y,
+						"flipX": data.flip.x,
+						"flipY": data.flip.y
+					});
+				}
+				if (data.angle) {
+					obj.set({
+						"angle": data.angle
+					});
+				}
 			}
 		});
 		// adjustPosition();
