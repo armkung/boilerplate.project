@@ -10,15 +10,14 @@ app.directive('group', function(GroupManager, Room, Canvas) {
 					scope.groups = GroupManager.getGroups(Room.users);
 				});
 			}, true);
-
-			var isHide = true;
+			
 			scope.toggle = function(index) {
-				if (isHide) {
-					GroupManager.show(scope.groups[index].id);
+				scope.groups.isHide = !scope.groups.isHide;
+				if (scope.groups.isHide) {
+					GroupManager.show(index);
 				} else {
-					GroupManager.hide(scope.groups[index].id);
+					GroupManager.hide(index);
 				}
-				isHide = !isHide;
 			}
 		}
 	};

@@ -16,6 +16,9 @@ app.service('SlideManager', function($http) {
 		// });
 		self.url = host + self.slide + "/preview";
 	}
+	this.getIndex =  function() {
+		return index;
+	};
 	this.next = function() {
 		self.index = id + changeIndex(1);
 	};

@@ -2,14 +2,12 @@ app.service('GroupManager', function($rootScope, Canvas, Room) {
 	var self = this;
 	var canvas;
 	var objs;
-
+	var groups = [];
 	this.init = function(cs) {
 		canvas = cs;
 		objs = canvas.getObjects();
-		self.hideAll();
-	}
+	};
 	this.getGroups = function(users) {
-		var groups = [];
 		var tmp = users.slice(0);
 		angular.forEach(objs, function(obj, key) {
 			if (obj instanceof fabric.Group) {
@@ -17,8 +15,10 @@ app.service('GroupManager', function($rootScope, Canvas, Room) {
 				if (!(user in groups)) {
 					groups.push({
 						user: user,
-						id: key
+						id: key,
+						isHide: false
 					});
+					// self.hide(groups.length - 1);
 				}
 			}
 		});
@@ -28,27 +28,34 @@ app.service('GroupManager', function($rootScope, Canvas, Room) {
 			};
 		});
 		canvas.renderAll();
+
 		return groups;
-	}
-	this.hideAll = function() {
-		angular.forEach(objs, function(obj, key) {
-			if (obj instanceof fabric.Group) {
-				obj.visible = false;
-			}
+	};
+	this.showAll = function() {
+		angular.forEach(groups, function(group, key) {
+			self.show(key)
 		});
-		canvas.renderAll();
-	}
-	this.show = function(id) {
+	};
+	this.hideAll = function() {
+		angular.forEach(groups, function(group, key) {
+			self.hide(key)
+		});
+	};
+	this.show = function(index) {
+		var id = groups[index].id
+		groups[index].isHide = false;
 		canvas.item(id).set({
 			"visible": true
 		});
 		canvas.renderAll();
-	}
-	this.hide = function(id) {
+	};
+	this.hide = function(index) {
+		var id = groups[index].id
+		groups[index].isHide = true;
 		canvas.item(id).set({
 			"visible": false
 		});
 		canvas.renderAll();
-	}
+	};
 
 });

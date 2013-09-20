@@ -163,7 +163,7 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 				callback.strokeSize = Math.floor(Math.random() * 10) + 4;
 				callback.fontSize = Math.floor(Math.random() * 20) + 28;
 				DrawFactory.setAttr(attr, callback);
-			});			
+			});	
 		}
 	};
 });

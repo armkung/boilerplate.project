@@ -1,4 +1,4 @@
-app.directive('slide', function(DrawManager, SlideManager, DataManager) {
+app.directive('slide', function($rootScope, DrawManager, SlideManager, DataManager) {
 	return {
 		restrict: 'E',
 		template: '<iframe id="slide" ng-src="{{url}}"></iframe>',
@@ -16,18 +16,20 @@ app.directive('slide', function(DrawManager, SlideManager, DataManager) {
 					url: SlideManager.url,
 					index: SlideManager.index
 				});
-				changeSlide(SlideManager.url, SlideManager.index);
+				changeSlide();
 			});
 
 			DataManager.getData(type, function(data) {
 				SlideManager.url = data.url;
 				SlideManager.index = data.index;
-				changeSlide(data.url, data.index);
+				changeSlide();
 			});
 
-			function changeSlide(url, index) {
-				DrawManager.init(id + '-' + index);
-				scope.url = url + index;
+			function changeSlide() {
+				var name = id + "-" + SlideManager.getIndex();
+				DrawManager.init(name);
+
+				scope.url = SlideManager.url + SlideManager.index;
 
 			}
 

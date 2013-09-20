@@ -145,29 +145,10 @@ app.service("Canvas", function($q) {
 			width: parent.width(),
 			height: parent.height()
 		});
-
-		if (id in obj) {
-			var children = obj[id];
-			angular.forEach(children, function(child, key) {
-				canvas.add(child);
-			});
-		} else {
-			self.saveData();
-		}
 		self.width = canvas.getWidth();
 		self.height = canvas.getHeight();
 		deferred.resolve(canvas);
 	};
-	this.saveData = function() {
-		obj[id] = canvas.getObjects();
-	}
-	// this.setSize = function(w, h) {
-	// 	canvas.set({
-	// 		width: w,
-	// 		height: h
-	// 	});
-	// 	canvas.renderAll();
-	// };
 	this.getCanvas = function() {
 		// var id = self.id
 		// canvas = new fabric.Canvas(id);

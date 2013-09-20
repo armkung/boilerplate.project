@@ -1,4 +1,4 @@
-<html>
+<html ng-app="socket">
 	<head>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<% styles.forEach( function ( file ) { %>
@@ -34,7 +34,7 @@
       		}
       		.draw-pad.mirror{
       			position: absolute;
-				z-index: 1;
+				z-index: 99;
       		}
 			.draw-pad{		      		
       			width: 100%;
@@ -91,11 +91,11 @@
 				<button ng-click="nextIndex()">Next</button>
 			</div>
 			<div class="draw-pad mirror" fit-size>
+				<div class="slide-pad" fit-size>
+					<slide></slide>
+				</div>
 				<canvas id="mirror" hand-writer tool="{{tool}}" text="{{text}}" ></canvas>
 				<input id="textbox" ng-model="text">
-			</div>
-			<div class="slide-pad" fit-size>
-				<slide></slide>
 			</div>
 		</script>
 

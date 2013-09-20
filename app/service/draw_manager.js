@@ -20,13 +20,15 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 
 	var line, text;
 	var id;
+	var obj = {};
 	var groups = {};
 	var canvas, current;
 	this.init = function(name) {
-		id = name.split("-")[0];
-		Canvas.init(id)
+		id = name;
+		Canvas.init(id.split("-")[0]);
 		Canvas.getCanvas().then(function(cs) {
 			canvas = cs;
+			canvas.defaultCursor = "crosshair";
 			canvas.on("object:selected", function(e) {
 				var obj = e.target;
 				obj.set('hasControls', true);
@@ -37,8 +39,20 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 				obj.set('hasControls', false);
 				obj.set('hasRotatingPoint', false);
 			});
+			if (id in obj) {
+				var children = obj[id];
+				angular.forEach(children, function(child, key) {
+					canvas.add(child);
+				});
+				canvas.renderAll();
+			} else {
+				obj[id] = canvas.getObjects();
+			}
 		});
 	};
+	this.saveData = function() {
+		obj[id] = canvas.getObjects();
+	}
 	this.disableMove = function(obj) {
 		canvas.selection = false;
 		obj.set('selectable', false);
@@ -287,6 +301,6 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 	};
 
 	$rootScope.$on("$routeChangeStart", function($currentRoute, $previousRoute) {
-		Canvas.saveData();
+		self.saveData();
 	});
 });
