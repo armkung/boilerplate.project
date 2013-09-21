@@ -1,5 +1,5 @@
 var app = angular.module('socket', ['templates-app',
-	'templates-common', 'restangular'
+	'templates-common', 'ngRoute', 'restangular'
 ]);
 var host = 'http://localhost:8080';
 var ws = 'http://foaas.com';

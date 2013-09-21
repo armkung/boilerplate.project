@@ -39,19 +39,22 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 				obj.set('hasControls', false);
 				obj.set('hasRotatingPoint', false);
 			});
-			if (id in obj) {
-				var children = obj[id];
-				angular.forEach(children, function(child, key) {
-					canvas.add(child);
-				});
-				canvas.renderAll();
-			} else {
-				obj[id] = canvas.getObjects();
-			}
+			self.newObject(id);
 		});
 	};
-	this.saveData = function() {
-		obj[id] = canvas.getObjects();
+	this.newObject = function(name) {
+		canvas.clear();
+		if (name in obj) {
+			var children = obj[name];
+			angular.forEach(children, function(child, key) {
+				canvas.add(child);
+			});
+			canvas.renderAll();
+		}
+	}
+	this.saveData = function(name) {
+		name = name ? name : id;
+		obj[name] = canvas.getObjects().slice(0);
 	}
 	this.disableMove = function(obj) {
 		canvas.selection = false;

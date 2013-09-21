@@ -1,4 +1,4 @@
-app.directive('slide', function($rootScope, DrawManager, SlideManager, DataManager) {
+app.directive('slide', function($sce, DrawManager, SlideManager, DataManager) {
 	return {
 		restrict: 'E',
 		template: '<iframe id="slide" ng-src="{{url}}"></iframe>',
@@ -9,13 +9,17 @@ app.directive('slide', function($rootScope, DrawManager, SlideManager, DataManag
 			var id = 'mirror';
 			var type = 'slide';
 			SlideManager.init();
+
 			scope.slide = SlideManager;
 
-			scope.$watch('slide.index', function() {
+			scope.$watch('slide.index', function(newV, oldV) {
 				DataManager.setData(type, {
 					url: SlideManager.url,
 					index: SlideManager.index
 				});
+				var name = id + "-";
+				DrawManager.saveData(name + oldV);
+				DrawManager.newObject(name + newV);
 				changeSlide();
 			});
 
@@ -26,11 +30,8 @@ app.directive('slide', function($rootScope, DrawManager, SlideManager, DataManag
 			});
 
 			function changeSlide() {
-				var name = id + "-" + SlideManager.getIndex();
-				DrawManager.init(name);
-
-				scope.url = SlideManager.url + SlideManager.index;
-
+				var url = SlideManager.url + SlideManager.index;
+				scope.url = $sce.trustAsResourceUrl(url);
 			}
 
 		}
