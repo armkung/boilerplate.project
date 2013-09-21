@@ -177,16 +177,11 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 			case self.tools.DRAG_GROUP:
 				DrawManager.canDrag(false);
 				DrawManager.canGroupDrag(true);
-				// var current = DrawManager.getCurrentGroup();
-				// angular.forEach(current, function(group, key) {
-				// 	setBind(listener.dragGroup, group);
-				// });
 				break;
 			case self.tools.DRAG_OBJECT:
 				DrawManager.canGroupDrag(false);
 				DrawManager.canDrag(true);
-				// var current = DrawManager.getCurrentGroup();
-				// angular.forEach(current, function(obj, key) {
+
 				setBind(listener.dragObject);
 				// });
 				break;
@@ -218,6 +213,13 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 			canvas.off("mouse:down");
 			canvas.off("mouse:move");
 			canvas.off("mouse:up");
+			canvas.off("path:created");
+			canvas.off("object:moving");
+			canvas.off("object:scaling");
+			canvas.off("object:rotating");
+			canvas.off("object:over");
+			canvas.off("object:selected");
+			canvas.off("selection:cleared");
 		});
 	}
 

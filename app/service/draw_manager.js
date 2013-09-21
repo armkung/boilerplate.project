@@ -2,20 +2,20 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 	var self = this;
 
 	this.strokeColor = 'black';
-	this.fillColor = 'white';
+	this.fillColor = 'black';
 	this.strokeSize = 5;
 	this.fontSize = 30;
 	var drawOption = {
-		color: 'black',
-		width: 5
+		color: self.strokeColor,
+		width: self.strokeSize
 	};
 	var lineOption = {
-		stroke: 'black',
-		strokeWidth: 5
+		stroke: self.strokeColor,
+		strokeWidth: self.strokeSize
 	};
 	var textOption = {
-		fontSize: 30,
-		fill: 'white'
+		fontSize: self.fontSize,
+		fill: self.fillColor
 	};
 
 	var line, text;
@@ -68,6 +68,7 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 		obj.set('selectable', true);
 		obj.set('hasBorders', true);
 		// obj.set('hasControls', true);
+		// obj.set('hasRotatingPoint', false);
 	};
 	this.draw = function(data, x, y) {
 		if (current instanceof fabric.Group) {
@@ -131,18 +132,26 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 	};
 
 	this.drawText = function(txt, x, y) {
-		var op = textOption;
-		op.x = x;
-		op.y = y;
-		op.text = txt;
-		text = new Kinetic.Text(op);
-		current.add(text);
-		layer.batchDraw();
+		text = new fabric.Text(txt, textOption);
+		text.set({
+			"left": x + text.getWidth() / 2,
+			"top": y
+		});
+		if (current instanceof fabric.Group) {
+			current.addWithUpdate(text);
+		} else {
+			current.add(text);
+		}
+		self.disableMove(text);
+		canvas.calcOffset();
+		canvas.renderAll();
 	};
 
 	this.setStrokeColor = function(color) {
 		if (color) {
 			self.strokeColor = color;
+			canvas.freeDrawingBrush.color = color;
+			drawOption.color = color;
 			lineOption.stroke = color;
 		}
 	};
@@ -155,6 +164,8 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 	this.setStrokeSize = function(size) {
 		if (size) {
 			self.strokeSize = size;
+			canvas.freeDrawingBrush.width = size;
+			drawOption.width = size;
 			lineOption.strokeWidth = size;
 		}
 	};
