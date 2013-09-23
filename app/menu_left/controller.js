@@ -1,3 +1,10 @@
+app.controller('QuizCtrl', function($scope, QuizManager) {
+	$('#slickQuiz').slickQuiz({
+		json: QuizManager.quizJSON,
+		skipStartButton: true
+	});
+});
+
 app.controller('HandWriteCtrl', function($scope, $rootScope, DrawFactory, Canvas) {
 	$scope.tools = [];
 	$scope.attrs = [];
@@ -80,6 +87,6 @@ app.controller('HomeCtrl', function($scope, Room, Socket, Restangular) {
 	$scope.disconnect = function() {
 		Socket.emit("leave:room");
 		Socket.disconnect();
-	};	
+	};
 	// $scope.connect();
 });

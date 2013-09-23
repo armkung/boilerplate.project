@@ -65,6 +65,10 @@
 				white-space:nowrap;
 			}
 		</style>
+
+		<% scripts.forEach( function ( file ) { %>
+		<script type="text/javascript" src="<%= file %>"></script><% }); %>		
+		
 	</head>
 
 
@@ -137,9 +141,6 @@
 
 			</div>
 		</div>
-
-	<% scripts.forEach( function ( file ) { %>
-    <script type="text/javascript" src="<%= file %>"></script><% }); %>
     
 	</body>
 </html>

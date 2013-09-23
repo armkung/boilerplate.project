@@ -14,6 +14,9 @@ app.config(['$routeProvider',
 		}).when('/slide', {
 			templateUrl: 'slide.tpl.html',
 			controller: 'SlideCtrl'
+		}).when('/quiz', {
+			templateUrl: 'menu_left/quiz.tpl.html',
+			controller: 'QuizCtrl'
 		}).otherwise({
 			redirectTo: '/draw'
 		});
