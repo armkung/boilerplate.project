@@ -18,7 +18,7 @@ app.config(['$routeProvider',
 			templateUrl: 'menu_left/quiz.tpl.html',
 			controller: 'QuizCtrl'
 		}).otherwise({
-			redirectTo: '/draw'
+			redirectTo: '/home'
 		});
 	}
 ]);
@@ -57,7 +57,8 @@ app.factory('Socket', function($rootScope) {
 app.factory("Room", function() {
 	return {
 		room: "",
-		users: []
+		users: [],
+		groups: {}
 	};
 });
 app.factory("DataManager", function(Canvas, Socket) {
@@ -166,7 +167,7 @@ app.service("Canvas", function($q) {
 		// 	obj[id] = canvas;
 		// }
 		// return canvas;
-		if (canvas && !deferred.promise) {
+		if (canvas) {
 			deferred.resolve(canvas);
 		}
 		return deferred.promise;

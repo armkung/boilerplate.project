@@ -88,5 +88,5 @@ app.controller('HomeCtrl', function($scope, Room, Socket, Restangular) {
 		Socket.emit("leave:room");
 		Socket.disconnect();
 	};
-	// $scope.connect();
+	$scope.connect();
 });

@@ -314,7 +314,5 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 		self.init(id);
 	};
 
-	$rootScope.$on("$routeChangeStart", function($currentRoute, $previousRoute) {
-		self.saveData();
-	});
+
 });

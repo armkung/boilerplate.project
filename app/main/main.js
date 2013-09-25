@@ -9,9 +9,7 @@ app.directive('menuRight', function() {
 	return {
 		restrict: 'E',
 		templateUrl: 'main/menu_right.tpl.html',
-		controller: function($scope) {
-			$scope.menu = "group";
-		}
+		controller: 'MenuRightCtrl'
 	};
 });
 
