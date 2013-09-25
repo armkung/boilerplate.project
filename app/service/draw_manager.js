@@ -23,6 +23,13 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 	var obj = {};
 	var groups = {};
 	var canvas, current;
+	var n = 0;
+
+	function setId(obj) {
+		obj.set({
+			"id": n++
+		});
+	}
 	this.init = function(name) {
 		id = name;
 		Canvas.init(id.split("-")[0]);
@@ -91,6 +98,7 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 
 			self.disableMove(path);
 		} else {
+			setId(data);
 			self.disableMove(data);
 		}
 		canvas.renderAll();
@@ -117,6 +125,7 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 				if (current instanceof fabric.Group) {
 					current.addWithUpdate(line)
 				} else {
+					setId(line);
 					current.add(line);
 				}
 				self.disableMove(line);
@@ -140,6 +149,7 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 		if (current instanceof fabric.Group) {
 			current.addWithUpdate(text);
 		} else {
+			setId(text);
 			current.add(text);
 		}
 		self.disableMove(text);
@@ -206,13 +216,13 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 	};
 	this.getIndex = function(obj) {
 		var index = [];
+
 		if (obj instanceof fabric.Group) {
 			obj.forEachObject(function(obj) {
-				index.push(canvas.getObjects().indexOf(obj));
-
+				index.push(obj.get("id"));
 			});
 		} else {
-			index.push(canvas.getObjects().indexOf(obj));
+			index.push(obj.get("id"));
 		}
 		return index
 	}

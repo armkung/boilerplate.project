@@ -95,17 +95,14 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 			objDrag;
 		var x1, y1, x2, y2;
 		listener.dragObject = {
-			onDown: function(pos, e) {
+			onSelect: function(e) {
 				objDrag = e.target;
-				if (e.target) {
-					x1 = objDrag.get("left");
-					y1 = objDrag.get("top");
-					isDrag = true;
-				}
+				x1 = objDrag.get("left");
+				y1 = objDrag.get("top");
 			},
 			onMove: function(e) {
 				var obj = e.target;
-				if (obj && isDrag && objDrag == obj) {
+				if (obj) {
 					var data = {};
 					x2 = obj.get("left");
 					y2 = obj.get("top");
