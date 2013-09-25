@@ -1,14 +1,13 @@
 <div>
 
 	<ul>
-    <li><a ng-click="menu = 'group'">Group</a></li>
-    <li><a ng-click="menu = 'chat'">Chat</a></li>
+    <li ng-repeat="menu in menus"><a ng-click="setCurrent($index)">{{menu}}</a></li>
 	</ul>
-    <div ng-switch on="menu">
-          <div ng-switch-when="group">
+    <div ng-switch on="current">
+          <div ng-switch-when="Group">
             <group></group>
           </div>
-          <div ng-switch-when="chat">
+          <div ng-switch-when="Chat">
             <chat></chat>
           </div>
       </div>

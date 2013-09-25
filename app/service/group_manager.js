@@ -2,9 +2,10 @@ app.service('GroupManager', function($rootScope, Canvas) {
 	var self = this;
 	var canvas;
 	var objs;
-	var groups = [];
+	var groups;
 
 	this.getGroups = function(users) {
+		groups = [];
 		Canvas.getCanvas().then(function(cs) {
 			canvas = cs;
 			objs = canvas.getObjects();
@@ -53,7 +54,6 @@ app.service('GroupManager', function($rootScope, Canvas) {
 	this.hide = function(index) {
 		var id = groups[index].id
 		groups[index].isHide = true;
-		console.log(canvas.item(id))
 		canvas.item(id).set({
 			"visible": false
 		});

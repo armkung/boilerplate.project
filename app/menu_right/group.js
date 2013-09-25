@@ -4,6 +4,7 @@ app.directive('group', function(GroupManager, Room, Canvas) {
 		templateUrl: 'menu_right/group.tpl.html',
 		link: function(scope) {
 			scope.room = Room;
+
 			scope.$watch('room.users', function() {
 				scope.groups = GroupManager.getGroups(Room.users);
 			}, true);
