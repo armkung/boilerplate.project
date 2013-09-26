@@ -1,16 +1,23 @@
 app.controller('MenuRightCtrl', function($scope, $rootScope, $location) {
-	$rootScope.$on("$routeChangeStart", function($currentRoute, $previousRoute) {
+	var menu = ["Chat", "Group"];
+
+	checkRoute();
+	$rootScope.$on("$stateChangeSuccess", function($currentRoute, $previousRoute) {
+		checkRoute();
+	});
+
+	$scope.setCurrent = function(index) {
+		$scope.current = $scope.menus[index];
+	};
+
+	function checkRoute() {
 		var route = $location.path();
 		if (route == "/draw") {
-			$scope.menus = ["Chat", "Group"];
+			$scope.menus = menu;
 			$scope.current = "Group";
 		} else {
 			$scope.menus = [];
 			$scope.current = "Chat";
 		}
-	});
-
-	$scope.setCurrent = function(index){
-		$scope.current = $scope.menus[index];
-	};
+	}
 })
