@@ -1,4 +1,17 @@
-app.controller('MenuRightCtrl', function($scope, $rootScope, $location) {
+app.controller('LoginCtrl', function($scope, $state, GoogleService) {
+	GoogleService.load().then(function() {
+		GoogleService.getUser(function(data) {
+			console.log(data);
+		});
+
+		GoogleService.listFile(function(data) {
+			console.log(data);
+		});
+
+		$state.go('main.home');
+	});
+});
+app.controller('MenuRightCtrl', function($scope, $rootScope, $state) {
 	var menu = ["Chat", "Group"];
 
 	checkRoute();
@@ -11,7 +24,7 @@ app.controller('MenuRightCtrl', function($scope, $rootScope, $location) {
 	};
 
 	function checkRoute() {
-		var route = $location.path();
+		var route = $state.current.url;
 		if (route == "/draw") {
 			$scope.menus = menu;
 			$scope.current = "Group";
@@ -20,4 +33,4 @@ app.controller('MenuRightCtrl', function($scope, $rootScope, $location) {
 			$scope.current = "Chat";
 		}
 	}
-})
+});

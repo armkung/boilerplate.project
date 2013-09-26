@@ -5,14 +5,15 @@ var host = 'http://localhost:8080';
 var ws = 'http://foaas.com';
 app.config(['$routeProvider','$stateProvider', '$urlRouterProvider',
 	function($routeProvider,$stateProvider, $urlRouterProvider) {
-		$urlRouterProvider.otherwise('main');
+		$urlRouterProvider.otherwise('main/home');
 		$stateProvider.state('main', {
-      		url: "/main",
-      		templateUrl: 'main/main.tpl.html'
-  		}).state('login', {
-      		url: "/login",
-      		templateUrl: 'main/login.tpl.html'
-  		}).state('main.draw', {
+			url: "/main",
+			templateUrl: 'main/main.tpl.html'
+		}).state('login', {
+			url: "/login",
+			templateUrl: 'main/login.tpl.html',
+			controller: 'LoginCtrl'
+		}).state('main.draw', {
 			url: '/draw',
 			templateUrl: 'hand_write.tpl.html',
 			controller: 'HandWriteCtrl'

@@ -15,7 +15,7 @@ app.service('SlideManager', function($http) {
 		// 	self.url = data.url;
 		// });
 		self.url = host + self.slide + "/preview";
-	}
+	};
 	this.getIndex =  function() {
 		return index;
 	};
@@ -31,4 +31,4 @@ app.service('SlideManager', function($http) {
 		index = Math.max(1, index);
 		return index;
 	}
-})
+});

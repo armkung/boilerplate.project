@@ -58,11 +58,11 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 			});
 			canvas.renderAll();
 		}
-	}
+	};
 	this.saveData = function(name) {
 		name = name ? name : id;
 		obj[name] = canvas.getObjects().slice(0);
-	}
+	};
 	this.disableMove = function(obj) {
 		canvas.selection = false;
 		obj.set('selectable', false);
@@ -102,7 +102,7 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 			self.disableMove(data);
 		}
 		canvas.renderAll();
-	}
+	};
 	this.setDraw = function() {
 		canvas.isDrawingMode = true;
 		angular.forEach(drawOption, function(value, key) {
@@ -123,7 +123,7 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 				current.remove(line);
 				line = new fabric.Line([xPos, yPos, x, y], lineOption);
 				if (current instanceof fabric.Group) {
-					current.addWithUpdate(line)
+					current.addWithUpdate(line);
 				} else {
 					setId(line);
 					current.add(line);
@@ -224,8 +224,8 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 		} else {
 			index.push(obj.get("id"));
 		}
-		return index
-	}
+		return index;
+	};
 	this.getCurrentGroup = function(id) {
 		// id = id ? id : '';
 		// return layer.get('#' + id)[0].getChildren();
@@ -238,7 +238,7 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 				if (data.pos) {
 					obj.set({
 						"left": obj.get("left") + data.pos.x,
-						"top": obj.get("top") + data.pos.y,
+						"top": obj.get("top") + data.pos.y
 					});
 				}
 				if (data.scale || data.flip) {

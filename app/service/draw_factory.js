@@ -87,7 +87,7 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 				};
 				obj.isUp = true;
 				line(obj);
-			},
+			}
 		};
 	};
 	this.setDragObject = function(drag) {

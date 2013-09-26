@@ -16,7 +16,7 @@ app.directive('group', function(GroupManager, Room, Canvas) {
 				} else {
 					GroupManager.show(index);
 				}
-			}
+			};
 		}
 	};
 });

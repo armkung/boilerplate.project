@@ -35,16 +35,16 @@ app.service('GroupManager', function($rootScope, Canvas) {
 	};
 	this.showAll = function() {
 		angular.forEach(groups, function(group, key) {
-			self.show(key)
+			self.show(key);
 		});
 	};
 	this.hideAll = function() {
 		angular.forEach(groups, function(group, key) {
-			self.hide(key)
+			self.hide(key);
 		});
 	};
 	this.show = function(index) {
-		var id = groups[index].id
+		var id = groups[index].id;
 		groups[index].isHide = false;
 		canvas.item(id).set({
 			"visible": true
@@ -52,7 +52,7 @@ app.service('GroupManager', function($rootScope, Canvas) {
 		canvas.renderAll();
 	};
 	this.hide = function(index) {
-		var id = groups[index].id
+		var id = groups[index].id;
 		groups[index].isHide = true;
 		canvas.item(id).set({
 			"visible": false
