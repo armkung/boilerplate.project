@@ -1,25 +1,42 @@
 var app = angular.module('socket', ['templates-app',
-	'templates-common', 'ngRoute', 'restangular'
+	'templates-common', 'ngRoute', 'ui.router', 'restangular'
 ]);
 var host = 'http://localhost:8080';
 var ws = 'http://foaas.com';
-app.config(['$routeProvider',
-	function($routeProvider) {
-		$routeProvider.when('/draw', {
+app.config(['$routeProvider','$stateProvider', '$urlRouterProvider',
+	function($routeProvider,$stateProvider, $urlRouterProvider) {
+		$stateProvider.state('draw', {
+			url: '/draw',
 			templateUrl: 'hand_write.tpl.html',
 			controller: 'HandWriteCtrl'
-		}).when('/home', {
+		}).state('home', {
+			url: '/home',
 			templateUrl: 'home.tpl.html',
 			controller: 'HomeCtrl'
-		}).when('/slide', {
+		}).state('slide', {
+			url: '/slide',
 			templateUrl: 'slide.tpl.html',
 			controller: 'SlideCtrl'
-		}).when('/quiz', {
+		}).state('quiz', {
+			url: '/quiz',
 			templateUrl: 'menu_left/quiz.tpl.html',
 			controller: 'QuizCtrl'
-		}).otherwise({
-			redirectTo: '/home'
 		});
+		// $routeProvider.when('/draw', {
+		// 	templateUrl: 'hand_write.tpl.html',
+		// 	controller: 'HandWriteCtrl'
+		// }).when('/home', {
+		// 	templateUrl: 'home.tpl.html',
+		// 	controller: 'HomeCtrl'
+		// }).when('/slide', {
+		// 	templateUrl: 'slide.tpl.html',
+		// 	controller: 'SlideCtrl'
+		// }).when('/quiz', {
+		// 	templateUrl: 'menu_left/quiz.tpl.html',
+		// 	controller: 'QuizCtrl'
+		// }).otherwise({
+		// 	redirectTo: '/home'
+		// });
 	}
 ]);
 
