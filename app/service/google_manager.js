@@ -1,22 +1,22 @@
 app.service('GoogleService', function($q) {
+  var libs = [
+    ['oauth2', 'v2'],
+    ['drive', 'v2'],
+    ['plus', 'v1']
+  ]
+
   var deferred = [];
-  var drive, plus, oauth2;
-  for (var i = 0; i <= 2; i++) {
+  var service = {};
+  for (var i = 0; i < libs.length; i++) {
     deferred.push($q.defer());
   }
   window.signinCallback = function(authResult) {
     if (authResult['access_token']) {
-      gapi.client.load('oauth2', 'v2', function() {
-        oauth2 = gapi.client.oauth2;
-        deferred[0].resolve();
-      });
-      gapi.client.load('drive', 'v2', function() {
-        drive = gapi.client.drive;
-        deferred[1].resolve();
-      });
-      gapi.client.load('plus', 'v1', function() {
-        plus = gapi.client.plus;
-        deferred[2].resolve();
+      angular.forEach(libs, function(lib, key) {
+        gapi.client.load(lib[0], lib[1], function() {
+          service[lib[0]] = gapi.client[lib[0]];         
+          deferred[key].resolve();
+        });
       });
     } else if (authResult['error']) {
 
@@ -30,9 +30,9 @@ app.service('GoogleService', function($q) {
     return $q.all(promises);
   };
   this.getUser = function(callback) {
-    oauth2.userinfo.get().execute(function(data) {
+    service["oauth2"].userinfo.get().execute(function(data) {
       var email = data.email;
-      plus.people.get({
+      service["plus"].people.get({
         'userId': 'me'
       }).execute(function(data) {
         var username = data.displayName;
@@ -50,7 +50,7 @@ app.service('GoogleService', function($q) {
         result = result.concat(resp.items);
         var nextPageToken = resp.nextPageToken;
         if (nextPageToken) {
-          request = drive.files.list({
+          request = service["drive"].files.list({
             'pageToken': nextPageToken
           });
           retrievePageOfFiles(request, result);
@@ -60,7 +60,9 @@ app.service('GoogleService', function($q) {
       });
     };
 
-    var initialRequest = drive.files.list();
+    var initialRequest = service["drive"].files.list({
+      'q': "mimeType='application/vnd.google-apps.presentation'"
+    });
     retrievePageOfFiles(initialRequest, []);
 
   };
