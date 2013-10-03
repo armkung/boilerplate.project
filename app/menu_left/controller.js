@@ -1,3 +1,13 @@
+app.controller('DriveCtrl', function($scope, GoogleService) {
+	GoogleService.load().then(function() {
+		GoogleService.listFile(function(data) {
+			console.log(data);
+			$scope.datas = data;
+			$scope.$apply();
+		});
+	});
+});
+
 app.controller('QuizCtrl', function($scope, QuizManager) {
 	$('#slickQuiz').slickQuiz({
 		json: QuizManager.quizJSON,

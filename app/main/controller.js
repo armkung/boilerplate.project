@@ -2,12 +2,7 @@ app.controller('LoginCtrl', function($scope, $state, GoogleService) {
 	GoogleService.load().then(function() {
 		GoogleService.getUser(function(data) {
 			console.log(data);
-		});
-
-		GoogleService.listFile(function(data) {
-			console.log(data);
-		});
-
+		});		
 		$state.go('main.home');
 	});
 });

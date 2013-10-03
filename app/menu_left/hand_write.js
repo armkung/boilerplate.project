@@ -161,7 +161,7 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 				callback.fontSize = Math.floor(Math.random() * 20) + 28;
 				DrawFactory.setAttr(attr, callback);
 			});
-			$rootScope.$on("$routeChangeStart", function($currentRoute, $previousRoute) {
+			$rootScope.$on("$stateChangeSuccess", function($currentRoute, $previousRoute) {
 				DrawManager.saveData();
 			});
 		}

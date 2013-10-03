@@ -74,13 +74,6 @@
 
 	<body ng-app="socket">
 
-
-		<script type="text/ng-template" id="emoticon.tpl.html">		
-			<div>		
-			<img ng-repeat="emo in emotions" ng-src="{{url+emo}}" ng-click="select($index)" class="emoticon">				
-			</div>
-		</script>
-
 		<ui-view></ui-view>
     
 	</body>

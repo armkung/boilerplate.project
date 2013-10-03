@@ -5,7 +5,7 @@ var host = 'http://localhost:8080';
 var ws = 'http://foaas.com';
 app.config(['$routeProvider','$stateProvider', '$urlRouterProvider',
 	function($routeProvider,$stateProvider, $urlRouterProvider) {
-		$urlRouterProvider.otherwise('main/home');
+		$urlRouterProvider.otherwise('login');
 		$stateProvider.state('main', {
 			url: "/main",
 			templateUrl: 'main/template/main.tpl.html'
@@ -17,6 +17,10 @@ app.config(['$routeProvider','$stateProvider', '$urlRouterProvider',
 			url: '/draw',
 			templateUrl: 'menu_left/template/hand_write.tpl.html',
 			controller: 'HandWriteCtrl'
+		}).state('main.drive', {
+			url: '/drive',
+			templateUrl: 'menu_left/template/drive.tpl.html',
+			controller: 'DriveCtrl'
 		}).state('main.home', {
 			url: '/home',
 			templateUrl: 'menu_left/template/home.tpl.html',
