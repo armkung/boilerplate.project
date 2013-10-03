@@ -1,14 +1,14 @@
 app.directive('menuLeft', function() {
 	return {
 		restrict: 'E',
-		templateUrl: 'main/menu_left.tpl.html'
+		templateUrl: 'main/template/menu_left.tpl.html'
 	};
 });
 
 app.directive('menuRight', function() {
 	return {
 		restrict: 'E',
-		templateUrl: 'main/menu_right.tpl.html',
+		templateUrl: 'main/template/menu_right.tpl.html',
 		controller: 'MenuRightCtrl'
 	};
 });

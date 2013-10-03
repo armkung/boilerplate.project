@@ -74,50 +74,6 @@
 
 	<body ng-app="socket">
 
-		<script type="text/ng-template" id="hand_write.tpl.html">
-			<div class="draw-pad">
-				<canvas id="draw" hand-writer tool="{{tool}}" text="{{text}}" ></canvas>
-				<input id="textbox" ng-model="text">
-			</div>
-			<div>
-				<button ng-repeat="t in tools" ng-click="changeTool($index)">{{t}}</button>
-				<button ng-repeat="a in attrs" ng-click="changeAttr($index)">{{a}}</button>
-			</div>
-		</script>
-
-		<script type="text/ng-template" id="slide.tpl.html">
-			<div>
-				<button ng-repeat="t in tools" ng-click="changeTool($index)">{{t}}</button>
-				<button ng-repeat="a in attrs" ng-click="changeAttr($index)">{{a}}</button>
-			</div>
-			<div>
-				<button ng-click="prevIndex()">Prev</button>
-				<button ng-click="nextIndex()">Next</button>
-			</div>
-				<div class="slide-pad" fit-size>
-					<slide></slide>
-				</div>
-			<div class="draw-pad mirror" fit-size>
-				<canvas id="mirror" hand-writer tool="{{tool}}" text="{{text}}" ></canvas>
-				<input id="textbox" ng-model="text">
-			</div>
-		</script>
-
-		<script type="text/ng-template" id="home.tpl.html">
-			<div>
-				<div>
-					<select ng-model="room" ng-options="room for room in rooms"></select>
-					<button ng-click="list()">List</button>		
-					<button ng-click="connect()">Connect</button>		
-					<button ng-click="disconnect()">Disconnect</button>
-				</div>
-				<div>
-					<input type="text" ng-model="room">
-					<button ng-click="create()">Create Room</button>
-					<button ng-click="close()">Close Room</button>
-				</div>
-			</div>
-		</script>
 
 		<script type="text/ng-template" id="emoticon.tpl.html">		
 			<div>		

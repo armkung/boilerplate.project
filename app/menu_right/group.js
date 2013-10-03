@@ -1,7 +1,7 @@
 app.directive('group', function(GroupManager, Room, Canvas) {
 	return {
 		restrict: 'E',
-		templateUrl: 'menu_right/group.tpl.html',
+		templateUrl: 'menu_right/template/group.tpl.html',
 		link: function(scope) {
 			scope.room = Room;
 

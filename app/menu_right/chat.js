@@ -1,14 +1,14 @@
 app.directive('chat', function() {
 	return {
 		restrict: 'E',
-		templateUrl: 'menu_right/chat.tpl.html',
+		templateUrl: 'menu_right/template/chat.tpl.html',
 		controller: 'ChatCtrl'
 	};
 });
 app.directive('emoticon', function() {
 	return {
 		restrict: 'E',
-		templateUrl: 'emoticon.tpl.html',
+		templateUrl: 'menu_right/template/emoticon.tpl.html',
 		scope: {
 			emotion: '='
 		},

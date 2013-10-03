@@ -8,26 +8,26 @@ app.config(['$routeProvider','$stateProvider', '$urlRouterProvider',
 		$urlRouterProvider.otherwise('main/home');
 		$stateProvider.state('main', {
 			url: "/main",
-			templateUrl: 'main/main.tpl.html'
+			templateUrl: 'main/template/main.tpl.html'
 		}).state('login', {
 			url: "/login",
-			templateUrl: 'main/login.tpl.html',
+			templateUrl: 'main/template/login.tpl.html',
 			controller: 'LoginCtrl'
 		}).state('main.draw', {
 			url: '/draw',
-			templateUrl: 'hand_write.tpl.html',
+			templateUrl: 'menu_left/template/hand_write.tpl.html',
 			controller: 'HandWriteCtrl'
 		}).state('main.home', {
 			url: '/home',
-			templateUrl: 'home.tpl.html',
+			templateUrl: 'menu_left/template/home.tpl.html',
 			controller: 'HomeCtrl'
 		}).state('main.slide', {
 			url: '/slide',
-			templateUrl: 'slide.tpl.html',
+			templateUrl: 'menu_left/template/slide.tpl.html',
 			controller: 'SlideCtrl'
 		}).state('main.quiz', {
 			url: '/quiz',
-			templateUrl: 'menu_left/quiz.tpl.html',
+			templateUrl: 'menu_left/template/quiz.tpl.html',
 			controller: 'QuizCtrl'
 		});
 

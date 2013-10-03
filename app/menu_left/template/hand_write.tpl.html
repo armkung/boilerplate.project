@@ -1,0 +1,8 @@
+<div class="draw-pad">
+	<canvas id="draw" hand-writer tool="{{tool}}" text="{{text}}" ></canvas>
+	<input id="textbox" ng-model="text">
+</div>
+<div>
+	<button ng-repeat="t in tools" ng-click="changeTool($index)">{{t}}</button>
+	<button ng-repeat="a in attrs" ng-click="changeAttr($index)">{{a}}</button>
+</div>
