@@ -1,6 +1,6 @@
 <div class="container">
 	<div class="row">
-		<div class="well col-lg-8" ng-repeat="data in datas">
+		<div class="well col-lg-8" ng-repeat="data in datas" ng-click="select($index)">
 			{{data.title}}
 		</div>
 	</div>

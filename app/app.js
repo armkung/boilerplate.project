@@ -36,7 +36,11 @@ app.config(['$routeProvider','$stateProvider', '$urlRouterProvider',
 		});
 
 	}
-]);
+]).run(function($rootScope){
+	// $rootScope.$on("$stateChangeSuccess", function($currentRoute, $previousRoute) {
+	// 	$state.go('login');
+	// });
+});
 
 app.config(function(RestangularProvider) {
 	RestangularProvider.setBaseUrl(ws);

@@ -1,4 +1,4 @@
-app.directive('slide', function($sce, DrawManager, SlideManager, DataManager) {
+app.directive('slide', function($sce, $state, DrawManager, SlideManager, DataManager) {
 	return {
 		restrict: 'E',
 		template: '<iframe id="slide" ng-src="{{url}}"></iframe>',
@@ -8,7 +8,9 @@ app.directive('slide', function($sce, DrawManager, SlideManager, DataManager) {
 		link: function(scope, iElement) {
 			var id = 'mirror';
 			var type = 'slide';
-			SlideManager.init();
+			SlideManager.init(function(){
+				$state.go('main.drive');
+			});
 
 			scope.slide = SlideManager;
 

@@ -1,11 +1,17 @@
-app.controller('DriveCtrl', function($scope, GoogleService) {
+app.controller('DriveCtrl', function($scope, GoogleService, SlideManager) {
 	GoogleService.load().then(function() {
 		GoogleService.listFile(function(data) {
 			console.log(data);
 			$scope.datas = data;
 			$scope.$apply();
+
 		});
 	});
+	$scope.select = function(index){
+		var id = $scope.datas[index].id;
+		SlideManager.setSlide(id);
+		console.log(id);
+	}
 });
 
 app.controller('QuizCtrl', function($scope, QuizManager) {
