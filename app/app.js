@@ -3,8 +3,8 @@ var app = angular.module('socket', ['templates-app',
 ]);
 var host = 'http://localhost:8080';
 var ws = 'http://foaas.com';
-app.config(['$routeProvider','$stateProvider', '$urlRouterProvider',
-	function($routeProvider,$stateProvider, $urlRouterProvider) {
+app.config(['$routeProvider', '$stateProvider', '$urlRouterProvider',
+	function($routeProvider, $stateProvider, $urlRouterProvider) {
 		$urlRouterProvider.otherwise('login');
 		$stateProvider.state('main', {
 			url: "/main",
@@ -25,6 +25,14 @@ app.config(['$routeProvider','$stateProvider', '$urlRouterProvider',
 			url: '/home',
 			templateUrl: 'menu_left/template/home.tpl.html',
 			controller: 'HomeCtrl'
+		}).state('main.home.teacher', {
+			url: '/teacher',
+			templateUrl: 'menu_left/template/home_teacher.tpl.html',
+			controller: 'RoomCtrl'
+		}).state('main.home.student', {
+			url: '/student',
+			templateUrl: 'menu_left/template/home_student.tpl.html',
+			controller: 'RoomCtrl'
 		}).state('main.slide', {
 			url: '/slide',
 			templateUrl: 'menu_left/template/slide.tpl.html',
@@ -36,9 +44,12 @@ app.config(['$routeProvider','$stateProvider', '$urlRouterProvider',
 		});
 
 	}
-]).run(function($rootScope){
-	// $rootScope.$on("$stateChangeSuccess", function($currentRoute, $previousRoute) {
-	// 	$state.go('login');
+]).run(function($rootScope, $state, LoginManager) {
+	// $rootScope.$on("$stateChangeStart", function($currentRoute, $previousRoute) {
+	// 	var user = LoginManager.getUser();
+	// 	if (!user) {
+	// 		$state.go('login');
+	// 	}
 	// });
 });
 

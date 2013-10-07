@@ -1,9 +1,11 @@
-app.controller('LoginCtrl', function($scope, $state, GoogleService) {
+app.controller('LoginCtrl', function($scope, $state, GoogleService, LoginManager) {
 	GoogleService.load().then(function() {
-		GoogleService.getUser(function(data) {
+		GoogleService.getUser().then(function(data) {
 			console.log(data);
-		});		
-		$state.go('main.home');
+
+			LoginManager.login(data);
+			$state.go('main.home');
+		});
 	});
 });
 app.controller('MenuRightCtrl', function($scope, $rootScope, $state) {

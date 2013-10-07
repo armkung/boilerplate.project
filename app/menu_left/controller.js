@@ -1,13 +1,11 @@
 app.controller('DriveCtrl', function($scope, GoogleService, SlideManager) {
 	GoogleService.load().then(function() {
-		GoogleService.listFile(function(data) {
+		GoogleService.listFile().then(function(data) {
 			console.log(data);
 			$scope.datas = data;
-			$scope.$apply();
-
 		});
 	});
-	$scope.select = function(index){
+	$scope.select = function(index) {
 		var id = $scope.datas[index].id;
 		SlideManager.setSlide(id);
 		console.log(id);
@@ -64,7 +62,12 @@ app.controller('SlideCtrl', function($scope, $rootScope, DrawFactory, SlideManag
 	};
 });
 
-app.controller('HomeCtrl', function($scope, Room, Socket, Restangular) {
+app.controller('HomeCtrl', function($state, LoginManager) {
+	var url = LoginManager.isTeacher() ? 'main.home.teacher' : 'main.home.student';
+	$state.go(url);
+});
+
+app.controller('RoomCtrl', function($scope, Room, Socket, Restangular) {
 	$scope.user = String.fromCharCode(Math.random() * 26 + 97);
 	$scope.room = "";
 	Room.room = $scope.room;

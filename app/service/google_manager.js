@@ -5,17 +5,17 @@ app.service('GoogleService', function($q) {
     ['plus', 'v1']
   ]
 
-  var deferred = [];
+  var defers = [];
   var service = {};
   for (var i = 0; i < libs.length; i++) {
-    deferred.push($q.defer());
+    defers.push($q.defer());
   }
   window.signinCallback = function(authResult) {
     if (authResult['access_token']) {
       angular.forEach(libs, function(lib, key) {
         gapi.client.load(lib[0], lib[1], function() {
           service[lib[0]] = gapi.client[lib[0]];         
-          deferred[key].resolve();
+          defers[key].resolve();
         });
       });
     } else if (authResult['error']) {
@@ -24,27 +24,29 @@ app.service('GoogleService', function($q) {
   };
   this.load = function() {
     var promises = [];
-    angular.forEach(deferred, function(task, key) {
+    angular.forEach(defers, function(task, key) {
       promises.push(task.promise);
     });
     return $q.all(promises);
   };
-  this.getUser = function(callback) {
+  this.getUser = function() {
+    var deferred = $q.defer();
     service["oauth2"].userinfo.get().execute(function(data) {
       var email = data.email;
       service["plus"].people.get({
         'userId': 'me'
       }).execute(function(data) {
         var username = data.displayName;
-        callback({
+        deferred.resolve({
           email: email,
           username: username
         });
       });
-
     })
+    return deferred.promise;
   };
-  this.listFile = function(callback) {
+  this.listFile = function() {
+    var deferred = $q.defer();
     var retrievePageOfFiles = function(request, result) {
       request.execute(function(resp) {
         result = result.concat(resp.items);
@@ -55,7 +57,7 @@ app.service('GoogleService', function($q) {
           });
           retrievePageOfFiles(request, result);
         } else {
-          callback(result);
+          deferred.resolve(result);
         }
       });
     };
@@ -64,6 +66,6 @@ app.service('GoogleService', function($q) {
       'q': "mimeType='application/vnd.google-apps.presentation'"
     });
     retrievePageOfFiles(initialRequest, []);
-
+    return deferred.promise;
   };
 });
