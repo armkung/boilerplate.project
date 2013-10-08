@@ -3,12 +3,20 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 		restrict: 'A',
 		scope: {
 			text: '@',
-			tool: '@'
+			tool: '@',
+			send: '@'
 		},
 		link: function(scope, iElement, iAttr) {
-			var typePos = "pos";
+			var type = "pos";
 			var id = iAttr.id;
 			DrawManager.init(id);
+
+			function sendData(obj) {
+				console.log(scope.send)
+				if (scope.send) {
+					DataManager.setData(type, obj);
+				}
+			}
 
 			function addGroup(id) {
 				if (id && Room.users.indexOf(id) == -1) {
@@ -44,7 +52,7 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 				var id = data.id;
 				addGroup(id);
 				DrawManager.setCurrent(id);
-				
+
 				var pos = data.pos;
 				DrawManager.setFillColor(pos.color);
 				DrawManager.setFontSize(pos.size);
@@ -57,7 +65,7 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 			}
 
 			var strokeColor, fillColor, strokeSize, fontSize;
-			DataManager.getData(typePos, function(data) {
+			DataManager.getData(type, function(data) {
 				if (data.pos) {
 					strokeColor = DrawManager.getStrokeColor();
 					fillColor = DrawManager.getFillColor();
@@ -100,22 +108,22 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 				obj.pos.color = DrawManager.getFillColor();
 				obj.pos.size = DrawManager.getFontSize();
 				text(obj);
-				DataManager.setData(typePos, obj);
+				sendData(obj);
 			});
 			Input.hide();
 
-			DataManager.loadData(typePos, {
-				room: Room.room
-			}, function(data) {
-				DrawFactory.setAnimate(data, draw);
-			});
+			// DataManager.loadData(type, {
+			// 	room: Room.room
+			// }, function(data) {
+			// 	DrawFactory.setAnimate(data, draw);
+			// });
 
 			DrawFactory.setDragObject(function(data, attr) {
 				var obj = {};
 				obj.type = DrawFactory.tools.DRAG_OBJECT;
 				obj.n = DrawManager.getIndex(data);
 				obj.data = attr;
-				DataManager.setData(typePos, obj);
+				sendData(obj);
 			});
 			DrawFactory.setDraw(function(data) {
 				var obj = {};
@@ -129,7 +137,7 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 				obj.pos.size = DrawManager.getStrokeSize();
 
 				draw(obj);
-				DataManager.setData(typePos, obj);
+				sendData(obj);
 			});
 			DrawFactory.setText(function(data) {
 				pos = data;
@@ -145,7 +153,7 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 
 				line(obj);
 				if (pos.isSeed || pos.isUp) {
-					DataManager.setData(typePos, obj);
+					sendData(obj);
 				}
 			});
 

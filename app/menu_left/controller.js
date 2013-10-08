@@ -22,6 +22,7 @@ app.controller('QuizCtrl', function($scope, QuizManager) {
 app.controller('HandWriteCtrl', function($scope, $rootScope, DrawFactory, Canvas) {
 	$scope.tools = [];
 	$scope.attrs = [];
+	$scope.isSend = true;
 	$scope.tool = DrawFactory.tools.DRAW;
 	angular.forEach(DrawFactory.tools, function(value, key) {
 		$scope.tools.push(value);
@@ -47,6 +48,7 @@ app.controller('SlideCtrl', function($scope, $rootScope, DrawFactory, SlideManag
 
 	$scope.tools = [];
 	$scope.attrs = [];
+	$scope.isSend = true;
 	$scope.tool = DrawFactory.tools.DRAW;
 	angular.forEach(DrawFactory.tools, function(value, key) {
 		$scope.tools.push(value);
