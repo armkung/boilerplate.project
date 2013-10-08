@@ -7,13 +7,14 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 			send: '@'
 		},
 		link: function(scope, iElement, iAttr) {
-			var type = "pos";
+			var type = DataManager.types.POS;
 			var id = iAttr.id;
 			DrawManager.init(id);
+			DataManager.initData(type);
 
 			function sendData(obj) {
-				console.log(scope.send)
 				if (scope.send) {
+					obj.name = id;
 					DataManager.setData(type, obj);
 				}
 			}
@@ -24,15 +25,14 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 					var name = user.name;
 					if (Room.users.indexOf(id) == -1) {
 						Room.users.push(name);
-						DrawManager.newGroup(id);
 					}
+					DrawManager.newGroup(id);
 					DrawManager.setCurrent(id)
 				}
 			}
 
 			function draw(data) {
 				addGroup(data.user)
-
 				var pos = data.pos;
 				DrawManager.setStrokeColor(pos.color);
 				DrawManager.setStrokeSize(pos.size);
@@ -65,34 +65,36 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 
 			var strokeColor, fillColor, strokeSize, fontSize;
 			DataManager.getData(type, function(data) {
-				if (data.pos) {
-					strokeColor = DrawManager.getStrokeColor();
-					fillColor = DrawManager.getFillColor();
-					strokeSize = DrawManager.getStrokeSize();
-					fontSize = DrawManager.getFontSize();
-				}
-				switch (data.type) {
-					case DrawFactory.tools.DRAW:
-						draw(data);
-						break;
-					case DrawFactory.tools.LINE:
-						line(data);
-						break;
-					case DrawFactory.tools.TEXT:
-						text(data);
-						break;
-					case DrawFactory.tools.DRAG_OBJECT:
-						drag(data);
-						break;
-				}
-				if (data.pos) {
-					DrawManager.setStrokeColor(strokeColor);
-					DrawManager.setFillColor(fillColor);
-					DrawManager.setStrokeSize(strokeSize);
-					DrawManager.setFontSize(fontSize);
-				}
-				if (scope.tool == DrawFactory.tools.DRAG_GROUP) {
-					DrawManager.canGroupDrag(true);
+				if (data.name == id) {
+					if (data.pos) {
+						strokeColor = DrawManager.getStrokeColor();
+						fillColor = DrawManager.getFillColor();
+						strokeSize = DrawManager.getStrokeSize();
+						fontSize = DrawManager.getFontSize();
+					}
+					switch (data.type) {
+						case DrawFactory.tools.DRAW:
+							draw(data);
+							break;
+						case DrawFactory.tools.LINE:
+							line(data);
+							break;
+						case DrawFactory.tools.TEXT:
+							text(data);
+							break;
+						case DrawFactory.tools.DRAG_OBJECT:
+							drag(data);
+							break;
+					}
+					if (data.pos) {
+						DrawManager.setStrokeColor(strokeColor);
+						DrawManager.setFillColor(fillColor);
+						DrawManager.setStrokeSize(strokeSize);
+						DrawManager.setFontSize(fontSize);
+					}
+					if (scope.tool == DrawFactory.tools.DRAG_GROUP) {
+						DrawManager.canGroupDrag(true);
+					}
 				}
 			});
 
@@ -171,6 +173,7 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 			$rootScope.$on("$stateChangeSuccess", function($currentRoute, $previousRoute) {
 				DrawManager.saveData();
 			});
+
 		}
 	};
 });

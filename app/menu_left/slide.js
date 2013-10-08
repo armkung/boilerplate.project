@@ -7,11 +7,11 @@ app.directive('slide', function($sce, $state, DrawManager, SlideManager, DataMan
 		},
 		link: function(scope, iElement) {
 			var id = 'mirror';
-			var type = 'slide';
+			var type = DataManager.types.SLIDE;
 			SlideManager.init(function(){
 				$state.go('main.drive');
 			});
-
+			DataManager.initData(type);
 			scope.slide = SlideManager;
 
 			scope.$watch('slide.index', function(newV, oldV) {

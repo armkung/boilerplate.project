@@ -95,7 +95,11 @@ app.factory("DataManager", function(Canvas, Socket) {
 
 	return {
 		types: {
-			POS: "pos"
+			POS: "pos",
+			SLIDE: "slide"
+		},
+		initData: function(type) {
+			Socket.emit("init:" + type);
 		},
 		setData: function(type, data) {
 			if (data.pos) {
@@ -105,7 +109,9 @@ app.factory("DataManager", function(Canvas, Socket) {
 			Socket.emit("send:" + type, data);
 		},
 		getData: function(type, callback) {
-			Socket.remove("send:" + type);
+			// angular.forEach(self.types, function(type, key){
+				Socket.remove("send:" + type);
+			// });
 			switch (type) {
 				case "pos":
 					Socket.on("send:" + type, function(data) {
@@ -126,18 +132,18 @@ app.factory("DataManager", function(Canvas, Socket) {
 
 		},
 		loadData: function(type, data, callback) {
-			Socket.remove("load:" + type);
-			Socket.emit("load:" + type, data, function(data) {
-				var obj = [];
-				angular.forEach(data, function(data, key) {
-					data.x *= Canvas.width;
-					data.y *= Canvas.height;
-					obj.push({
-						pos: data
-					});
-				});
-				callback(obj);
-			});
+			// Socket.remove("load:" + type);
+			// Socket.emit("load:" + type, data, function(data) {
+			// 	var obj = [];
+			// 	angular.forEach(data, function(data, key) {
+			// 		data.x *= Canvas.width;
+			// 		data.y *= Canvas.height;
+			// 		obj.push({
+			// 			pos: data
+			// 		});
+			// 	});
+			// 	callback(obj);
+			// });
 		},
 		removeData: function() {
 

@@ -65,11 +65,15 @@ app.controller('SlideCtrl', function($scope, $rootScope, DrawFactory, SlideManag
 });
 
 app.controller('HomeCtrl', function($state, LoginManager) {
-	var url = LoginManager.isTeacher() ? 'main.home.teacher' : 'main.home.student';
-	$state.go(url);
+	LoginManager.isTeacher(function(){
+		$state.go('main.home.teacher');
+	});
+	LoginManager.isStudent(function(){
+		$state.go('main.home.student');
+	});
 });
 
-app.controller('RoomCtrl', function($scope, Room, Socket, Restangular, LoginManager) {
+app.controller('RoomCtrl', function($scope, Room, Socket, LoginManager) {
 	// $scope.user = String.fromCharCode(Math.random() * 26 + 97);
 	$scope.user = LoginManager.getUser();
 	$scope.room = "";
