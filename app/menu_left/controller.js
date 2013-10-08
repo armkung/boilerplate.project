@@ -69,8 +69,9 @@ app.controller('HomeCtrl', function($state, LoginManager) {
 	$state.go(url);
 });
 
-app.controller('RoomCtrl', function($scope, Room, Socket, Restangular) {
-	$scope.user = String.fromCharCode(Math.random() * 26 + 97);
+app.controller('RoomCtrl', function($scope, Room, Socket, Restangular, LoginManager) {
+	// $scope.user = String.fromCharCode(Math.random() * 26 + 97);
+	$scope.user = LoginManager.getUser();
 	$scope.room = "";
 	Room.room = $scope.room;
 
@@ -90,7 +91,7 @@ app.controller('RoomCtrl', function($scope, Room, Socket, Restangular) {
 		Room.room = $scope.room;
 		Socket.emit("connect:room", {
 			room: $scope.room,
-			user: $scope.user
+			user: $scope.user.username
 		}, function(id) {
 
 		});
@@ -99,7 +100,7 @@ app.controller('RoomCtrl', function($scope, Room, Socket, Restangular) {
 		Room.room = $scope.room;
 		Socket.emit("create:room", {
 			room: $scope.room,
-			user: $scope.user
+			user: $scope.user.username
 		});
 	};
 	$scope.close = function() {

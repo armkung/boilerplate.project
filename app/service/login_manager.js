@@ -14,7 +14,7 @@ app.service('LoginManager', function() {
 		return user && user.accessLevel == self.level.TEACHER;;
 	}
 	this.login = function(data) {
-		user = {};
+		user = data;
 		user.accessLevel = self.level.TEACHER;
 	};
 });

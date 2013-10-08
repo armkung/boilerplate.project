@@ -77,9 +77,10 @@ io.sockets.on('connection', function(socket) {
 	}
 
 	function loginUser(room, user) {
+		socket.set('roomName', room);
+		socket.set('userName', user);
 		socket.join(room);
 		logger.logUser(room, getId(), user);
-		socket.set('userName', user);
 
 		console.log("User : '" + user + "' join Room : '" + room + "'")
 	}
@@ -96,8 +97,6 @@ io.sockets.on('connection', function(socket) {
 	socket.on('connect:room', function(data, callback) {
 		var room = data.room == "" ? "" : "/" + data.room;
 		if (room in io.sockets.manager.rooms) {
-			socket.set('roomName', data.room);
-
 			if (data.room == "" || data.room == "/") {
 				logger.init(data.room);
 			}
@@ -106,14 +105,10 @@ io.sockets.on('connection', function(socket) {
 		}
 	});
 	socket.on('create:room', function(data) {
-		socket.set('roomName', data.room, function() {
+		logger.init(data.room);
+		console.log("Create Room : '" + data.room + "'");
 
-			logger.init(data.room);
-			console.log("Create Room : '" + data.room + "'");
-
-			loginUser(data.room, data.user);
-
-		});
+		loginUser(data.room, data.user);
 	});
 	socket.on('close:room', function() {
 		socket.get('roomName', function(err, room) {
@@ -159,9 +154,13 @@ io.sockets.on('connection', function(socket) {
 					console.log("x : " + data.pos.x + ", y : " + data.pos.y)
 				}
 				logger.logPos(room, data.pos);
-
-				data.id = getId();
-				socket.broadcast.to(room).emit('send:pos', data);
+				socket.get('userName', function(err, user) {
+					data.user = {
+						id: getId(),
+						name: user
+					};
+					socket.broadcast.to(room).emit('send:pos', data);
+				});
 			}
 		});
 
@@ -178,16 +177,6 @@ io.sockets.on('connection', function(socket) {
 		}
 	});
 
-	// socket.on('send:text', function(data) {
-	// 	socket.get('roomName', function(err, room) {
-	// 		if (room != null) {
-	// 			data.id = getId();
-	// 			socket.broadcast.to(room).emit('send:text', data);
-	// 			console.log("Send text : " + data.pos.text)
-	// 		}
-	// 	});
-
-	// });
 
 	socket.on('send:msg', function(data) {
 		socket.get('roomName', function(err, room) {

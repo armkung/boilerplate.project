@@ -18,17 +18,20 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 				}
 			}
 
-			function addGroup(id) {
-				if (id && Room.users.indexOf(id) == -1) {
-					Room.users.push(id);
-					DrawManager.newGroup(id);
+			function addGroup(user) {
+				if (user) {
+					var id = user.id;
+					var name = user.name;
+					if (Room.users.indexOf(id) == -1) {
+						Room.users.push(name);
+						DrawManager.newGroup(id);
+					}
+					DrawManager.setCurrent(id)
 				}
 			}
 
 			function draw(data) {
-				var id = data.id;
-				addGroup(id)
-				DrawManager.setCurrent(id)
+				addGroup(data.user)
 
 				var pos = data.pos;
 				DrawManager.setStrokeColor(pos.color);
@@ -37,9 +40,7 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 			}
 
 			function line(data) {
-				var id = data.id;
-				addGroup(id);
-				DrawManager.setCurrent(id);
+				addGroup(data.user);
 
 				var pos = data.pos;
 				DrawManager.setStrokeColor(pos.color);
@@ -49,9 +50,7 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 			}
 
 			function text(data) {
-				var id = data.id;
-				addGroup(id);
-				DrawManager.setCurrent(id);
+				addGroup(data.user);
 
 				var pos = data.pos;
 				DrawManager.setFillColor(pos.color);
