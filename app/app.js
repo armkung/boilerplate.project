@@ -98,8 +98,8 @@ app.factory("DataManager", function(Canvas, Socket) {
 			POS: "pos",
 			SLIDE: "slide"
 		},
-		initData: function(type) {
-			Socket.emit("init:" + type);
+		initData: function(type, data) {
+			Socket.emit("init:" + type, data);
 		},
 		setData: function(type, data) {
 			if (data.pos) {
@@ -110,7 +110,7 @@ app.factory("DataManager", function(Canvas, Socket) {
 		},
 		getData: function(type, callback) {
 			// angular.forEach(self.types, function(type, key){
-				Socket.remove("send:" + type);
+			Socket.remove("send:" + type);
 			// });
 			switch (type) {
 				case "pos":
@@ -164,7 +164,7 @@ app.service("Canvas", function($q) {
 		// mirror: {},
 		// test: {}
 	};
-	var id;
+	// var id;
 	var deferred = $q.defer();
 	var canvas;
 	// angular.forEach(obj, function(value, key) {
@@ -173,8 +173,8 @@ app.service("Canvas", function($q) {
 	// 	obj[key] = canvas.getObjects();
 	// });
 	// this.id = self.names.DRAW;
-	this.init = function(name) {
-		id = name;
+	this.init = function(id) {
+		// id = name;
 		deferred = $q.defer();
 		// var id = self.id
 		var parent = $('#' + id).parent();

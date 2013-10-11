@@ -23,11 +23,18 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 	var obj = {};
 	var groups = {};
 	var canvas, current;
-	var n = 0;
+	// var n = 0;
 
 	function setId(obj) {
+		// var n = canvas.getObjects().indexOf(obj);
+		var n = -1;
+		canvas.forEachObject(function(obj) {
+			if (!(current instanceof fabric.Group)) {
+				n++;
+			}
+		});
 		obj.set({
-			"id": n++
+			"id": n
 		});
 	}
 	this.init = function(name) {
@@ -74,7 +81,7 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 		canvas.selection = true;
 		obj.set('selectable', true);
 		obj.set('hasBorders', true);
-		// obj.set('hasControls', true);
+		obj.set('hasControls', true);
 		// obj.set('hasRotatingPoint', false);
 	};
 	this.draw = function(data, x, y) {
@@ -233,6 +240,7 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 	this.setCurrentPosition = function(indexs, data) {
 		// var objMin, min = {};
 		// var objs = [];
+		// console.log(indexs)
 		angular.forEach(current.getObjects(), function(obj, key) {
 			if (indexs.indexOf(key) != -1) {
 				if (data.pos) {
@@ -259,6 +267,7 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 			}
 		});
 		// adjustPosition();
+		canvas.calcOffset();
 		canvas.renderAll();
 
 		// function adjustPosition() {
@@ -319,9 +328,15 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 		});
 	};
 	this.clear = function() {
-		canvas.clear();
-		Canvas.removeId(id)
-		self.init(id);
+		// canvas.clear();
+		// Canvas.removeId(id)		
+		// self.init(id);
+		angular.forEach(canvas.getObjects(), function(obj, key) {
+			if (!(obj instanceof fabric.Group)) {
+				canvas.remove(obj);
+			}
+		});
+		n = 0;
 	};
 
 

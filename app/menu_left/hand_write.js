@@ -10,7 +10,6 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 			var type = DataManager.types.POS;
 			var id = iAttr.id;
 			DrawManager.init(id);
-			DataManager.initData(type);
 
 			function sendData(obj) {
 				if (scope.send) {
@@ -20,9 +19,10 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 			}
 
 			function addGroup(user) {
+				var id, name;				
 				if (user) {
-					var id = user.id;
-					var name = user.name;
+					id = user.id;
+					name = user.name;
 					if (Room.users.indexOf(id) == -1) {
 						Room.users.push(name);
 					}
@@ -59,43 +59,44 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 			}
 
 			function drag(data) {
-				DrawManager.setCurrent(data.id);
+				DrawManager.setCurrent(data.user.id);
 				DrawManager.setCurrentPosition(data.n, data.data);
 			}
 
 			var strokeColor, fillColor, strokeSize, fontSize;
 			DataManager.getData(type, function(data) {
-				if (data.name == id) {
-					if (data.pos) {
-						strokeColor = DrawManager.getStrokeColor();
-						fillColor = DrawManager.getFillColor();
-						strokeSize = DrawManager.getStrokeSize();
-						fontSize = DrawManager.getFontSize();
-					}
-					switch (data.type) {
-						case DrawFactory.tools.DRAW:
-							draw(data);
-							break;
-						case DrawFactory.tools.LINE:
-							line(data);
-							break;
-						case DrawFactory.tools.TEXT:
-							text(data);
-							break;
-						case DrawFactory.tools.DRAG_OBJECT:
-							drag(data);
-							break;
-					}
-					if (data.pos) {
-						DrawManager.setStrokeColor(strokeColor);
-						DrawManager.setFillColor(fillColor);
-						DrawManager.setStrokeSize(strokeSize);
-						DrawManager.setFontSize(fontSize);
-					}
-					if (scope.tool == DrawFactory.tools.DRAG_GROUP) {
-						DrawManager.canGroupDrag(true);
-					}
+				if (data.pos) {
+					strokeColor = DrawManager.getStrokeColor();
+					fillColor = DrawManager.getFillColor();
+					strokeSize = DrawManager.getStrokeSize();
+					fontSize = DrawManager.getFontSize();
 				}
+				switch (data.type) {
+					case DrawFactory.tools.DRAW:
+						draw(data);
+						break;
+					case DrawFactory.tools.LINE:
+						line(data);
+						break;
+					case DrawFactory.tools.TEXT:
+						text(data);
+						break;
+					case DrawFactory.tools.DRAG_OBJECT:
+						drag(data);
+						break;
+				}
+				if (data.pos) {
+					DrawManager.setStrokeColor(strokeColor);
+					DrawManager.setFillColor(fillColor);
+					DrawManager.setStrokeSize(strokeSize);
+					DrawManager.setFontSize(fontSize);
+				}
+				if (scope.tool == DrawFactory.tools.DRAG_GROUP) {
+					DrawManager.canGroupDrag(true);
+				}
+			});
+			DataManager.initData(type, {
+				name: id
 			});
 
 			Input.init(function() {
