@@ -18,27 +18,27 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 		fill: self.fillColor
 	};
 
-	var line, text;
-	var id;
 	var obj = {};
-	var groups = {};
+	var line, text;
+	var id, groups;
 	var canvas, current;
-	// var n = 0;
+	var n = 0;
 
 	function setId(obj) {
 		// var n = canvas.getObjects().indexOf(obj);
-		var n = -1;
-		canvas.forEachObject(function(obj) {
-			if (!(current instanceof fabric.Group)) {
-				n++;
-			}
-		});
+		// var n = -1;
+		// canvas.forEachObject(function(obj) {
+		// 	if (!(current instanceof fabric.Group)) {
+		// 		n++;
+		// 	}
+		// });
 		obj.set({
-			"id": n
+			"id": n++
 		});
 	}
 	this.init = function(name) {
 		id = name;
+		groups = {};
 		Canvas.init(id.split("-")[0]);
 		Canvas.getCanvas().then(function(cs) {
 			canvas = cs;
@@ -61,7 +61,9 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 		if (name in obj) {
 			var children = obj[name];
 			angular.forEach(children, function(child, key) {
-				canvas.add(child);
+				if (!(child instanceof fabric.Group)) {
+					canvas.add(child);
+				}
 			});
 			canvas.renderAll();
 		}
@@ -82,7 +84,7 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 		obj.set('selectable', true);
 		obj.set('hasBorders', true);
 		obj.set('hasControls', true);
-		// obj.set('hasRotatingPoint', false);
+		obj.set('hasRotatingPoint', true);
 	};
 	this.draw = function(data, x, y) {
 		if (current instanceof fabric.Group) {

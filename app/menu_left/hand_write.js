@@ -19,16 +19,16 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 			}
 
 			function addGroup(user) {
-				var id, name;				
+				var id, name;
 				if (user) {
 					id = user.id;
 					name = user.name;
 					if (Room.users.indexOf(id) == -1) {
 						Room.users.push(name);
 					}
-					DrawManager.newGroup(id);
-					DrawManager.setCurrent(id)
 				}
+				DrawManager.newGroup(id);
+				DrawManager.setCurrent(id)
 			}
 
 			function draw(data) {
@@ -65,34 +65,36 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 
 			var strokeColor, fillColor, strokeSize, fontSize;
 			DataManager.getData(type, function(data) {
-				if (data.pos) {
-					strokeColor = DrawManager.getStrokeColor();
-					fillColor = DrawManager.getFillColor();
-					strokeSize = DrawManager.getStrokeSize();
-					fontSize = DrawManager.getFontSize();
-				}
-				switch (data.type) {
-					case DrawFactory.tools.DRAW:
-						draw(data);
-						break;
-					case DrawFactory.tools.LINE:
-						line(data);
-						break;
-					case DrawFactory.tools.TEXT:
-						text(data);
-						break;
-					case DrawFactory.tools.DRAG_OBJECT:
-						drag(data);
-						break;
-				}
-				if (data.pos) {
-					DrawManager.setStrokeColor(strokeColor);
-					DrawManager.setFillColor(fillColor);
-					DrawManager.setStrokeSize(strokeSize);
-					DrawManager.setFontSize(fontSize);
-				}
-				if (scope.tool == DrawFactory.tools.DRAG_GROUP) {
-					DrawManager.canGroupDrag(true);
+				if (data.name == id) {
+					if (data.pos) {
+						strokeColor = DrawManager.getStrokeColor();
+						fillColor = DrawManager.getFillColor();
+						strokeSize = DrawManager.getStrokeSize();
+						fontSize = DrawManager.getFontSize();
+					}
+					switch (data.type) {
+						case DrawFactory.tools.DRAW:
+							draw(data);
+							break;
+						case DrawFactory.tools.LINE:
+							line(data);
+							break;
+						case DrawFactory.tools.TEXT:
+							text(data);
+							break;
+						case DrawFactory.tools.DRAG_OBJECT:
+							drag(data);
+							break;
+					}
+					if (data.pos) {
+						DrawManager.setStrokeColor(strokeColor);
+						DrawManager.setFillColor(fillColor);
+						DrawManager.setStrokeSize(strokeSize);
+						DrawManager.setFontSize(fontSize);
+					}
+					if (scope.tool == DrawFactory.tools.DRAG_GROUP) {
+						DrawManager.canGroupDrag(true);
+					}
 				}
 			});
 			DataManager.initData(type, {

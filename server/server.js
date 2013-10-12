@@ -78,10 +78,11 @@ io.sockets.on('connection', function(socket) {
 		return socket.id;
 	}
 
-	function loginUser(room, user) {
+	function loginUser(room, user, access) {
 		socket.join(room);
 		logger.logUser(room, getId(), user);
 		socket.set('userName', user);
+		socket.set('accessLevel', access);
 
 		console.log("User : '" + user + "' join Room : '" + room + "'")
 	}
@@ -103,7 +104,7 @@ io.sockets.on('connection', function(socket) {
 			if (data.room == "" || data.room == "/") {
 				logger.init(data.room);
 			}
-			loginUser(data.room, data.user);
+			loginUser(data.room, data.user, data.access);
 			callback(getId());
 		}
 	});
@@ -113,7 +114,7 @@ io.sockets.on('connection', function(socket) {
 			logger.init(data.room);
 			console.log("Create Room : '" + data.room + "'");
 
-			loginUser(data.room, data.user);
+			loginUser(data.room, data.user, data.access);
 
 		});
 	});
@@ -148,6 +149,10 @@ io.sockets.on('connection', function(socket) {
 					console.log("User : " + user + " disconnect");
 					socket.leave(room)
 					socket.broadcast.to(room).emit('leave:room', getId());
+
+					socket.get('accessLevel', function(err,access) {
+						
+					});
 				});
 			}
 		});
@@ -158,8 +163,7 @@ io.sockets.on('connection', function(socket) {
 			if (room != null) {
 				var pos = logger.logData[room].pos;
 				for (var i = 0; i < pos.length; i++) {
-					if (pos[i].user.id != getId() &&
-						data.name == pos[i].name) {
+					if (pos[i].user.id != getId()) {
 						socket.emit('send:pos', pos[i]);
 					}
 				};
