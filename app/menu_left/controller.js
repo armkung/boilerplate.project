@@ -93,20 +93,20 @@ app.controller('RoomCtrl', function($scope, Room, Socket, LoginManager) {
 	$scope.list();
 	$scope.connect = function() {
 		Room.room = $scope.room;
+		Room.users.push($scope.user.username);
 		Socket.emit("connect:room", {
 			room: $scope.room,
-			user: $scope.user.username,
-			access: $scope.user.accessLevel
+			user: $scope.user.username
 		}, function(id) {
 
 		});
 	};
 	$scope.create = function() {
 		Room.room = $scope.room;
+		Room.users.push($scope.user.username);	
 		Socket.emit("create:room", {
 			room: $scope.room,
 			user: $scope.user.username,
-			access: $scope.user.accessLevel
 		});
 	};
 	$scope.close = function() {

@@ -87,28 +87,28 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 		obj.set('hasRotatingPoint', true);
 	};
 	this.draw = function(data, x, y) {
+		var paths = [];
+		angular.forEach(data.path, function(value, key) {
+			paths.push(value.join(" "));
+		});
+		paths = paths.join(" ");
+		var path = new fabric.Path(paths);
+		path.set({
+			left: x,
+			top: y,
+			fill: null,
+			stroke: data.stroke,
+			strokeWidth: data.strokeWidth,
+			strokeLineCap: data.strokeLineCap,
+			strokeLineJoin: data.strokeLineJoin
+		});
+		self.disableMove(path);
 		if (current instanceof fabric.Group) {
-			var paths = [];
-			angular.forEach(data.path, function(value, key) {
-				paths.push(value.join(" "));
-			});
-			paths = paths.join(" ");
-			var path = new fabric.Path(paths);
-			path.set({
-				left: x,
-				top: y,
-				fill: null,
-				stroke: data.stroke,
-				strokeWidth: data.strokeWidth,
-				strokeLineCap: data.strokeLineCap,
-				strokeLineJoin: data.strokeLineJoin
-			});
 			current.addWithUpdate(path);
-
-			self.disableMove(path);
 		} else {
-			setId(data);
-			self.disableMove(data);
+			canvas.remove(data)
+			setId(path);
+			canvas.add(path)
 		}
 		canvas.renderAll();
 	};
@@ -243,35 +243,36 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 		// var objMin, min = {};
 		// var objs = [];
 		// console.log(indexs)
-		angular.forEach(current.getObjects(), function(obj, key) {
-			if (indexs.indexOf(key) != -1) {
-				if (data.pos) {
-					obj.set({
-						"left": obj.get("left") + data.pos.x,
-						"top": obj.get("top") + data.pos.y
-					});
+		if (current instanceof fabric.Group) {
+			angular.forEach(current.getObjects(), function(obj, key) {
+				if (indexs.indexOf(key) != -1) {
+					if (data.pos) {
+						obj.set({
+							"left": obj.get("left") + data.pos.x,
+							"top": obj.get("top") + data.pos.y
+						});
+					}
+					if (data.scale || data.flip) {
+						// var center = obj.getCenterPoint();
+						// obj.translateToOriginPoint(center, scale.point.x, scale.point.y);
+						obj.set({
+							"scaleX": data.scale.x,
+							"scaleY": data.scale.y,
+							"flipX": data.flip.x,
+							"flipY": data.flip.y
+						});
+					}
+					if (data.angle) {
+						obj.set({
+							"angle": data.angle
+						});
+					}
 				}
-				if (data.scale || data.flip) {
-					// var center = obj.getCenterPoint();
-					// obj.translateToOriginPoint(center, scale.point.x, scale.point.y);
-					obj.set({
-						"scaleX": data.scale.x,
-						"scaleY": data.scale.y,
-						"flipX": data.flip.x,
-						"flipY": data.flip.y
-					});
-				}
-				if (data.angle) {
-					obj.set({
-						"angle": data.angle
-					});
-				}
-			}
-		});
-		// adjustPosition();
-		canvas.calcOffset();
-		canvas.renderAll();
-
+			});
+			// adjustPosition();
+			canvas.calcOffset();
+			canvas.renderAll();
+		}
 		// function adjustPosition() {
 		// 	var x = objMin.get("left");
 		// 	var y = objMin.get("top");

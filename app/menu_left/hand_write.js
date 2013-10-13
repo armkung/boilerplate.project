@@ -18,31 +18,37 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 				}
 			}
 
-			function addGroup(user) {
+			function setCurrent(user) {
 				var id, name;
 				if (user) {
-					id = user.id;
 					name = user.name;
-					if (Room.users.indexOf(id) == -1) {
-						Room.users.push(name);
+					if (name != Room.users[0]) {
+						id = user.id;
+						if (Room.users.indexOf(id) == -1) {
+							Room.users.push(name);
+						}
 					}
 				}
-				DrawManager.newGroup(id);
 				DrawManager.setCurrent(id)
 			}
 
 			function draw(data) {
-				addGroup(data.user)
 				var pos = data.pos;
+				var id = data.user ? data.user.id : undefined;
+				setCurrent(data.user)
+				DrawManager.newGroup(id);
+
 				DrawManager.setStrokeColor(pos.color);
 				DrawManager.setStrokeSize(pos.size);
 				DrawManager.draw(data.data, pos.x, pos.y);
 			}
 
 			function line(data) {
-				addGroup(data.user);
-
 				var pos = data.pos;
+				var id = data.user ? data.user.id : undefined;
+				setCurrent(data.user)
+				DrawManager.newGroup(id);
+
 				DrawManager.setStrokeColor(pos.color);
 				DrawManager.setStrokeSize(pos.size);
 				DrawManager.drawLine(pos.x, pos.y, pos.isSeed, pos.isUp);
@@ -50,16 +56,19 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 			}
 
 			function text(data) {
-				addGroup(data.user);
-
 				var pos = data.pos;
+				var id = data.user ? data.user.id : undefined;
+				setCurrent(data.user)
+				DrawManager.newGroup(id);
+				
 				DrawManager.setFillColor(pos.color);
 				DrawManager.setFontSize(pos.size);
 				DrawManager.drawText(pos.text, pos.x, pos.y);
 			}
 
 			function drag(data) {
-				DrawManager.setCurrent(data.user.id);
+				setCurrent(data.user);
+
 				DrawManager.setCurrentPosition(data.n, data.data);
 			}
 
@@ -97,9 +106,7 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 					}
 				}
 			});
-			DataManager.initData(type, {
-				name: id
-			});
+			DataManager.initData(type);
 
 			Input.init(function() {
 				var obj = {};
