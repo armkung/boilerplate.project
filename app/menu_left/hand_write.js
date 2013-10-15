@@ -9,6 +9,10 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 		link: function(scope, iElement, iAttr) {
 			var type = DataManager.types.POS;
 			var id = iAttr.id;
+			// $rootScope.$on('index', function(index) {
+			// 	id = iAttr.id + "-" + index;
+			// 	console.log(id)
+			// })
 			DrawManager.init(id);
 
 			function sendData(obj) {
@@ -22,7 +26,7 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 				var id, name;
 				if (user) {
 					name = user.name;
-					if (name != Room.users[0]) {
+					if (name != Room.user) {
 						id = user.id;
 						if (Room.users.indexOf(id) == -1) {
 							Room.users.push(name);
@@ -35,8 +39,8 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 			function draw(data) {
 				var pos = data.pos;
 				var id = data.user ? data.user.id : undefined;
-				setCurrent(data.user)
 				DrawManager.newGroup(id);
+				setCurrent(data.user)
 
 				DrawManager.setStrokeColor(pos.color);
 				DrawManager.setStrokeSize(pos.size);
@@ -46,8 +50,8 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 			function line(data) {
 				var pos = data.pos;
 				var id = data.user ? data.user.id : undefined;
-				setCurrent(data.user)
 				DrawManager.newGroup(id);
+				setCurrent(data.user)
 
 				DrawManager.setStrokeColor(pos.color);
 				DrawManager.setStrokeSize(pos.size);
@@ -58,9 +62,9 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 			function text(data) {
 				var pos = data.pos;
 				var id = data.user ? data.user.id : undefined;
-				setCurrent(data.user)
 				DrawManager.newGroup(id);
-				
+				setCurrent(data.user)
+
 				DrawManager.setFillColor(pos.color);
 				DrawManager.setFontSize(pos.size);
 				DrawManager.drawText(pos.text, pos.x, pos.y);

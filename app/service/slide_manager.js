@@ -1,4 +1,4 @@
-app.service('SlideManager', function($http) {
+app.service('SlideManager', function($http, $rootScope) {
 	var self = this;
 
 	// var host = "http://www.greedmonkey.com/kreang/index.php/test/print_file/";
@@ -26,6 +26,7 @@ app.service('SlideManager', function($http) {
 	function changeIndex(k) {
 		index = self.index + k;
 		index = Math.max(1, index);
+		$rootScope.$broadcast('index', index);
 		return index;
 	}
 

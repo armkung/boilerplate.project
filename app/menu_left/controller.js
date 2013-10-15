@@ -93,7 +93,7 @@ app.controller('RoomCtrl', function($scope, Room, Socket, LoginManager) {
 	$scope.list();
 	$scope.connect = function() {
 		Room.room = $scope.room;
-		Room.users.push($scope.user.username);
+		Room.user = $scope.user.username;
 		Socket.emit("connect:room", {
 			room: $scope.room,
 			user: $scope.user.username
@@ -103,7 +103,7 @@ app.controller('RoomCtrl', function($scope, Room, Socket, LoginManager) {
 	};
 	$scope.create = function() {
 		Room.room = $scope.room;
-		Room.users.push($scope.user.username);	
+		Room.user = $scope.user.username;	
 		Socket.emit("create:room", {
 			room: $scope.room,
 			user: $scope.user.username,

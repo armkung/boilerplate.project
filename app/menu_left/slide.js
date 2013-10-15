@@ -26,15 +26,17 @@ app.directive('slide', function($sce, $state, DrawManager, SlideManager, DataMan
 			scope.$watch('slide.index', function(newV, oldV) {
 				if (!angular.isUndefined(SlideManager.slide) &&
 					!angular.isUndefined(SlideManager.index)) {
-					
 					var name = id + "-";
-					DrawManager.saveData(name + oldV);
+					if(oldV){
+						DrawManager.saveData(name + oldV);
+					}
 					DrawManager.newObject(name + newV);
 					DataManager.setData(type, {
 						slide: SlideManager.slide,
 						index: SlideManager.index
 					});
 					changeSlide();
+					$state.go('main.slide');
 				}
 			});
 
