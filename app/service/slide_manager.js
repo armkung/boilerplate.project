@@ -15,7 +15,7 @@ app.service('SlideManager', function($http, $rootScope) {
 		var url = host_name + self.slide + "/preview";
 		var index = index_name + self.index;
 		return url + index;
-	}
+	};
 	this.next = function() {
 		self.index = changeIndex(1);
 	};
@@ -26,7 +26,6 @@ app.service('SlideManager', function($http, $rootScope) {
 	function changeIndex(k) {
 		index = self.index + k;
 		index = Math.max(1, index);
-		$rootScope.$broadcast('index', index);
 		return index;
 	}
 

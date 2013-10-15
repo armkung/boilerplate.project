@@ -9,15 +9,11 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 		link: function(scope, iElement, iAttr) {
 			var type = DataManager.types.POS;
 			var id = iAttr.id;
-			// $rootScope.$on('index', function(index) {
-			// 	id = iAttr.id + "-" + index;
-			// 	console.log(id)
-			// })
 			DrawManager.init(id);
 
 			function sendData(obj) {
 				if (scope.send) {
-					obj.name = id;
+					obj.name = DrawManager.getName();
 					DataManager.setData(type, obj);
 				}
 			}
@@ -78,7 +74,7 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 
 			var strokeColor, fillColor, strokeSize, fontSize;
 			DataManager.getData(type, function(data) {
-				if (data.name == id) {
+				if (data.name == DrawManager.getName()) {
 					if (data.pos) {
 						strokeColor = DrawManager.getStrokeColor();
 						fillColor = DrawManager.getFillColor();
