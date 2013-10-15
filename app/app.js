@@ -53,7 +53,8 @@ app.config(['$routeProvider', '$stateProvider', '$urlRouterProvider',
 	// });
 });
 
-app.config(function(RestangularProvider) {
+app.config(function(RestangularProvider, $httpProvider) {
+	delete $httpProvider.defaults.headers.common['X-Requested-With'];
 	RestangularProvider.setBaseUrl(ws);
 });
 
@@ -98,11 +99,11 @@ app.factory("DataManager", function(Canvas, Socket) {
 			POS: "pos",
 			SLIDE: "slide"
 		},
-		initData: function(type, data) {
-			Socket.emit("init:" + type, data);
+		initData: function(type) {
+			Socket.emit("init:" + type);
 		},
 		setData: function(type, data) {
-			if (data.pos) {
+			if (data && data.pos) {
 				data.pos.x /= Canvas.width;
 				data.pos.y /= Canvas.height;
 			}
@@ -115,7 +116,7 @@ app.factory("DataManager", function(Canvas, Socket) {
 			switch (type) {
 				case "pos":
 					Socket.on("send:" + type, function(data) {
-						if (data.pos) {
+						if (data && data.pos) {
 							data.pos.x *= Canvas.width;
 							data.pos.y *= Canvas.height;
 						}

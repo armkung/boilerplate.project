@@ -3,8 +3,9 @@ app.controller('LoginCtrl', function($scope, $state, GoogleService, LoginManager
 		GoogleService.getUser().then(function(data) {
 			console.log(data);
 
-			LoginManager.login(data);
-			$state.go('main.home');
+			LoginManager.login(data).then(function(){
+				$state.go('main.home');
+			});
 		});
 	});
 });

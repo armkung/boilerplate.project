@@ -8,32 +8,41 @@ app.directive('slide', function($sce, $state, DrawManager, SlideManager, DataMan
 		link: function(scope, iElement) {
 			var id = 'mirror';
 			var type = DataManager.types.SLIDE;
-			SlideManager.init(function(){
-				$state.go('main.drive');
-			});
-			DataManager.initData(type);
 			scope.slide = SlideManager;
 
-			scope.$watch('slide.index', function(newV, oldV) {
-				DataManager.setData(type, {
-					url: SlideManager.url,
-					index: SlideManager.index
-				});
-				var name = id + "-";
-				DrawManager.saveData(name + oldV);
-				DrawManager.newObject(name + newV);
-				changeSlide();
-			});
-
 			DataManager.getData(type, function(data) {
-				SlideManager.url = data.url;
-				SlideManager.index = data.index;
-				changeSlide();
+				if (data) {
+					SlideManager.setSlide(data.slide, data.index);
+					changeSlide();
+				} else {
+					if (angular.isUndefined(SlideManager.slide) &&
+						angular.isUndefined(SlideManager.index)) {
+						$state.go('main.drive');
+					}
+				}
+			});
+			DataManager.initData(type);
+
+			scope.$watch('slide.index', function(newV, oldV) {
+				if (!angular.isUndefined(SlideManager.slide) &&
+					!angular.isUndefined(SlideManager.index)) {
+					
+					var name = id + "-";
+					DrawManager.saveData(name + oldV);
+					DrawManager.newObject(name + newV);
+					DataManager.setData(type, {
+						slide: SlideManager.slide,
+						index: SlideManager.index
+					});
+					changeSlide();
+				}
 			});
 
 			function changeSlide() {
-				var url = SlideManager.url + SlideManager.index;
-				scope.url = $sce.trustAsResourceUrl(url);
+				var url = SlideManager.getUrl();
+				if (url) {
+					scope.url = $sce.trustAsResourceUrl(url);
+				}
 			}
 
 		}
