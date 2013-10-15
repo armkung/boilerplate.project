@@ -22,7 +22,7 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 	var line, text;
 	var id, groups;
 	var canvas, current;
-	var n = 0;
+	var n;
 
 	function setId(obj) {
 		// var n = canvas.getObjects().indexOf(obj);
@@ -60,6 +60,7 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 	this.newObject = function(name) {
 		id = name;
 		groups = {};
+		n = 0;
 		canvas.clear();
 		if (name in obj) {
 			var children = obj[name];
