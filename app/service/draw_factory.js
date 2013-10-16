@@ -91,8 +91,9 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 		};
 	};
 	this.setDragObject = function(drag) {
-		var isDrag = false,
-			objDrag;
+		var isMove = false,
+			isScale = false,
+			isRotate = false;
 		var x1, y1, x2, y2;
 		listener.dragObject = {
 			onDown: function(pos, e) {
@@ -102,47 +103,84 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 					y1 = obj.get("top");
 				}
 			},
-			onMove: function(e) {
+			onUp: function(pos, e) {
 				var obj = e.target;
 				if (obj) {
 					var data = {};
 					x2 = obj.get("left");
-					y2 = obj.get("top");
-					data.pos = {
-						x: x2 - x1,
-						y: y2 - y1
-					};
+					y2 = obj.get("top");					
+					if (isMove) {
+						data.pos = {
+							x: x2 - x1,
+							y: y2 - y1
+						};
+					}
+					if (isScale) {
+						data.scale = {
+							x: obj.get("scaleX"),
+							y: obj.get("scaleY")
+						};
+						data.flip = {
+							x: obj.get("flipX"),
+							y: obj.get("flipY")
+						};
+					}
+					if (isRotate) {
+						data.angle = obj.get("angle");
+					}
+
 					drag(obj, data);
 					x1 = x2;
 					y1 = y2;
 				}
+				isMove = false;
+				isScale = false;
+				isRotate = false;
+			},
+			onMove: function(e) {
+				isMove = true;
+				// var obj = e.target;
+				// if (obj) {
+				// 	var data = {};
+				// 	x2 = obj.get("left");
+				// 	y2 = obj.get("top");
+				// 	data.pos = {
+				// 		x: x2 - x1,
+				// 		y: y2 - y1
+				// 	};
+				// 	drag(obj, data);
+				// 	x1 = x2;
+				// 	y1 = y2;
+				// }
 			},
 			onScale: function(e) {
-				var obj = e.target;
-				var data = {};
-				x2 = obj.get("left");
-				y2 = obj.get("top");
-				data.pos = {
-					x: x2 - x1,
-					y: y2 - y1
-				};
-				data.scale = {
-					x: obj.get("scaleX"),
-					y: obj.get("scaleY")
-				};
-				data.flip = {
-					x: obj.get("flipX"),
-					y: obj.get("flipY")
-				};
-				drag(obj, data);
-				x1 = x2;
-				y1 = y2;
+				isScale = true;
+				// var obj = e.target;
+				// var data = {};
+				// x2 = obj.get("left");
+				// y2 = obj.get("top");
+				// data.pos = {
+				// 	x: x2 - x1,
+				// 	y: y2 - y1
+				// };
+				// data.scale = {
+				// 	x: obj.get("scaleX"),
+				// 	y: obj.get("scaleY")
+				// };
+				// data.flip = {
+				// 	x: obj.get("flipX"),
+				// 	y: obj.get("flipY")
+				// };
+				// drag(obj, data);
+				// x1 = x2;
+				// y1 = y2;
 			},
 			onRotate: function(e) {
-				var obj = e.target;
-				var data = {};
-				data.angle = obj.get("angle");
-				drag(obj, data);
+				isRotate = true;
+				// var obj = e.target;
+				// var data = {};
+				// data.angle = obj.get("angle");
+				// drag(obj, data);
 			}
 
 		};
