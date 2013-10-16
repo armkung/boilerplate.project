@@ -28,7 +28,10 @@ var Logger = function() {
 		// 	usersRoom.push(user);
 		// }
 		if (data[room]) {
-			data[room].users[user] = id;
+			data[room].users[user.username] = {
+				id: id,
+				email: user.email
+			}
 		}
 	}
 	this.logMsg = function(msg) {
@@ -88,9 +91,9 @@ io.sockets.on('connection', function(socket) {
 	function loginUser(room, user) {
 		socket.join(room);
 		logger.logUser(getId(), user);
-		socket.set('userName', user);
+		socket.set('userName', user.username);
 
-		console.log("User : '" + user + "' join Room : '" + room + "'")
+		console.log("User : '" + user.username + "' join Room : '" + room + "'")
 	}
 	socket.on('list:room', function(data, callback) {
 		var host = io.sockets.manager.rooms;

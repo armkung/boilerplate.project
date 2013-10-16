@@ -9,6 +9,10 @@ app.controller('DriveCtrl', function($scope, GoogleService, SlideManager) {
 		var id = $scope.datas[index].id;
 		SlideManager.setSlide(id);
 		console.log(id);
+
+		// GoogleService.shareFile(id).then(function(data) {
+		// 	console.log(data);
+		// });
 	}
 });
 
@@ -96,7 +100,7 @@ app.controller('RoomCtrl', function($scope, Room, Socket, LoginManager) {
 		Room.user = $scope.user.username;
 		Socket.emit("connect:room", {
 			room: $scope.room,
-			user: $scope.user.username
+			user: $scope.user
 		}, function(id) {
 
 		});
@@ -106,7 +110,7 @@ app.controller('RoomCtrl', function($scope, Room, Socket, LoginManager) {
 		Room.user = $scope.user.username;	
 		Socket.emit("create:room", {
 			room: $scope.room,
-			user: $scope.user.username,
+			user: $scope.user,
 		});
 	};
 	$scope.close = function() {

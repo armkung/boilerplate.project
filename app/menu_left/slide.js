@@ -3,7 +3,7 @@ app.directive('slide', function($sce, $state, DrawManager, SlideManager, DataMan
 		restrict: 'E',
 		template: '<iframe id="slide" ng-src="{{url}}"></iframe>',
 		scope: {
-
+			send: '@'
 		},
 		link: function(scope, iElement, iAttr) {
 			var id = iAttr.id;
@@ -24,22 +24,23 @@ app.directive('slide', function($sce, $state, DrawManager, SlideManager, DataMan
 			DataManager.initData(type);
 
 			scope.$watch('slide.index', function(newV, oldV) {
-				if (!angular.isUndefined(SlideManager.slide) &&
+				if (!angular.isUndefined(SlideManager.slide) && 
 					!angular.isUndefined(SlideManager.index)) {
 					var name = id + "-";
-					DataManager.setData(type, {
-						slide: SlideManager.slide,
-						index: SlideManager.index
-					});
+					if (scope.send) {
+						DataManager.setData(type, {
+							slide: SlideManager.slide,
+							index: SlideManager.index
+						});
+					}
 					DataManager.initData(DataManager.types.POS);
-					
-					if(oldV){
+
+					if (oldV) {
 						DrawManager.saveData(name + oldV);
 					}
 					DrawManager.newObject(name + newV);
 
 					changeSlide();
-					$state.go('main.slide');
 				}
 			});
 
