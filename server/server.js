@@ -12,7 +12,6 @@ var Logger = function() {
 	this.logData = data;
 	this.init = function(rm) {
 		room = rm;
-		// if (!(room in data)) {
 		if (!(room in data)) {
 			data[room] = {
 				users: {},
@@ -20,13 +19,17 @@ var Logger = function() {
 				pos: []
 			};
 		}
-		// }
+	}
+	this.getEmails = function() {
+		var emails = [];
+		if (data[room]) {
+			for (name in data[room].users) {
+				emails.push(data[room].users[name].email);
+			}
+		}
+		return emails;
 	}
 	this.logUser = function(id, user) {
-		// var usersRoom = data[room].users;
-		// if (usersRoom.indexOf(user) == -1) {
-		// 	usersRoom.push(user);
-		// }
 		if (data[room]) {
 			data[room].users[user.username] = {
 				id: id,
@@ -41,14 +44,6 @@ var Logger = function() {
 	}
 
 	this.logPos = function(pos) {
-		// var n = data[room].pos.length;
-		// n = (n == 0) ? 0 : n - 1;
-		// if (pos.isSeed) {
-		// 	data[room].pos[n] = [];
-		// } else {
-		// 	data[room].pos[n].push(pos);
-		// }
-		// console.log(data[room].pos)
 		if (data[room]) {
 			data[room].pos.push(pos);
 		}
@@ -127,11 +122,13 @@ io.sockets.on('connection', function(socket) {
 
 		});
 	});
-	socket.on('close:room', function() {
+	socket.on('close:room', function(data, callback) {
 		socket.get('roomName', function(err, room) {
 			if (room != null) {
 				var clients = io.sockets.clients(room)
 				if (clients) {
+					callback(logger.getEmails());
+					
 					for (var i = 0; i < clients.length; i++) {
 						clients[i].disconnect();
 					}

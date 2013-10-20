@@ -1,13 +1,15 @@
 // 'use strict';
 
-// describe('Socket', function() {
+describe('Socket', function() {
 
-// 	beforeEach(function() {
-// 		browser().navigateTo('/');
-// 	});
-// 	it('should redirect to Draw', function() {
-// 		expect(browser().location().url()).toBe("/a");
-// 	});
+	beforeEach(function() {
+		browser().navigateTo('/a');
+		// console.log(browser().location().url());
+	});
+
+	it('should redirect to Draw', function() {
+		// expect(browser().window().path()).toBe("/home");
+	});
 
 
-// });
+});

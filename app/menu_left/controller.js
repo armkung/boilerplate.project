@@ -17,10 +17,16 @@ app.controller('DriveCtrl', function($scope, GoogleService, SlideManager) {
 });
 
 app.controller('QuizCtrl', function($scope, QuizManager) {
-	$('#slickQuiz').slickQuiz({
-		json: QuizManager.quizJSON,
+	QuizManager.load().then(function(data){
+		$('#slickQuiz').slickQuiz({
+		json: data,
 		skipStartButton: true
 	});
+	});
+	// $('#slickQuiz').slickQuiz({
+	// 	json: QuizManager.quizJSON,
+	// 	skipStartButton: true
+	// });
 });
 
 app.controller('HandWriteCtrl', function($scope, $rootScope, DrawFactory, Canvas) {
@@ -69,10 +75,10 @@ app.controller('SlideCtrl', function($scope, $rootScope, DrawFactory, SlideManag
 });
 
 app.controller('HomeCtrl', function($state, LoginManager) {
-	LoginManager.isTeacher(function(){
+	LoginManager.isTeacher(function() {
 		$state.go('main.home.teacher');
 	});
-	LoginManager.isStudent(function(){
+	LoginManager.isStudent(function() {
 		$state.go('main.home.student');
 	});
 });
@@ -107,14 +113,16 @@ app.controller('RoomCtrl', function($scope, Room, Socket, LoginManager) {
 	};
 	$scope.create = function() {
 		Room.room = $scope.room;
-		Room.user = $scope.user.username;	
+		Room.user = $scope.user.username;
 		Socket.emit("create:room", {
 			room: $scope.room,
 			user: $scope.user,
 		});
 	};
 	$scope.close = function() {
-		Socket.emit("close:room");
+		Socket.emit("close:room", {}, function(emails) {
+			console.log(emails);
+		});
 	};
 	$scope.disconnect = function() {
 		Socket.emit("leave:room");
