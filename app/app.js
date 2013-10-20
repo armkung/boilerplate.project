@@ -1,10 +1,10 @@
 var app = angular.module('socket', ['templates-app',
-	'templates-common', 'ngRoute', 'ui.router', 'restangular'
+	'templates-common', 'ui.router'
 ]);
 var host = 'http://localhost:8080';
-var ws = 'http://foaas.com';
-app.config(['$routeProvider', '$stateProvider', '$urlRouterProvider',
-	function($routeProvider, $stateProvider, $urlRouterProvider) {
+
+app.config(['$stateProvider', '$urlRouterProvider',
+	function($stateProvider, $urlRouterProvider) {
 		$urlRouterProvider.otherwise('login');
 		$stateProvider.state('main', {
 			url: "/main",
@@ -51,11 +51,6 @@ app.config(['$routeProvider', '$stateProvider', '$urlRouterProvider',
 	// 		$state.go('login');
 	// 	}
 	// });
-});
-
-app.config(function(RestangularProvider, $httpProvider) {
-	delete $httpProvider.defaults.headers.common['X-Requested-With'];
-	RestangularProvider.setBaseUrl(ws);
 });
 
 app.factory('Socket', function($rootScope) {

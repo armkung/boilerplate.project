@@ -1,4 +1,4 @@
-app.controller('DriveCtrl', function($scope, GoogleService, SlideManager) {
+app.controller('DriveCtrl', function($scope, GoogleService, SlideManager, Canvas) {
 	GoogleService.load().then(function() {
 		GoogleService.listFile().then(function(data) {
 			console.log(data);
@@ -9,19 +9,35 @@ app.controller('DriveCtrl', function($scope, GoogleService, SlideManager) {
 		var id = $scope.datas[index].id;
 		SlideManager.setSlide(id);
 		console.log(id);
+	};
+	$scope.share = function() {
+		GoogleService.shareFile(id).then(function(data) {
+			console.log(data);
+		});
+	};
+	$scope.save = function() {
+		var name = "test";
+		var type = "png";
+		Canvas.getCanvas().then(function(cs) {
+			var data = cs.toDataURL({
+				format: type
+			});
 
-		// GoogleService.shareFile(id).then(function(data) {
-		// 	console.log(data);
-		// });
-	}
+			var obj = {};
+			obj.type = "image/" + type;
+			obj.data = data.split(",")[1];
+			obj.fileName = name;
+			GoogleService.insertFile(obj);
+		});
+	};
 });
 
 app.controller('QuizCtrl', function($scope, QuizManager) {
-	QuizManager.load().then(function(data){
+	QuizManager.load().then(function(data) {
 		$('#slickQuiz').slickQuiz({
-		json: data,
-		skipStartButton: true
-	});
+			json: data,
+			skipStartButton: true
+		});
 	});
 	// $('#slickQuiz').slickQuiz({
 	// 	json: QuizManager.quizJSON,
@@ -55,7 +71,14 @@ app.controller('SlideCtrl', function($scope, $rootScope, DrawFactory, SlideManag
 	$scope.prevIndex = function() {
 		SlideManager.prev();
 	};
-
+	$scope.save = function() {
+		html2canvas($('body'), {
+			onrendered: function(canvas) {
+				$('body').append(canvas);
+				console.log(canvas)
+			}
+		});
+	};
 	$scope.tools = [];
 	$scope.attrs = [];
 	$scope.isSend = true;

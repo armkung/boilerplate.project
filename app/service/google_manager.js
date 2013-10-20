@@ -48,18 +48,18 @@ app.service('GoogleService', function($q) {
 	this.shareFile = function(id) {
 		var deferred = $q.defer();
 		var body = {
-		   'value': 'anand.kung@mail.kmutt.ac.th',
-		   'type': 'group',
-		   'role': 'reader'
-		 };
-		 var request = gapi.client.drive.permissions.insert({
-		   'fileId': id,
-		   'resource': body
-		 });
-		 request.execute(function(resp) { 
-		 	deferred.resolve(resp);
-		 });
-		 return deferred.promise;
+			'value': 'anand.kung@mail.kmutt.ac.th',
+			'type': 'group',
+			'role': 'reader'
+		};
+		var request = gapi.client.drive.permissions.insert({
+			'fileId': id,
+			'resource': body
+		});
+		request.execute(function(resp) {
+			deferred.resolve(resp);
+		});
+		return deferred.promise;
 	};
 	this.listFile = function() {
 		var deferred = $q.defer();
@@ -82,6 +82,50 @@ app.service('GoogleService', function($q) {
 			'q': "mimeType='application/vnd.google-apps.presentation'"
 		});
 		retrievePageOfFiles(initialRequest, []);
+		return deferred.promise;
+	};
+	this.insertFile = function(fileData) {
+		var deferred = $q.defer();
+
+		const boundary = '-------314159265358979323846';
+		const delimiter = "\r\n--" + boundary + "\r\n";
+		const close_delim = "\r\n--" + boundary + "--";
+
+		var base64Data = fileData.data;
+		// base64Data.replace("/^data:image\/(png|jpg|jpeg);base64,/", "");
+
+		var metadata = {
+			'title': fileData.fileName,
+			'mimeType': fileData.type
+		};
+
+		var multipartRequestBody =
+			delimiter +
+			'Content-Type: application/json\r\n\r\n' +
+			JSON.stringify(metadata) +
+			delimiter +
+			'Content-Type: ' + metadata.mimeType + '\r\n' +
+			'Content-Transfer-Encoding: base64\r\n' +
+			'\r\n' +
+			base64Data +
+			close_delim;
+		var request = gapi.client.request({
+			'path': '/upload/drive/v2/files',
+			'method': 'POST',
+			'params': {
+				'uploadType': 'multipart'
+			},
+			'headers': {
+				'Content-Type': 'multipart/mixed; boundary="' + boundary + '"'
+			},
+			'body': multipartRequestBody
+		});
+
+
+		request.execute(function(resp) {
+			deferred.resolve(resp);
+		});
+
 		return deferred.promise;
 	};
 });
