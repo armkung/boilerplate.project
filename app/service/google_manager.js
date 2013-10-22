@@ -45,6 +45,16 @@ app.service('GoogleService', function($q) {
 		})
 		return deferred.promise;
 	};
+	this.getFile = function(id) {
+		var deferred = $q.defer();
+		var request = service["drive"].files.get({
+			'fileId': id
+		});
+		request.execute(function(resp) {
+			deferred.resolve(resp);
+		});
+		return deferred.promise;
+	};
 	this.shareFile = function(id) {
 		var deferred = $q.defer();
 		var body = {

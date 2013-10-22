@@ -151,10 +151,10 @@ app.factory("DataManager", function(Canvas, Socket) {
 app.service("Canvas", function($q) {
 	var self = this;
 	var stage;
-	// this.names = {
-	// 	DRAW: "draw",
-	// 	MIRROR: "mirror"
-	// }
+	this.types = {
+		DRAW: "draw",
+		MIRROR: "mirror"
+	}
 	var obj = {
 		// draw: {},
 		// mirror: {},

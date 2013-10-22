@@ -1,4 +1,4 @@
-app.controller('DriveCtrl', function($scope, GoogleService, SlideManager, Canvas) {
+app.controller('DriveCtrl', function($scope, GoogleService, SlideManager, Canvas, PDFService) {
 	GoogleService.load().then(function() {
 		GoogleService.listFile().then(function(data) {
 			console.log(data);
@@ -9,6 +9,7 @@ app.controller('DriveCtrl', function($scope, GoogleService, SlideManager, Canvas
 		var id = $scope.datas[index].id;
 		SlideManager.setSlide(id);
 		console.log(id);
+		$scope.id = id;
 	};
 	$scope.share = function() {
 		GoogleService.shareFile(id).then(function(data) {
@@ -19,15 +20,49 @@ app.controller('DriveCtrl', function($scope, GoogleService, SlideManager, Canvas
 		var name = "test";
 		var type = "png";
 		Canvas.getCanvas().then(function(cs) {
-			var data = cs.toDataURL({
-				format: type
-			});
 
-			var obj = {};
-			obj.type = "image/" + type;
-			obj.data = data.split(",")[1];
-			obj.fileName = name;
-			GoogleService.insertFile(obj);
+			if ($scope.id) {
+				console.log($scope.id);
+				GoogleService.getFile($scope.id).then(function(data) {
+					PDFService.load(data.exportLinks['application/pdf']).then(function(page) {
+						var tmp = page.getViewport(1);
+						var w = cs.getWidth(),
+							h = cs.getHeight();
+						var scale = w < h ? w / tmp.width : h / tmp.height;
+						console.log(scale)
+						var view = page.getViewport(scale);
+						var canvas = $('#pdf')[0];
+						var ctx = canvas.getContext('2d');
+						canvas.width = view.width;
+						canvas.height = view.height;
+
+						var renderContext = {
+							canvasContext: ctx,
+							viewport: view
+						};
+						page.render(renderContext).then(function() {
+							fabric.Image.fromURL(canvas.toDataURL(), function(img) {
+								cs.add(img);
+								img.center();
+								img.setCoords();
+								cs.sendToBack(img);
+								cs.renderAll();
+
+								// var data = cs.toDataURL({
+								// 	format: type
+								// });
+								// var obj = {};
+								// obj.type = "image/" + type;
+								// obj.data = data.split(",")[1];
+								// obj.fileName = name;
+								// GoogleService.insertFile(obj);
+							});
+						});
+
+					});
+				});
+
+			}
 		});
 	};
 });
