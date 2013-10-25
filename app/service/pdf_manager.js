@@ -1,5 +1,5 @@
 app.service('PDFService', function($q) {
-
+	var SCALE = 0.8;
 	var doc = new jsPDF();
 
 	this.load = function(url) {
@@ -12,15 +12,16 @@ app.service('PDFService', function($q) {
 		});
 		return deferred.promise;
 	};
-	this.init = function(canvas, page, w, h) {
+	this.init = function(src, dst, page) {
+		var w = dst.getWidth(),
+			h = dst.getHeight();
 		var tmp = page.getViewport(1);
 		var scale = w < h ? w / tmp.width : h / tmp.height;
 		var view = page.getViewport(scale);
 
-		// var canvas = $('#pdf')[0];
-		var ctx = canvas.getContext('2d');
-		canvas.width = view.width;
-		canvas.height = view.height;
+		var ctx = src.getContext('2d');
+		src.width = view.width;
+		src.height = view.height;
 
 		return {
 			canvasContext: ctx,
@@ -28,8 +29,13 @@ app.service('PDFService', function($q) {
 		};
 	};
 	this.addImage = function(data, w, h) {
-		var k = Math.min(doc.internal.pageSize.width / w, doc.internal.pageSize.height / h);
-		doc.addImage(data, 'jpeg', 0, 0, w * k, h * k);
+		var page = doc.internal.pageSize
+		var k = Math.min(page.width / w, page.height / h) * SCALE;
+		w *= k;
+		h *= k;
+		var x = Math.abs(page.width - w) / 2
+		var y = 0;
+		doc.addImage(data, 'jpeg', x, y, w, h);
 	};
 
 	this.save = function(name) {

@@ -25,31 +25,43 @@ app.controller('DriveCtrl', function($scope, GoogleService, SlideManager, Canvas
 				console.log($scope.id);
 				GoogleService.getFile($scope.id).then(function(data) {
 					PDFService.load(data.exportLinks['application/pdf']).then(function(page) {
-						var w = cs.getWidth(),
-							h = cs.getHeight();
 						var canvas = $('#pdf')[0];
-						var renderContext = PDFService.init(canvas, page, w, h);
+						var renderContext = PDFService.init(canvas, cs, page);
 
+						var w = renderContext.viewport.width,
+							h = renderContext.viewport.height;
 						page.render(renderContext).then(function() {
 							fabric.Image.fromURL(canvas.toDataURL(), function(img) {
 								cs.add(img);
+								img.set({
+									stroke: 'black',
+									strokeWidth: 3
+								});
 								img.center();
 								img.setCoords();
 								cs.sendToBack(img);
+
 								cs.renderAll();
 
 								var data = cs.toDataURL({
-									format: type.split('/')[1]
+									format: type.split('/')[1],
+									top: img.getTop() - img.getHeight() / 2,
+									left: img.getLeft() - img.getWidth() / 2,
+									width: w,
+									height: h
 								});
 								console.log(data);
+
+								PDFService.addImage(data, w, h);
+								PDFService.save();
+
 								// var obj = {};
 								// obj.type = "image/" + type;
 								// obj.data = data.split(",")[1];
 								// obj.fileName = name;
 								// GoogleService.insertFile(obj);
 
-								PDFService.addImage(data, w, h);
-								PDFService.save();
+								cs.remove(img);
 							});
 						});
 
