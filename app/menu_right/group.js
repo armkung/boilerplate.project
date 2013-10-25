@@ -10,8 +10,8 @@ app.directive('group', function(GroupManager, Room, Canvas) {
 			}, true);
 
 			scope.toggle = function(index) {
-				scope.groups.isHide = !scope.groups.isHide;
-				if (scope.groups.isHide) {
+				scope.groups[index].isHide = !scope.groups[index].isHide;
+				if (scope.groups[index].isHide) {
 					GroupManager.hide(index);
 				} else {
 					GroupManager.show(index);

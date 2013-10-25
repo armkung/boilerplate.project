@@ -18,28 +18,18 @@ app.controller('DriveCtrl', function($scope, GoogleService, SlideManager, Canvas
 	};
 	$scope.save = function() {
 		var name = "test";
-		var type = "png";
+		var type = "image/jpeg";
 		Canvas.getCanvas().then(function(cs) {
 
 			if ($scope.id) {
 				console.log($scope.id);
 				GoogleService.getFile($scope.id).then(function(data) {
 					PDFService.load(data.exportLinks['application/pdf']).then(function(page) {
-						var tmp = page.getViewport(1);
 						var w = cs.getWidth(),
 							h = cs.getHeight();
-						var scale = w < h ? w / tmp.width : h / tmp.height;
-						console.log(scale)
-						var view = page.getViewport(scale);
 						var canvas = $('#pdf')[0];
-						var ctx = canvas.getContext('2d');
-						canvas.width = view.width;
-						canvas.height = view.height;
+						var renderContext = PDFService.init(canvas, page, w, h);
 
-						var renderContext = {
-							canvasContext: ctx,
-							viewport: view
-						};
 						page.render(renderContext).then(function() {
 							fabric.Image.fromURL(canvas.toDataURL(), function(img) {
 								cs.add(img);
@@ -48,14 +38,18 @@ app.controller('DriveCtrl', function($scope, GoogleService, SlideManager, Canvas
 								cs.sendToBack(img);
 								cs.renderAll();
 
-								// var data = cs.toDataURL({
-								// 	format: type
-								// });
+								var data = cs.toDataURL({
+									format: type.split('/')[1]
+								});
+								console.log(data);
 								// var obj = {};
 								// obj.type = "image/" + type;
 								// obj.data = data.split(",")[1];
 								// obj.fileName = name;
 								// GoogleService.insertFile(obj);
+
+								PDFService.addImage(data, w, h);
+								PDFService.save();
 							});
 						});
 
