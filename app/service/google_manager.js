@@ -24,8 +24,8 @@ app.service('GoogleService', function($q) {
 	};
 	this.load = function() {
 		var promises = [];
-		angular.forEach(defers, function(task, key) {
-			promises.push(task.promise);
+		angular.forEach(defers, function(defer, key) {
+			promises.push(defer.promise);
 		});
 		return $q.all(promises);
 	};
