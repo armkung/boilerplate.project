@@ -18,7 +18,6 @@ app.controller('DriveCtrl', function($scope, GoogleService, SlideManager, Canvas
 	};
 	$scope.save = function() {
 		var name = "test";
-		var type = "image/jpeg";
 		Canvas.getCanvas().then(function(cs) {
 
 			if ($scope.id) {
@@ -26,49 +25,18 @@ app.controller('DriveCtrl', function($scope, GoogleService, SlideManager, Canvas
 				GoogleService.getFile($scope.id).then(function(data) {
 					PDFService.load(data.exportLinks['application/pdf']).then(function(pdf) {
 
-
 						var n = pdf.pdfInfo.numPages;
-						for (var i = 1; i <= n; i++) {
-							pdf.getPage(i).then(function(page) {
-								var canvas = $('<canvas/>')[0];
-								var renderContext = PDFService.init(canvas, cs, page);
 
-								var w = renderContext.viewport.width,
-									h = renderContext.viewport.height;
-								page.render(renderContext).then(function() {
-									fabric.Image.fromURL(canvas.toDataURL(), function(img) {
-										cs.add(img);
-										img.set({
-											stroke: 'black',
-											strokeWidth: 3
-										});
-										img.center();
-										img.setCoords();
-										cs.sendToBack(img);
+						PDFService.init(cs);
+						PDFService.render(pdf, n).then(function(data) {
+							console.log(data);
+							var obj = {};
+							obj.type = "application/pdf";
+							obj.data = data.split(",")[1];
+							obj.fileName = name;
+							GoogleService.insertFile(obj);
+						});
 
-										cs.renderAll();
-
-										var data = cs.toDataURL({
-											format: type.split('/')[1],
-											top: img.getTop() - img.getHeight() / 2,
-											left: img.getLeft() - img.getWidth() / 2,
-											width: w,
-											height: h
-										});
-										console.log(data);
-
-										PDFService.addImage(data, w, h);
-										// var obj = {};
-										// obj.type = "image/" + type;
-										// obj.data = data.split(",")[1];
-										// obj.fileName = name;
-										// GoogleService.insertFile(obj);
-
-										cs.remove(img);
-									});
-								});
-							});
-						}
 					});
 				});
 

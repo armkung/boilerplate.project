@@ -1,4 +1,6 @@
 app.service('GoogleService', function($q) {
+	var self = this;
+
 	var libs = [
 		['oauth2', 'v2'],
 		['drive', 'v2'],
@@ -45,13 +47,32 @@ app.service('GoogleService', function($q) {
 		})
 		return deferred.promise;
 	};
+	this.setPermission = function(id) {
+		var deferred = $q.defer();
+		var body = {
+			'type': 'anyone',
+			'role': 'reader'
+		};
+		var request = gapi.client.drive.permissions.insert({
+			'fileId': id,
+			'resource': body
+		});
+		request.execute(function(resp) {
+			console.log(resp)
+			deferred.resolve();
+		});
+		return deferred.promise;
+
+	};
 	this.getFile = function(id) {
 		var deferred = $q.defer();
 		var request = service["drive"].files.get({
 			'fileId': id
 		});
 		request.execute(function(resp) {
-			deferred.resolve(resp);
+			self.setPermission(id).then(function() {
+				deferred.resolve(resp);
+			})
 		});
 		return deferred.promise;
 	};
@@ -133,6 +154,7 @@ app.service('GoogleService', function($q) {
 
 
 		request.execute(function(resp) {
+			console.log(resp);
 			deferred.resolve(resp);
 		});
 
