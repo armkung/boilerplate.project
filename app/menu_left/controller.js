@@ -1,4 +1,4 @@
-app.controller('DriveCtrl', function($scope, GoogleService, SlideManager, Canvas, PDFService) {
+app.controller('DriveCtrl', function($scope, GoogleService, SlideManager, Canvas, DrawManager, PDFService) {
 	GoogleService.load().then(function() {
 		GoogleService.listFile().then(function(data) {
 			console.log(data);
@@ -17,17 +17,24 @@ app.controller('DriveCtrl', function($scope, GoogleService, SlideManager, Canvas
 		});
 	};
 	$scope.save = function() {
+		var id = "data";
 		var name = "test";
-		Canvas.getCanvas().then(function(cs) {
+		// Canvas.init(id);
+		Canvas.getCanvas().then(function() {
 
 			if ($scope.id) {
 				console.log($scope.id);
 				GoogleService.getFile($scope.id).then(function(data) {
 					PDFService.load(data.exportLinks['application/pdf']).then(function(pdf) {
-
 						var n = pdf.pdfInfo.numPages;
+						var mirrors = [];
+						for (var i = 1; i <= n; i++) {
+							var cs = Canvas.newCanvas(id, Canvas.width, Canvas.height);
+							DrawManager.getObject(cs, Canvas.types.MIRROR + "-" + i);
+							mirrors.push(cs);
+						}
 
-						PDFService.init(cs);
+						PDFService.init(mirrors);
 						PDFService.render(pdf, n).then(function(data) {
 							console.log(data);
 							var obj = {};

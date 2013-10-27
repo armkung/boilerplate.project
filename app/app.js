@@ -150,58 +150,36 @@ app.factory("DataManager", function(Canvas, Socket) {
 
 app.service("Canvas", function($q) {
 	var self = this;
-	var stage;
+
+	var deferred = $q.defer();
+	var canvas;
 	this.types = {
 		DRAW: "draw",
 		MIRROR: "mirror"
 	}
-	var obj = {
-		// draw: {},
-		// mirror: {},
-		// test: {}
-	};
-	// var id;
-	var deferred = $q.defer();
-	var canvas;
-	// angular.forEach(obj, function(value, key) {
-	// 	canvas = new fabric.Canvas(key);
-	// 	canvas.selection = false;
-	// 	obj[key] = canvas.getObjects();
-	// });
-	// this.id = self.names.DRAW;
-	this.init = function(id) {
-		// id = name;
-		deferred = $q.defer();
-		// var id = self.id
-		var parent = $('#' + id).parent();
-		$('#' + id)[0].width = parent.width();
-		$('#' + id)[0].height = parent.height();
-		// canvas = new fabric.Canvas(id);
-		canvas = new fabric.Canvas(id, {
-			width: parent.width(),
-			height: parent.height()
+
+	this.newCanvas = function(id, w, h) {
+		$('#' + id)[0].width = w;
+		$('#' + id)[0].height = h;
+		return new fabric.Canvas(id, {
+			width: w,
+			height: h
 		});
+	};
+	this.init = function(id) {
+		deferred = $q.defer();
+		var parent = $('#' + id).parent();
+
+		canvas = self.newCanvas(id, parent.width(), parent.height());
+
 		self.width = canvas.getWidth();
 		self.height = canvas.getHeight();
 		deferred.resolve(canvas);
 	};
 	this.getCanvas = function() {
-		// var id = self.id
-		// canvas = new fabric.Canvas(id);
-		// canvas.selection = false;
-		// if (id in obj) {
-		// 	var children = obj[id].getObjects();
-		// 	console.log(canvas)
-		// 	angular.forEach(children, function(child, key) {
-		// 		canvas.add(child);
-		// 	});
-		// } else {
-		// 	obj[id] = canvas;
+		// if (canvas) {
+		// 	deferred.resolve(canvas);
 		// }
-		// return canvas;
-		if (canvas) {
-			deferred.resolve(canvas);
-		}
 		return deferred.promise;
 	};
 });

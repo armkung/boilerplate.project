@@ -9,7 +9,7 @@ app.service('PDFService', function($q, $timeout) {
 	var scale;
 	var i = 1;
 	var renderContext;
-	var drawCanvas, slideCanvas;
+	var mirrors, slideCanvas;
 	this.load = function(url) {
 		var deferred = $q.defer();
 		PDFJS.disableWorker = true;
@@ -20,11 +20,11 @@ app.service('PDFService', function($q, $timeout) {
 		});
 		return deferred.promise;
 	};
-	this.init = function(dc) {
+	this.init = function(mrs) {
 		var sc = $('<canvas/>')[0];
 		var ctx = sc.getContext('2d');
 
-		drawCanvas = dc;
+		mirrors = mrs;
 		slideCanvas = sc;
 		renderContext = {
 			canvasContext: ctx
@@ -32,6 +32,7 @@ app.service('PDFService', function($q, $timeout) {
 	};
 
 	function setScale(page) {
+		var drawCanvas = mirrors[0];
 		var w = drawCanvas.getWidth(),
 			h = drawCanvas.getHeight();
 		var tmp = page.getViewport(1);
@@ -42,6 +43,7 @@ app.service('PDFService', function($q, $timeout) {
 		// var stop = $timeout(function() {
 		var render = function() {
 			pdf.getPage(i).then(function(page) {
+				var drawCanvas = mirrors[i - 1];
 				if (!scale) {
 					scale = setScale(page);
 					// console.log(DELAY);
@@ -58,6 +60,7 @@ app.service('PDFService', function($q, $timeout) {
 
 				page.render(renderContext).then(function() {
 					fabric.Image.fromURL(slideCanvas.toDataURL(), function(img) {
+						console.log(drawCanvas)
 						drawCanvas.add(img);
 						img.set({
 							stroke: 'black',
@@ -66,9 +69,7 @@ app.service('PDFService', function($q, $timeout) {
 						img.center();
 						img.setCoords();
 						drawCanvas.sendToBack(img);
-
 						drawCanvas.renderAll();
-
 						var data = drawCanvas.toDataURL({
 							format: TYPE.split('/')[1],
 							top: img.getTop() - img.getHeight() / 2,
@@ -78,7 +79,7 @@ app.service('PDFService', function($q, $timeout) {
 						});
 						console.log(data);
 
-						self.addImage(data, w, h);
+						self.addImage(data, i, w, h);
 
 						drawCanvas.remove(img);
 						if (i == n) {
@@ -88,6 +89,7 @@ app.service('PDFService', function($q, $timeout) {
 							return;
 							// return self.save();
 						} else {
+							self.addPage(i)
 							i++;
 							render();
 						}
@@ -99,7 +101,7 @@ app.service('PDFService', function($q, $timeout) {
 		// }, DELAY);
 		return deferred.promise;
 	};
-	this.addImage = function(data, w, h) {
+	this.addImage = function(data, i, w, h) {
 		var page = doc.internal.pageSize
 		var k = Math.min(page.width / w, page.height / h) * SCALE;
 		w *= k;
@@ -107,11 +109,13 @@ app.service('PDFService', function($q, $timeout) {
 		var x = Math.abs(page.width - w) / 2
 		var y = page.height * ((i - 1) % 2) / 2;
 		doc.addImage(data, 'jpeg', x, y, w, h);
+	};
+
+	this.addPage = function(i) {
 		if (i % 2 == 0) {
 			doc.addPage();
 		}
 	};
-
 	this.save = function() {
 		// doc.output('datauri');
 		return doc.output('datauristring');

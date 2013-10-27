@@ -6,7 +6,7 @@ app.directive('slide', function($sce, $state, DrawManager, SlideManager, DataMan
 			send: '@'
 		},
 		link: function(scope, iElement, iAttr) {
-			var id = iAttr.id;
+			var id = "mirror";
 			var type = DataManager.types.SLIDE;
 			scope.slide = SlideManager;
 
@@ -26,7 +26,6 @@ app.directive('slide', function($sce, $state, DrawManager, SlideManager, DataMan
 			scope.$watch('slide.index', function(newV, oldV) {
 				if (!angular.isUndefined(SlideManager.slide) && 
 					!angular.isUndefined(SlideManager.index)) {
-					var name = id + "-";
 					if (scope.send) {
 						DataManager.setData(type, {
 							slide: SlideManager.slide,
@@ -35,10 +34,13 @@ app.directive('slide', function($sce, $state, DrawManager, SlideManager, DataMan
 					}
 					DataManager.initData(DataManager.types.POS);
 
+					var name = id + "-";
 					if (oldV) {
 						DrawManager.saveData(name + oldV);
 					}
-					DrawManager.newObject(name + newV);
+					if (newV) {
+						DrawManager.newObject(name + newV);
+					}
 
 					changeSlide();
 				}

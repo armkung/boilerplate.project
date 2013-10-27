@@ -1,4 +1,7 @@
 <div class="container">
+	<div style="display:none;">
+		<canvas id="data"/>
+	</div>
 	<div class="row">
 		<button ng-click="save()">Save</button>
 		<div class="well col-lg-8" ng-repeat="data in datas" ng-click="select($index)">

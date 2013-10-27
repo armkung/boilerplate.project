@@ -58,7 +58,6 @@ app.service('GoogleService', function($q) {
 			'resource': body
 		});
 		request.execute(function(resp) {
-			console.log(resp)
 			deferred.resolve();
 		});
 		return deferred.promise;

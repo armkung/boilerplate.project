@@ -36,11 +36,11 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 			"id": n++
 		});
 	}
-	this.getName = function(){
+	this.getName = function() {
 		return id;
 	}
 	this.init = function(name) {
-		Canvas.init(name.split("-")[0]);
+		Canvas.init(name);
 		Canvas.getCanvas().then(function(cs) {
 			canvas = cs;
 			canvas.defaultCursor = "crosshair";
@@ -72,9 +72,21 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 			canvas.renderAll();
 		}
 	};
+	this.getObject = function(cs, name) {
+		// cs.clear();
+		if (name in obj) {
+			var children = obj[name];
+			angular.forEach(children, function(child, key) {
+				cs.add(child);
+			});
+			cs.renderAll();
+		}
+	};
 	this.saveData = function(name) {
 		name = name ? name : id;
-		obj[name] = canvas.getObjects().slice(0);
+		if (name) {
+			obj[name] = canvas.getObjects().slice(0);
+		}
 	};
 	this.disableMove = function(obj) {
 		canvas.selection = false;
