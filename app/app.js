@@ -21,32 +21,24 @@ app.config(['$stateProvider', '$urlRouterProvider',
 			url: '/drive',
 			templateUrl: 'menu_left/template/drive.tpl.html',
 			controller: 'DriveCtrl'
-		}).state('main.home', {
-			url: '/home',
-			template: '<ui-view></ui-view>',
-			controller: 'AccessCtrl'
 		}).state('main.home_teacher', {
-			url: '/home',
+			url: '/home/teacher',
 			templateUrl: 'menu_left/template/home_teacher.tpl.html',
 			controller: 'RoomCtrl'
 		}).state('main.home_student', {
-			url: '/home',
+			url: '/home/student',
 			templateUrl: 'menu_left/template/home_student.tpl.html',
 			controller: 'RoomCtrl'
 		}).state('main.slide', {
 			url: '/slide',
 			templateUrl: 'menu_left/template/slide.tpl.html',
 			controller: 'SlideCtrl'
-		}).state('main.quiz', {
-			url: '/quiz',
-			template: '<ui-view></ui-view>',
-			controller: 'AccessCtrl'
-		}).state('main.quiz.teacher', {
-			url: '/teacher',
-			templateUrl: 'menu_left/template/quiz_student.tpl.html',
-			controller: 'QuizCtrl'
-		}).state('main.quiz.student', {
-			url: '/student',
+		}).state('main.quiz_teacher', {
+			url: '/quiz/teacher',
+			templateUrl: 'menu_left/template/quiz_teacher.tpl.html',
+			controller: 'QuizTeacherCtrl'
+		}).state('main.quiz_student', {
+			url: '/quiz/student',
 			templateUrl: 'menu_left/template/quiz_student.tpl.html',
 			controller: 'QuizCtrl'
 		});
@@ -100,7 +92,8 @@ app.factory("DataManager", function(Canvas, Socket) {
 	return {
 		types: {
 			POS: "pos",
-			SLIDE: "slide"
+			SLIDE: "slide",
+			QUIZ: "quiz"
 		},
 		initData: function(type) {
 			Socket.emit("init:" + type);

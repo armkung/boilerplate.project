@@ -9,7 +9,7 @@ app.controller('LoginCtrl', function($scope, $state, GoogleService, LoginManager
 		});
 	});
 });
-app.controller('MainCtrl', function($scope, LoginManager) {
+app.controller('MainCtrl', function($scope, $state, LoginManager) {
 	LoginManager.isTeacher(function() {
 		$scope.access = 'teacher';
 	});

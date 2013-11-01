@@ -3,6 +3,9 @@ app.service("QuizManager", function($q, $http) {
     this.quiz = [{
         question: "ques",
         answer: ["a", "b", "c", "d"]
+    }, {
+        question: "ques2",
+        answer: ["a", "b", "c", "d"]
     }];
     this.load = function() {
         var deferred = $q.defer();

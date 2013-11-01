@@ -52,7 +52,7 @@ app.controller('DriveCtrl', function($scope, GoogleService, SlideManager, Canvas
 	};
 });
 
-app.controller('QuizCtrl', function($scope, QuizManager) {
+app.controller('QuizCtrl', function($scope, QuizManager, DataManager) {
 	// QuizManager.load().then(function(data) {
 	// 	$('#slickQuiz').slickQuiz({
 	// 		json: data,
@@ -61,13 +61,36 @@ app.controller('QuizCtrl', function($scope, QuizManager) {
 	// });
 
 	var quiz = QuizManager.quiz;
-
-	$scope.next = function(index) {
-		$scope.question = quiz[index].question;
-		$scope.answer = quiz[index].answer;
-		console.log(quiz[index])
+	var index = 0,
+		n = quiz.length;
+	$scope.next = function() {
+		if (index < n) {
+			$scope.question = quiz[index].question;
+			$scope.answer = quiz[index].answer;
+			index++;
+		}
 	}
-	$scope.next(0);
+	$scope.next(index);
+});
+app.controller('QuizTeacherCtrl', function($scope, QuizManager, DataManager) {
+	var type = DataManager.types.QUIZ;
+	$scope.quiz = [];
+	angular.forEach(QuizManager.quiz, function(quiz, key) {
+		var obj = {}
+		obj.question = quiz.question;
+		obj.answer = [];
+		angular.forEach(quiz.answer, function(answer, key) {
+			obj.answer.push({
+				name: answer,
+				n: 0
+			})
+		});
+		$scope.quiz.push(obj);
+	});
+	
+	DataManager.getData(type, function(data) {
+
+	});
 });
 
 app.controller('HandWriteCtrl', function($scope, $rootScope, DrawFactory, Canvas) {
@@ -120,20 +143,6 @@ app.controller('SlideCtrl', function($scope, $rootScope, DrawFactory, SlideManag
 	$scope.changeAttr = function(index) {
 		$rootScope.$broadcast('attr', $scope.attrs[index]);
 	};
-});
-
-app.controller('AccessCtrl', function($scope, $state, LoginManager,test) {
-	var current = $state.current.name;
-	if (!$scope.url) {
-		LoginManager.isTeacher(function() {
-			$scope.url = name + '.teacher';
-		});
-		LoginManager.isStudent(function() {
-			$scope.url = name + '.student';
-		});
-	}
-	console.log($scope.url)
-	$state.go($scope.url);
 });
 
 app.controller('RoomCtrl', function($scope, Room, Socket, LoginManager) {

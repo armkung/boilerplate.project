@@ -1,0 +1,11 @@
+<div>
+	<div ng-repeat="q in quiz">
+		<div>
+			{{q.question}}
+		</div>
+		<div ng-repeat="answer in q.answer">
+			{{answer.n}}
+			{{answer.name}}
+		</div>
+	</div>
+</div>
