@@ -53,16 +53,21 @@ app.controller('DriveCtrl', function($scope, GoogleService, SlideManager, Canvas
 });
 
 app.controller('QuizCtrl', function($scope, QuizManager) {
-	QuizManager.load().then(function(data) {
-		$('#slickQuiz').slickQuiz({
-			json: data,
-			skipStartButton: true
-		});
-	});
-	// $('#slickQuiz').slickQuiz({
-	// 	json: QuizManager.quizJSON,
-	// 	skipStartButton: true
+	// QuizManager.load().then(function(data) {
+	// 	$('#slickQuiz').slickQuiz({
+	// 		json: data,
+	// 		skipStartButton: true
+	// 	});
 	// });
+
+	var quiz = QuizManager.quiz;
+
+	$scope.next = function(index) {
+		$scope.question = quiz[index].question;
+		$scope.answer = quiz[index].answer;
+		console.log(quiz[index])
+	}
+	$scope.next(0);
 });
 
 app.controller('HandWriteCtrl', function($scope, $rootScope, DrawFactory, Canvas) {
@@ -117,13 +122,18 @@ app.controller('SlideCtrl', function($scope, $rootScope, DrawFactory, SlideManag
 	};
 });
 
-app.controller('HomeCtrl', function($state, LoginManager) {
-	LoginManager.isTeacher(function() {
-		$state.go('main.home.teacher');
-	});
-	LoginManager.isStudent(function() {
-		$state.go('main.home.student');
-	});
+app.controller('AccessCtrl', function($scope, $state, LoginManager,test) {
+	var current = $state.current.name;
+	if (!$scope.url) {
+		LoginManager.isTeacher(function() {
+			$scope.url = name + '.teacher';
+		});
+		LoginManager.isStudent(function() {
+			$scope.url = name + '.student';
+		});
+	}
+	console.log($scope.url)
+	$state.go($scope.url);
 });
 
 app.controller('RoomCtrl', function($scope, Room, Socket, LoginManager) {

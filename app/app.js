@@ -23,14 +23,14 @@ app.config(['$stateProvider', '$urlRouterProvider',
 			controller: 'DriveCtrl'
 		}).state('main.home', {
 			url: '/home',
-			templateUrl: 'menu_left/template/home.tpl.html',
-			controller: 'HomeCtrl'
-		}).state('main.home.teacher', {
-			url: '/teacher',
+			template: '<ui-view></ui-view>',
+			controller: 'AccessCtrl'
+		}).state('main.home_teacher', {
+			url: '/home',
 			templateUrl: 'menu_left/template/home_teacher.tpl.html',
 			controller: 'RoomCtrl'
-		}).state('main.home.student', {
-			url: '/student',
+		}).state('main.home_student', {
+			url: '/home',
 			templateUrl: 'menu_left/template/home_student.tpl.html',
 			controller: 'RoomCtrl'
 		}).state('main.slide', {
@@ -39,7 +39,15 @@ app.config(['$stateProvider', '$urlRouterProvider',
 			controller: 'SlideCtrl'
 		}).state('main.quiz', {
 			url: '/quiz',
-			templateUrl: 'menu_left/template/quiz.tpl.html',
+			template: '<ui-view></ui-view>',
+			controller: 'AccessCtrl'
+		}).state('main.quiz.teacher', {
+			url: '/teacher',
+			templateUrl: 'menu_left/template/quiz_student.tpl.html',
+			controller: 'QuizCtrl'
+		}).state('main.quiz.student', {
+			url: '/student',
+			templateUrl: 'menu_left/template/quiz_student.tpl.html',
 			controller: 'QuizCtrl'
 		});
 

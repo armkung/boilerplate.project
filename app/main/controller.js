@@ -3,11 +3,21 @@ app.controller('LoginCtrl', function($scope, $state, GoogleService, LoginManager
 		GoogleService.getUser().then(function(data) {
 			console.log(data);
 
-			LoginManager.login(data).then(function(){
-				$state.go('main.home');
+			LoginManager.login(data).then(function() {
+				$state.go('main');
 			});
 		});
 	});
+});
+app.controller('MainCtrl', function($scope, LoginManager) {
+	LoginManager.isTeacher(function() {
+		$scope.access = 'teacher';
+	});
+	LoginManager.isStudent(function() {
+		$scope.access = 'student';
+	});
+	$state.go('main.home_' + $scope.access);
+	console.log($scope.access)
 });
 app.controller('MenuRightCtrl', function($scope, $rootScope, $state) {
 	var menu = ["Chat", "Group"];
