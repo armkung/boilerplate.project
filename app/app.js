@@ -119,12 +119,11 @@ app.factory("DataManager", function(Canvas, Socket) {
 						callback(data);
 					});
 					break;
-				case "slide":
+				default:
 					Socket.on("send:" + type, function(data) {
 
 						callback(data);
 					});
-					break;
 			}
 
 		},

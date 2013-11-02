@@ -17,7 +17,8 @@ app.service('LoginManager', function($q, $http) {
 	this.login = function(data) {
 		deferred = $q.defer();
 		user = data;
-		user.accessLevel = self.level.TEACHER;
+		// user.accessLevel = self.level.TEACHER;
+		user.accessLevel = self.level.STUDENT;
 		deferred.resolve();
 		var obj = {
 			username: user.username,

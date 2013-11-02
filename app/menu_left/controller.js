@@ -59,16 +59,31 @@ app.controller('QuizCtrl', function($scope, QuizManager, DataManager) {
 	// 		skipStartButton: true
 	// 	});
 	// });
-
+	var type = DataManager.types.QUIZ;
 	var quiz = QuizManager.quiz;
 	var index = 0,
+		select = 0,
 		n = quiz.length;
+	$scope.isEnd = false;
+	$scope.selected = false;
 	$scope.next = function() {
+		if (index != 0) {
+			var obj = {};
+			obj.question = index - 1;
+			obj.answer = select;
+			console.log(select)
+			DataManager.setData(type, obj);
+		}
 		if (index < n) {
 			$scope.question = quiz[index].question;
 			$scope.answer = quiz[index].answer;
 			index++;
+		} else {
+			$scope.isEnd = true;
 		}
+	}
+	$scope.select = function(index) {
+		select = index;
 	}
 	$scope.next(index);
 });
@@ -87,9 +102,10 @@ app.controller('QuizTeacherCtrl', function($scope, QuizManager, DataManager) {
 		});
 		$scope.quiz.push(obj);
 	});
-	
-	DataManager.getData(type, function(data) {
 
+	DataManager.getData(type, function(data) {
+		$scope.quiz[data.question].answer[data.answer].n += 1;
+		console.log($scope.quiz);
 	});
 });
 

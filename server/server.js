@@ -249,4 +249,13 @@ io.sockets.on('connection', function(socket) {
 			}
 		});
 	});
+
+	socket.on('send:quiz', function(data) {
+		socket.get('roomName', function(err, room) {
+			if (room != null) {
+				socket.broadcast.to(room).emit('send:quiz', data);
+				console.log("Send quiz");
+			}
+		});
+	});
 });

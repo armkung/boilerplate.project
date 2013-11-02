@@ -1,9 +1,14 @@
 <div>
-    <div>{{question}}</div>
-    <div ng-repeat="ans in answer">
-        <input type="radio" name="answer"/>
-        {{ans}}
-    </div>
+    <div ng-hide="isEnd">
+        <div>{{question}}</div>
+        <div ng-repeat="ans in answer">
+            <input type="radio" name="answer" ng-click="select($index)" ng-checked="$index==0"/>
+            {{ans}}
+        </div>
+        <button ng-click="next()">Next</button>
+    </div>    
 
-    <button ng-click="next()">Next</button>
+    <div ng-show="isEnd">
+        Finish!!!!
+    </div>
 </div>
