@@ -1,5 +1,5 @@
 var app = angular.module('socket', ['templates-app',
-	'templates-common', 'ui.router'
+	'templates-common', 'ui.router', 'ngTouch'
 ]);
 
 app.constant('host_node', 'http://localhost:8080');
@@ -169,7 +169,7 @@ app.service("Canvas", function($q) {
 	};
 	this.init = function(id) {
 		deferred = $q.defer();
-		var parent = $('#' + id).parent();
+		var parent = $('.pad');
 
 		canvas = self.newCanvas(id, parent.width(), parent.height());
 

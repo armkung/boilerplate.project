@@ -17,8 +17,8 @@ app.directive('fitSize', function() {
 	return {
 		restrict: 'AC',
 		link: function(scope, iElement) {
-			$(iElement).width($('#pad').width());
-			$(iElement).height($('#pad').height());
+			$(iElement).width($('.pad').width());
+			$(iElement).height($('.pad').height());
 		}
 	};
 });

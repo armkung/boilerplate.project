@@ -85,13 +85,8 @@ app.controller('SlideCtrl', function($scope, $rootScope, DrawFactory, SlideManag
 	$scope.prevIndex = function() {
 		SlideManager.prev();
 	};
-	$scope.save = function() {
-		html2canvas($('body'), {
-			onrendered: function(canvas) {
-				$('body').append(canvas);
-				console.log(canvas)
-			}
-		});
+	$scope.changeMode = function() {
+		$scope.tool = null;		
 	};
 	$scope.tools = [];
 	$scope.attrs = [];
