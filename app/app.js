@@ -1,7 +1,9 @@
 var app = angular.module('socket', ['templates-app',
 	'templates-common', 'ui.router'
 ]);
-var host = 'http://localhost:8080';
+
+app.constant('host_node', 'http://localhost:8080');
+app.constant('host_drupal', 'http://10.16.86.131');
 
 app.config(['$stateProvider', '$urlRouterProvider',
 	function($stateProvider, $urlRouterProvider) {
@@ -40,7 +42,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
 		}).state('main.quiz_student', {
 			url: '/quiz/student',
 			templateUrl: 'menu_left/template/quiz_student.tpl.html',
-			controller: 'QuizCtrl'
+			controller: 'QuizStudentCtrl'
 		});
 
 	}
@@ -53,8 +55,8 @@ app.config(['$stateProvider', '$urlRouterProvider',
 	// });
 });
 
-app.factory('Socket', function($rootScope) {
-	var socket = io.connect(host);
+app.factory('Socket', function($rootScope, host_node) {
+	var socket = io.connect(host_node);
 	return {
 		on: function(event, callback) {
 			socket.on(event, function(data) {

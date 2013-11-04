@@ -52,60 +52,64 @@ app.controller('DriveCtrl', function($scope, GoogleService, SlideManager, Canvas
 	};
 });
 
-app.controller('QuizCtrl', function($scope, QuizManager, DataManager) {
+app.controller('QuizStudentCtrl', function($scope, QuizManager, DataManager) {
 	// QuizManager.load().then(function(data) {
 	// 	$('#slickQuiz').slickQuiz({
 	// 		json: data,
 	// 		skipStartButton: true
 	// 	});
 	// });
-	var type = DataManager.types.QUIZ;
-	var quiz = QuizManager.quiz;
-	var index = 0,
-		select = 0,
-		n = quiz.length;
-	$scope.isEnd = false;
-	$scope.selected = false;
-	$scope.next = function() {
-		if (index != 0) {
-			var obj = {};
-			obj.question = index - 1;
-			obj.answer = select;
-			console.log(select)
-			DataManager.setData(type, obj);
+	QuizManager.load().then(function(quiz) {
+		var type = DataManager.types.QUIZ;
+		// var quiz = QuizManager.quiz;
+		var index = 0,
+			select = 0,
+			n = quiz.length;
+		$scope.isEnd = false;
+		$scope.selected = false;
+		$scope.next = function() {
+			if (index != 0) {
+				var obj = {};
+				obj.question = index - 1;
+				obj.answer = select;
+				console.log(select)
+				DataManager.setData(type, obj);
+			}
+			if (index < n) {
+				$scope.question = quiz[index].question;
+				$scope.answer = quiz[index].answer;
+				index++;
+			} else {
+				$scope.isEnd = true;
+			}
 		}
-		if (index < n) {
-			$scope.question = quiz[index].question;
-			$scope.answer = quiz[index].answer;
-			index++;
-		} else {
-			$scope.isEnd = true;
+		$scope.select = function(index) {
+			select = index;
 		}
-	}
-	$scope.select = function(index) {
-		select = index;
-	}
-	$scope.next(index);
+		$scope.next(index);
+	});
 });
 app.controller('QuizTeacherCtrl', function($scope, QuizManager, DataManager) {
-	var type = DataManager.types.QUIZ;
-	$scope.quiz = [];
-	angular.forEach(QuizManager.quiz, function(quiz, key) {
-		var obj = {}
-		obj.question = quiz.question;
-		obj.answer = [];
-		angular.forEach(quiz.answer, function(answer, key) {
-			obj.answer.push({
-				name: answer,
-				n: 0
-			})
+	QuizManager.load().then(function(data) {
+		var type = DataManager.types.QUIZ;
+		$scope.quiz = [];
+		angular.forEach(data, function(quiz, key) {
+			var obj = {}
+			obj.question = quiz.question;
+			obj.answer = [];
+			angular.forEach(quiz.answer, function(answer, key) {
+				obj.answer.push({
+					name: answer,
+					n: 0
+				})
+			});
+			$scope.quiz.push(obj);
 		});
-		$scope.quiz.push(obj);
-	});
 
-	DataManager.getData(type, function(data) {
-		$scope.quiz[data.question].answer[data.answer].n += 1;
-		console.log($scope.quiz);
+		DataManager.getData(type, function(data) {
+			$scope.quiz[data.question].answer[data.answer].n += 1;
+			console.log($scope.quiz);
+		});
 	});
 });
 
