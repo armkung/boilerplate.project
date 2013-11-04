@@ -1,7 +1,11 @@
 <div class="container">
-	<ul>
-		<li><a ui-sref="main.drive.slide">Slide</a></li>
-		<li><a ui-sref="main.drive.quiz">Quiz</a></li>
+	<ul ng-init="tab = 'slide'">
+		<li><a ng-click="tab = 'slide'">Slide</a></li>
+		<li><a ng-click="tab = 'quiz'">Quiz</a></li>
 	</ul>
-	<ui-view></ui-view>
-</div>
+
+	<div ng-switch on="tab">
+		<drive-slide ng-switch-when="slide"></drive-slide>
+		<drive-quiz ng-switch-when="quiz"></drive-quiz>
+	</div>
+</div> 

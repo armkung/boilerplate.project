@@ -22,15 +22,6 @@ app.config(['$stateProvider', '$urlRouterProvider',
 		}).state('main.drive', {
 			url: '/drive',
 			templateUrl: 'menu_left/template/drive.tpl.html',
-			controller: 'DriveCtrl'
-		}).state('main.drive.slide', {
-			url: '/slide',
-			templateUrl: 'menu_left/template/drive_slide.tpl.html',
-			controller: 'DriveSlideCtrl'
-		}).state('main.drive.quiz', {
-			url: '/quiz',
-			templateUrl: 'menu_left/template/drive_quiz.tpl.html',
-			controller: 'DriveQuizCtrl'
 		}).state('main.home_teacher', {
 			url: '/home/teacher',
 			templateUrl: 'menu_left/template/home_teacher.tpl.html',
