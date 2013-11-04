@@ -1,0 +1,12 @@
+<div>
+	<div style="display:none;">
+		<canvas id="data"/>
+	</div>
+	<div class="row">
+		<button ng-click="saveSlide()">Save Slide</button>
+		<button ng-click="saveDraw()">Save Draw</button>
+		<div class="well col-lg-8" ng-repeat="data in datas" ng-click="select($index)">
+			{{data.title}}
+		</div>
+	</div>
+</div>

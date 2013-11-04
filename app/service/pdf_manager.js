@@ -2,7 +2,7 @@ app.service('PDFService', function($q, $timeout) {
 	var self = this;
 
 	var SCALE = 0.8;
-	var TYPE = "image/jpeg";
+	var TYPE = "jpeg";
 	var DELAY = 500;
 
 	var doc = new jsPDF();
@@ -59,19 +59,20 @@ app.service('PDFService', function($q, $timeout) {
 					h = view.height;
 
 				page.render(renderContext).then(function() {
+					var stroke = 2;
 					fabric.Image.fromURL(slideCanvas.toDataURL(), function(img) {
 						console.log(drawCanvas)
 						drawCanvas.add(img);
 						img.set({
 							stroke: 'black',
-							strokeWidth: 3
+							strokeWidth: stroke
 						});
 						img.center();
 						img.setCoords();
 						drawCanvas.sendToBack(img);
 						drawCanvas.renderAll();
 						var data = drawCanvas.toDataURL({
-							format: TYPE.split('/')[1],
+							format: TYPE,
 							top: img.getTop() - img.getHeight() / 2,
 							left: img.getLeft() - img.getWidth() / 2,
 							width: w,

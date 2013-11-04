@@ -1,4 +1,14 @@
-app.controller('DriveCtrl', function($scope, GoogleService, SlideManager, Canvas, DrawManager, PDFService) {
+app.controller('DriveCtrl', function($state) {
+	$state.go('^.drive.slide');
+});
+app.controller('DriveQuizCtrl', function($scope) {
+	$scope.datas = ["a", "b"];
+	$scope.select = function(index) {
+		var id = $scope.datas[index];
+		console.log(id);
+	};
+});
+app.controller('DriveSlideCtrl', function($scope, GoogleService, SlideManager, Canvas, DrawManager, PDFService) {
 	GoogleService.load().then(function() {
 		GoogleService.listFile().then(function(data) {
 			console.log(data);
@@ -16,21 +26,42 @@ app.controller('DriveCtrl', function($scope, GoogleService, SlideManager, Canvas
 			console.log(data);
 		});
 	};
-	$scope.save = function() {
+
+	function loadCanvas(name) {
 		var id = "data";
+		var cs = Canvas.newCanvas(id, Canvas.width, Canvas.height);
+		DrawManager.getObject(cs, name);
+		return cs;
+	}
+	$scope.saveDraw = function() {
+		var type = "image/png";
 		var name = "test";
-		// Canvas.init(id);
+
+		var cs = loadCanvas(Canvas.types.DRAW);
+		var data = cs.toDataURL({
+			format: type.split("/")
+		});
+
+		var obj = {};
+		obj.type = type;
+		obj.data = data.split(",")[1];
+		obj.fileName = name;
+		GoogleService.insertFile(obj);
+
+	};
+	$scope.saveSlide = function() {
+		var name = "test";
 		Canvas.getCanvas().then(function() {
 
 			if ($scope.id) {
 				console.log($scope.id);
 				GoogleService.getFile($scope.id).then(function(data) {
-					PDFService.load(data.exportLinks['application/pdf']).then(function(pdf) {
+					var url = data.exportLinks['application/pdf'];
+					PDFService.load(url).then(function(pdf) {
 						var n = pdf.pdfInfo.numPages;
 						var mirrors = [];
 						for (var i = 1; i <= n; i++) {
-							var cs = Canvas.newCanvas(id, Canvas.width, Canvas.height);
-							DrawManager.getObject(cs, Canvas.types.MIRROR + "-" + i);
+							var cs = loadCanvas(Canvas.types.MIRROR + "-" + i);
 							mirrors.push(cs);
 						}
 

@@ -7,9 +7,10 @@ app.service("QuizManager", function($q, $http, host_drupal) {
         question: "ques2",
         answer: ["a", "b", "c", "d"]
     }];
+    this.node = 8;
     this.load = function() {
         var deferred = $q.defer();
-        $http.jsonp(host_drupal + '/drupal/rest/node/8?callback=JSON_CALLBACK').then(function(data) {
+        $http.jsonp(host_drupal + '/drupal/rest/node/' + self.node + '?callback=JSON_CALLBACK').then(function(data) {
             var items = data.data.webform.components;
             var quizs = [];
             angular.forEach(items, function(item, key) {
