@@ -12,6 +12,9 @@ app.service('SlideManager', function($http, $q, $rootScope) {
 		deferred = df;
 	};
 	this.getMax = function() {
+		if (!deferred) {
+			deferred = $q.defer();
+		}
 		return deferred.promise;
 	};
 	this.setSlide = function(id, n) {

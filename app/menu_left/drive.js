@@ -11,15 +11,18 @@ app.directive('driveQuiz', function() {
 		}
 	};
 });
-app.directive('driveSlide', function($q, GoogleService, SlideManager, Canvas, DrawManager, PDFService) {
+app.directive('driveSlide', function($q, cfpLoadingBar, GoogleService, SlideManager, Canvas, DrawManager, PDFService) {
 	return {
 		restrict: 'E',
 		templateUrl: 'menu_left/template/drive_slide.tpl.html',
 		controller: function($scope) {
+			cfpLoadingBar.start();
 			GoogleService.load().then(function() {
 				GoogleService.listFile().then(function(data) {
 					console.log(data);
 					$scope.datas = data;
+
+					cfpLoadingBar.complete();
 				});
 			});
 			$scope.select = function(index) {

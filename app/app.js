@@ -1,51 +1,53 @@
 var app = angular.module('socket', ['templates-app',
-	'templates-common', 'ui.router', 'ngGesture'
+	'templates-common', 'ui.router', 'ngGesture', 'chieffancypants.loadingBar'
 ]);
 
 app.constant('host_node', 'http://localhost:8080');
 app.constant('host_drupal', 'http://10.16.86.131');
 
-app.config(['$stateProvider', '$urlRouterProvider',
-	function($stateProvider, $urlRouterProvider) {
-		$urlRouterProvider.otherwise('login');
-		$stateProvider.state('main', {
-			url: "/main",
-			templateUrl: 'main/template/main.tpl.html'
-		}).state('login', {
-			url: "/login",
-			templateUrl: 'main/template/login.tpl.html',
-			controller: 'LoginCtrl'
-		}).state('main.draw', {
-			url: '/draw',
-			templateUrl: 'menu_left/template/hand_write.tpl.html',
-			controller: 'HandWriteCtrl'
-		}).state('main.drive', {
-			url: '/drive',
-			templateUrl: 'menu_left/template/drive.tpl.html',
-		}).state('main.home_teacher', {
-			url: '/home/teacher',
-			templateUrl: 'menu_left/template/home_teacher.tpl.html',
-			controller: 'RoomCtrl'
-		}).state('main.home_student', {
-			url: '/home/student',
-			templateUrl: 'menu_left/template/home_student.tpl.html',
-			controller: 'RoomCtrl'
-		}).state('main.slide', {
-			url: '/slide',
-			templateUrl: 'menu_left/template/slide.tpl.html',
-			controller: 'SlideCtrl'
-		}).state('main.quiz_teacher', {
-			url: '/quiz/teacher',
-			templateUrl: 'menu_left/template/quiz_teacher.tpl.html',
-			controller: 'QuizTeacherCtrl'
-		}).state('main.quiz_student', {
-			url: '/quiz/student',
-			templateUrl: 'menu_left/template/quiz_student.tpl.html',
-			controller: 'QuizStudentCtrl'
-		});
+app.config(function(cfpLoadingBarProvider) {
+	cfpLoadingBarProvider.includeSpinner = false;
+})
 
-	}
-]).run(function($rootScope, $state, LoginManager) {
+app.config(function($stateProvider, $urlRouterProvider) {
+	$urlRouterProvider.otherwise('login');
+	$stateProvider.state('main', {
+		url: "/main",
+		templateUrl: 'main/template/main.tpl.html'
+	}).state('login', {
+		url: "/login",
+		templateUrl: 'main/template/login.tpl.html',
+		controller: 'LoginCtrl'
+	}).state('main.draw', {
+		url: '/draw',
+		templateUrl: 'menu_left/template/hand_write.tpl.html',
+		controller: 'HandWriteCtrl'
+	}).state('main.drive', {
+		url: '/drive',
+		templateUrl: 'menu_left/template/drive.tpl.html',
+	}).state('main.home_teacher', {
+		url: '/home/teacher',
+		templateUrl: 'menu_left/template/home_teacher.tpl.html',
+		controller: 'RoomCtrl'
+	}).state('main.home_student', {
+		url: '/home/student',
+		templateUrl: 'menu_left/template/home_student.tpl.html',
+		controller: 'RoomCtrl'
+	}).state('main.slide', {
+		url: '/slide',
+		templateUrl: 'menu_left/template/slide.tpl.html',
+		controller: 'SlideCtrl'
+	}).state('main.quiz_teacher', {
+		url: '/quiz/teacher',
+		templateUrl: 'menu_left/template/quiz_teacher.tpl.html',
+		controller: 'QuizTeacherCtrl'
+	}).state('main.quiz_student', {
+		url: '/quiz/student',
+		templateUrl: 'menu_left/template/quiz_student.tpl.html',
+		controller: 'QuizStudentCtrl'
+	});
+
+}).run(function($rootScope, $state, LoginManager) {
 	// $rootScope.$on("$stateChangeStart", function($currentRoute, $previousRoute) {
 	// 	var user = LoginManager.getUser();
 	// 	if (!user) {
