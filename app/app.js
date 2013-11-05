@@ -170,7 +170,6 @@ app.service("Canvas", function($q) {
 	this.init = function(id) {
 		deferred = $q.defer();
 		var parent = $('.pad');
-
 		canvas = self.newCanvas(id, parent.width(), parent.height());
 
 		self.width = canvas.getWidth();

@@ -8,18 +8,20 @@ app.directive('chat', function() {
 app.directive('emoticon', function() {
 	return {
 		restrict: 'E',
-		templateUrl: 'menu_right/template/emoticon.tpl.html',
+		template: '<img width="{{size}}" height="{{size}}" ng-repeat="emo in emotions" ng-src="{{url+emo}}" ng-click="select(index)" class="emoticon">',
 		scope: {
 			emotion: '='
 		},
-		controller: function($scope) {
-			$scope.url = "assets/emoticon/";
-			$scope.emotions = [];
+		link: function(scope, iElement, iAttrs) {
+			scope.size = iElement.parent().height() - 15;
+
+			scope.url = "assets/emoticon/";
+			scope.emotions = [];
 			for (var i = 1; i <= 9; i++) {
-				$scope.emotions.push(i + ".gif");
+				scope.emotions.push(i + ".gif");
 			}
-			$scope.select = function(index) {
-				$scope.emotion = $scope.url + $scope.emotions[index];
+			scope.select = function(index) {
+				scope.emotion = scope.url + scope.emotions[index];
 			};
 		}
 	};

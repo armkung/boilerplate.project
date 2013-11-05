@@ -1,10 +1,12 @@
-<div class="chat-box">
-	<div ng-repeat="msg in msgs">
-		<img ng-src="{{msg}}" class="emotion">
+<div>
+	<div class="chat-box">
+		<div ng-repeat="msg in msgs">
+			<img ng-src="{{msg}}" class="emotion">
+		</div>
 	</div>
-</div>
-<!-- <button ng-click="sendMsg()">Send</button>
-<input type="text" ng-model="text"> -->
-<div class="emoticon-box">
-	<emoticon emotion="img"></emoticon>
+	<!-- <button ng-click="sendMsg()">Send</button>
+	<input type="text" ng-model="text"> -->
+	<div class="emoticon-box">
+		<emoticon emotion="img"></emoticon>
+	</div>
 </div>

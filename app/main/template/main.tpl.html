@@ -1,13 +1,11 @@
-<!-- <div class="container"> -->
-	<div class="row" ng-controller="MainCtrl">
-		<menu-left class="well col-lg-1"></menu-left>
-		<div class="well col-lg-9">
-			<div class="container">
-				<div id="pad">
-					<ui-view></ui-view>
-				</div>
-			</div>
-		</div>				
-		<menu-right class="well col-lg-2"></menu-right>
+<div class="fluid-container">
+	<div class="row fit" ng-controller="MainCtrl">
+
+		<menu-left class="well col-md-1 fit"></menu-left>
+
+		<ui-view class="well col-md-9 fit"></ui-view>
+
+		<menu-right class="well col-md-2 fit visible-md visible-lg"></menu-right>
+		
 	</div>
-<!-- </div> -->
+</div>
