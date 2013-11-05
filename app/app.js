@@ -1,5 +1,5 @@
 var app = angular.module('socket', ['templates-app',
-	'templates-common', 'ui.router', 'ngTouch'
+	'templates-common', 'ui.router', 'ngGesture'
 ]);
 
 app.constant('host_node', 'http://localhost:8080');

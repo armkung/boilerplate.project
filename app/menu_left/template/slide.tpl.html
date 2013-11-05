@@ -1,20 +1,25 @@
-<div ng-swipe-left="prevIndex()" ng-swipe-right="nextIndex()">
-	<div class="draw-pad mirror" fit-size>
-		<canvas id="mirror-1" hand-writer tool="{{tool}}" text="{{text}}" send="{{isSend}}"></canvas>
-		<input id="textbox" ng-model="text">
-	</div>
-	<div class="pad slide-pad">
-		<slide send="{{isSend}}"></slide>
-	</div>
-</div>	
-<div style="position: absolute;z-index=99">
+<div ng-swipe-left="nextIndex()" ng-swipe-right="prevIndex()" ng-swipe-up="isHide = false" ng-swipe-down="isHide = true">
+
 	<div>
-		<button ng-repeat="t in tools" ng-click="changeTool($index)">{{t}}</button>
-		<button ng-repeat="a in attrs" ng-click="changeAttr($index)">{{a}}</button>
+		<div class="draw-pad mirror" fit-size>
+			<canvas id="mirror-1" hand-writer tool="{{tool}}" text="{{text}}" send="{{isSend}}"></	canvas>	
+			<input 	id="textbox" ng-model="text">	
+		</div>	
+		<div class="pad slide-pad">	
+			<slide send="{{isSend}}"></slide>
+		</div>
 	</div>
-	<div>
-		<button ng-click="prevIndex()">Prev</button>
-		<button ng-click="nextIndex()">Next</button>
-		<button ng-click="changeMode()">Mode</button>
+
+	<div style="position: absolute;z-index=99">
+		<div>
+			<button ng-click="prevIndex()">Prev</button>
+			<button ng-click="nextIndex()">Next</button>
+			<button ng-click="changeMode()">Mode</button>
+		</div>
+		<div ng-hide="isHide">
+			<button ng-repeat="t in tools" ng-click="changeTool($index)">{{t}}</button>
+			<button ng-repeat="a in attrs" ng-click="changeAttr($index)">{{a}}</button>
+		</div>
 	</div>
+	
 </div>

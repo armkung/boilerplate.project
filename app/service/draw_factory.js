@@ -108,7 +108,7 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 				if (obj) {
 					var data = {};
 					x2 = obj.get("left");
-					y2 = obj.get("top");					
+					y2 = obj.get("top");
 					if (isMove) {
 						data.pos = {
 							x: x2 - x1,
@@ -225,6 +225,8 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 			case self.tools.CLEAR:
 				DrawManager.clear();
 				break;
+			default:
+				DrawManager.disableSelect();
 		}
 	};
 	this.setAttr = function(attr, callback) {
