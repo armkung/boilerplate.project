@@ -1,11 +1,17 @@
-<div class="fluid-container">
-	<div class="row fit" ng-controller="MainCtrl">
+<div ng-controller="MainCtrl">
 
-		<menu-left class="well col-md-1 fit"></menu-left>
+	<menu-left class="navbar navbar-fixed-top"></menu-left>
+	
+	<div class="fluid-container">
+		<div class="row fit-height">
+			<div class="well col-md-9 col-lg-9 fit-height">
+				<ui-view></ui-view>
+			</div>
 
-		<ui-view class="well col-md-9 fit"></ui-view>
-
-		<menu-right class="well col-md-2 fit visible-md visible-lg"></menu-right>
-		
+			<div class="well col-md-3 col-lg-3 visible-md visible-lg fit-height">
+				<menu-right></menu-right>
+			</div>
+		</div>
 	</div>
+
 </div>

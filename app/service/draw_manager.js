@@ -88,11 +88,8 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 			obj[name] = canvas.getObjects().slice(0);
 		}
 	};
-	this.disableSelect = function(){
-		canvas.selection = false;
-	};
 	this.disableMove = function(obj) {
-		self.disableSelect();
+		canvas.selection = false;
 		obj.set('selectable', false);
 		obj.set('hasControls', false);
 		obj.set('hasBorders', false);

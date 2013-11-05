@@ -13,7 +13,9 @@ app.directive('slide', function($q, $sce, $state, cfpLoadingBar, DrawManager, Sl
 
 			scope.slide = SlideManager;
 			var deferred;
-			if (angular.isUndefined(SlideManager.max)) {
+			if (angular.isUndefined(SlideManager.slide) &&
+				angular.isUndefined(SlideManager.index) &&
+				angular.isUndefined(SlideManager.max)) {
 				deferred = $q.defer();
 				SlideManager.setMax(deferred);
 			}

@@ -226,7 +226,8 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 				DrawManager.clear();
 				break;
 			default:
-				DrawManager.disableSelect();
+				DrawManager.canDrag(false);
+				DrawManager.canGroupDrag(false);
 		}
 	};
 	this.setAttr = function(attr, callback) {

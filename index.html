@@ -10,19 +10,28 @@
 		     	width: 100%;
       			height: 100%; 
       			margin: 0; 
-      			padding: 0; 
+      			padding: 0;
+      		}
+      		body{
+      			padding-top: 30px;      			
       		}
       		#loading-bar .bar {
       			/*background: red;*/
       		}
 
+      		.list{
+      			overflow-y: hidden;
+      		}
+      		.item{
+      			overflow-y: auto;
+      		}
       		.pad{
       			height: 90%;
       		}
       		.toolbar{
       			height: 10%;
       		}
-      		.fit{
+      		.fit-height{
       			height: 100%;
       		}
       		.fluid-container{
@@ -41,11 +50,12 @@
       			/*background-color: gray;*/
       		}
       		.slide-pad{
-      			/*position: absolute;
-      			z-index: 0;*/
-
+      			position: relative;
+      			/*z-index: 0;*/
+                        top: -28px;
+                        
       			/*width: 100%;
-      			height: 100%;*/
+      			height: 110%;*/
       			overflow: hidden;
       		}
       		.mirror{
@@ -71,7 +81,7 @@
 			.emoticon-box{
 				height: 20%;
 				overflow-x: scroll; 
-				white-space:nowrap;
+				white-space: nowrap;
 			}
 		</style>
 
