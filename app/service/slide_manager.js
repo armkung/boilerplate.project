@@ -1,4 +1,4 @@
-app.service('SlideManager', function($http, $rootScope) {
+app.service('SlideManager', function($http, $q, $rootScope) {
 	var self = this;
 
 	// var host = "http://www.greedmonkey.com/kreang/index.php/test/print_file/";
@@ -6,7 +6,11 @@ app.service('SlideManager', function($http, $rootScope) {
 	var index_name = "#slide=";
 
 	// var slide = "1-oQjVefFucKtYkHP1dgLQdt3G6OsTTnjXvAw1EyZ8Lc";
-	// var slide, index;
+	// var slide, index;	
+	var deferred = $q.defer();
+	this.setMax = function() {
+		return deferred;
+	};
 	this.setSlide = function(id, n) {
 		self.index = n ? n : 1;
 		self.slide = id;
@@ -17,16 +21,30 @@ app.service('SlideManager', function($http, $rootScope) {
 		return url + index;
 	};
 	this.next = function() {
+		// if (!max) {
+		// 	deferred.promise.then(function(data) {
+		// 		max = data;
+		// 		self.index = changeIndex(1);
+		// 	})
+		// } else {
 		self.index = changeIndex(1);
+		// }
 	};
 	this.prev = function() {
 		self.index = changeIndex(-1);
 	};
+	this.isStart = function() {
+		return self.index == 1;
+	};
+	this.isEnd = function() {
+		return self.index == self.max;
+	};
 
 	function changeIndex(k) {
-		index = self.index + k;
+		var index = self.index + k;
 		index = Math.max(1, index);
-		return index;
+
+		return index <= self.max ? index : self.max;
 	}
 
 });

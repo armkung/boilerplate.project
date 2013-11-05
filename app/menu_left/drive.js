@@ -11,7 +11,7 @@ app.directive('driveQuiz', function() {
 		}
 	};
 });
-app.directive('driveSlide', function(GoogleService, SlideManager, Canvas, DrawManager, PDFService) {
+app.directive('driveSlide', function($q, GoogleService, SlideManager, Canvas, DrawManager, PDFService) {
 	return {
 		restrict: 'E',
 		templateUrl: 'menu_left/template/drive_slide.tpl.html',
@@ -27,6 +27,15 @@ app.directive('driveSlide', function(GoogleService, SlideManager, Canvas, DrawMa
 				SlideManager.setSlide(id);
 				console.log(id);
 				$scope.id = id;
+
+				GoogleService.getFile($scope.id).then(function(data) {
+					var url = data.exportLinks['application/pdf'];
+					PDFService.load(url).then(function(pdf) {
+						$scope.pdf = pdf;
+						var deffered = SlideManager.setMax();
+						deffered.resolve(pdf.pdfInfo.numPages);
+					});
+				});
 			};
 			$scope.share = function() {
 				GoogleService.shareFile(id).then(function(data) {
@@ -56,34 +65,30 @@ app.directive('driveSlide', function(GoogleService, SlideManager, Canvas, DrawMa
 				GoogleService.insertFile(obj);
 
 			};
+
 			$scope.saveSlide = function() {
 				var name = "test";
 				Canvas.getCanvas().then(function() {
 
 					if ($scope.id) {
-						console.log($scope.id);
-						GoogleService.getFile($scope.id).then(function(data) {
-							var url = data.exportLinks['application/pdf'];
-							PDFService.load(url).then(function(pdf) {
-								var n = pdf.pdfInfo.numPages;
-								var mirrors = [];
-								for (var i = 1; i <= n; i++) {
-									var cs = loadCanvas(Canvas.types.MIRROR + "-" + i);
-									mirrors.push(cs);
-								}
+						if ($scope.pdf) {
+							var n = pdf.pdfInfo.numPages;
+							var mirrors = [];
+							for (var i = 1; i <= n; i++) {
+								var cs = loadCanvas(Canvas.types.MIRROR + "-" + i);
+								mirrors.push(cs);
+							}
 
-								PDFService.init(mirrors);
-								PDFService.render(pdf, n).then(function(data) {
-									console.log(data);
-									var obj = {};
-									obj.type = "application/pdf";
-									obj.data = data.split(",")[1];
-									obj.fileName = name;
-									GoogleService.insertFile(obj);
-								});
-
+							PDFService.init(mirrors);
+							PDFService.render(pdf, n).then(function(data) {
+								console.log(data);
+								var obj = {};
+								obj.type = "application/pdf";
+								obj.data = data.split(",")[1];
+								obj.fileName = name;
+								GoogleService.insertFile(obj);
 							});
-						});
+						}
 
 					}
 				});

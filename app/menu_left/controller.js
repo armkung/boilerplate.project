@@ -79,15 +79,25 @@ app.controller('HandWriteCtrl', function($scope, $rootScope, DrawFactory, Canvas
 });
 
 app.controller('SlideCtrl', function($scope, $rootScope, DrawFactory, SlideManager) {
-	$scope.nextIndex = function() {
-		SlideManager.next();
-	};
-	$scope.prevIndex = function() {
-		SlideManager.prev();
-	};
-	$scope.changeMode = function() {
-		$scope.tool = null;		
-	};
+	SlideManager.setMax().promise.then(function(max) {
+		console.log("aa " + SlideManager.isStart());
+		SlideManager.max = max;
+		$scope.isStart = true;
+		$scope.isEnd = false;
+		$scope.nextIndex = function() {
+			SlideManager.next();
+			$scope.isStart = SlideManager.isStart();
+			$scope.isEnd = SlideManager.isEnd();
+		};
+		$scope.prevIndex = function() {
+			SlideManager.prev();
+			$scope.isStart = SlideManager.isStart();
+			$scope.isEnd = SlideManager.isEnd();
+		};
+		$scope.changeMode = function() {
+			$scope.tool = null;
+		};
+	})
 	$scope.tools = [];
 	$scope.attrs = [];
 	$scope.isSend = true;

@@ -12,8 +12,8 @@
 
 	<div class="toolbar" style="position: absolute;z-index=99">
 		<div>
-			<button ng-click="prevIndex()">Prev</button>
-			<button ng-click="nextIndex()">Next</button>
+			<button ng-click="prevIndex()" ng-hide="isStart">Prev</button>
+			<button ng-click="nextIndex()" ng-hide="isEnd">Next</button>
 			<button ng-click="changeMode()">Mode</button>
 		</div>
 		<div ng-hide="isHide">
