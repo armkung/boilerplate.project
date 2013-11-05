@@ -6,10 +6,13 @@ app.service('SlideManager', function($http, $q, $rootScope) {
 	var index_name = "#slide=";
 
 	// var slide = "1-oQjVefFucKtYkHP1dgLQdt3G6OsTTnjXvAw1EyZ8Lc";
-	// var slide, index;	
-	var deferred = $q.defer();
-	this.setMax = function() {
-		return deferred;
+	// var slide, index;
+	var deferred;
+	this.setMax = function(df) {
+		deferred = df;
+	};
+	this.getMax = function() {
+		return deferred.promise;
 	};
 	this.setSlide = function(id, n) {
 		self.index = n ? n : 1;

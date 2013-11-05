@@ -28,12 +28,13 @@ app.directive('driveSlide', function($q, GoogleService, SlideManager, Canvas, Dr
 				console.log(id);
 				$scope.id = id;
 
+				var deferred = $q.defer();
+				SlideManager.setMax(deferred);
 				GoogleService.getFile($scope.id).then(function(data) {
 					var url = data.exportLinks['application/pdf'];
 					PDFService.load(url).then(function(pdf) {
 						$scope.pdf = pdf;
-						var deffered = SlideManager.setMax();
-						deffered.resolve(pdf.pdfInfo.numPages);
+						deferred.resolve(pdf.pdfInfo.numPages);
 					});
 				});
 			};
