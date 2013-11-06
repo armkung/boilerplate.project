@@ -1,4 +1,4 @@
-<div ng-swipe-left="nextIndex(false)" ng-swipe-right="prevIndex(false)" ng-swipe-up="isHide = false" ng-swipe-down="isHide = true">
+<div ng-swipe-left="nextIndex(false)" ng-swipe-right="prevIndex(false)" ng-swipe-up="checkSwipe(false)" ng-swipe-down="checkSwipe(true)">
 
 	<div class="pad">
 		<div class="mirror">
@@ -14,9 +14,8 @@
 		<div>
 			<button ng-click="prevIndex(true)" ng-hide="isStart">Prev</button>
 			<button ng-click="nextIndex(true)" ng-hide="isEnd">Next</button>
-			<button ng-click="changeMode()">Mode</button>
 		</div>
-		<div ng-hide="isHide" class="visible-md visible-lg">
+		<div ng-hide="isHide">
 			<button ng-repeat="t in tools" ng-click="changeTool($index)">{{t}}</button>
 			<button ng-repeat="a in attrs" ng-click="changeAttr($index)">{{a}}</button>
 		</div>

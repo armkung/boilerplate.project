@@ -1,6 +1,7 @@
 app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 	var self = this;
 	this.tools = {
+		MODE: "Mode",
 		DRAG_GROUP: "Group Drag",
 		DRAG_OBJECT: "Drag",
 		CLEAR: "Clear",

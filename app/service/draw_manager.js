@@ -47,6 +47,7 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 		Canvas.init(name);
 		Canvas.getCanvas().then(function(cs) {
 			canvas = cs;
+			canvas.selection = false;
 			canvas.defaultCursor = "crosshair";
 			canvas.on("object:selected", function(e) {
 				var obj = e.target;

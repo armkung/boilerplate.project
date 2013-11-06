@@ -70,6 +70,11 @@ app.controller('HandWriteCtrl', function($scope, $rootScope, DrawFactory, Canvas
 	angular.forEach(DrawFactory.attrs, function(value, key) {
 		$scope.attrs.push(value);
 	});
+	$scope.checkSwipe = function(isHide) {
+		if ($scope.tool == DrawFactory.tools.MODE) {
+			$scope.isHide = isHide;
+		}
+	};
 	$scope.changeTool = function(index) {
 		$scope.tool = $scope.tools[index];
 	};
@@ -82,23 +87,25 @@ app.controller('SlideCtrl', function($scope, $rootScope, DrawFactory, SlideManag
 	$scope.isStart = true;
 	$scope.isEnd = false;
 	$scope.nextIndex = function(isSwipe) {
-		if ($scope.tool == null || isSwipe) {
+		if ($scope.tool == DrawFactory.tools.MODE || isSwipe) {
 			SlideManager.next();
 			$scope.isStart = SlideManager.isStart();
 			$scope.isEnd = SlideManager.isEnd();
 		}
 	};
 	$scope.prevIndex = function(isSwipe) {
-		if ($scope.tool == null || isSwipe) {
+		if ($scope.tool == DrawFactory.tools.MODE || isSwipe) {
 			SlideManager.prev();
 			$scope.isStart = SlideManager.isStart();
 			$scope.isEnd = SlideManager.isEnd();
 		}
 	};
-	$scope.changeMode = function() {
-		$scope.tool = null;
+	$scope.checkSwipe = function(isHide) {
+		if ($scope.tool == DrawFactory.tools.MODE) {
+			$scope.isHide = isHide;
+		}
 	};
-
+	
 	$scope.tools = [];
 	$scope.attrs = [];
 	$scope.isSend = true;
