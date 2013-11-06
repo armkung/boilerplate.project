@@ -16,7 +16,7 @@
 			<button ng-click="nextIndex(true)" ng-hide="isEnd">Next</button>
 			<button ng-click="changeMode()">Mode</button>
 		</div>
-		<div ng-hide="isHide">
+		<div ng-hide="isHide" class="visible-md visible-lg">
 			<button ng-repeat="t in tools" ng-click="changeTool($index)">{{t}}</button>
 			<button ng-repeat="a in attrs" ng-click="changeAttr($index)">{{a}}</button>
 		</div>

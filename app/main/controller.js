@@ -20,25 +20,28 @@ app.controller('MainCtrl', function($scope, $state, LoginManager) {
 	console.log($scope.access)
 });
 app.controller('MenuRightCtrl', function($scope, $rootScope, $state) {
-	var menu = ["Chat", "Group"];
-
-	checkRoute();
+	// var menu = ["Chat", "Group"];
+	var types = {
+		GROUP: "group",
+		CHAT: "chat"
+	}
+	// checkRoute();
 	$rootScope.$on("$stateChangeSuccess", function($currentRoute, $previousRoute) {
 		checkRoute();
 	});
-
 	$scope.setCurrent = function(index) {
 		$scope.current = $scope.menus[index];
 	};
 
 	function checkRoute() {
 		var route = $state.current.url;
-		if (route == "/draw") {
-			$scope.menus = menu;
-			$scope.current = "Group";
-		} else {
-			$scope.menus = [];
-			$scope.current = "Chat";
+		// $scope.isHide = route == "/home/teacher" || route == "/home/student";
+		switch (route) {
+			case "/draw":
+				$scope.current = types.GROUP;
+				break;
+			default:
+				$scope.current = types.CHAT;
 		}
 	}
 });

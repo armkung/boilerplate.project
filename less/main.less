@@ -1,0 +1,77 @@
+@chat_box_color: grey;
+@draw_color: white;
+@loading_bar_color: red;
+
+body,html{ 
+	width: 100%;
+	height: 100%; 
+	margin: 0; 
+	padding: 0;
+}
+body{
+	padding-top: 30px;      			
+}
+#loading-bar .bar {
+	background: @loading_bar_color;
+}
+.fluid-container{
+	padding-left: 15px;
+	padding-right: 15px;
+	margin-left: auto;
+	margin-right: auto;      		
+}
+.list{
+	overflow-y: hidden;
+}
+.item{
+	overflow-y: auto;
+}
+.pad{
+	height: 90%;
+}
+.toolbar{
+	height: 10%;
+}
+.fit-height{
+	height: 100%;
+}
+#draw{
+	background-color: @draw_color; 			
+}
+#textbox{
+	position: absolute;
+	/*display: none;*/
+	z-index: 9;
+	/*background-color: gray;*/
+}
+.slide-pad{
+	position: relative;
+
+	/*top: -28px;*/
+	height: 100%;
+	overflow: hidden;
+}
+.mirror{
+	position: absolute;
+	z-index: 1;
+}
+#slide{
+	width: 100%;
+	height: 28+100%;
+	position: relative;
+	/*top: 28px;*/
+	border: none;
+}
+.chat-box{
+	height: 80%;
+	background-color: @chat_box_color;
+	overflow: auto;
+}
+.chat-box img{
+	padding: 10; 
+}
+.emoticon-box{
+	height: 20%;
+	overflow-x: scroll; 
+	white-space: nowrap;
+}

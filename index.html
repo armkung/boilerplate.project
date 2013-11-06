@@ -1,95 +1,14 @@
 <html ng-app="socket">
 	<head>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-	<% styles.forEach( function ( file ) { %>
-    <link rel="stylesheet" type="text/css" href="<%= file %>" /><% }); %>
-		
-		<style type="text/css">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		    body,html{ 
-		     	width: 100%;
-      			height: 100%; 
-      			margin: 0; 
-      			padding: 0;
-      		}
-      		body{
-      			padding-top: 30px;      			
-      		}
-      		#loading-bar .bar {
-      			/*background: red;*/
-      		}
-
-      		.list{
-      			overflow-y: hidden;
-      		}
-      		.item{
-      			overflow-y: auto;
-      		}
-      		.pad{
-      			height: 90%;
-      		}
-      		.toolbar{
-      			height: 10%;
-      		}
-      		.fit-height{
-      			height: 100%;
-      		}
-      		.fluid-container{
-      			padding-left: 15px;
-      			padding-right: 15px;
-      			margin-left: auto;
-      			margin-right: auto;      		
-      		}
-      		.canvas{
-				background-color: black; 			
-      		}
-      		#textbox{
-      			position: absolute;
-      			/*display: none;*/
-      			z-index: 9;
-      			/*background-color: gray;*/
-      		}
-      		.slide-pad{
-      			position: relative;
-      			/*z-index: 0;*/
-                        top: -28px;
-                        
-      			/*width: 100%;
-      			height: 110%;*/
-      			overflow: hidden;
-      		}
-      		.mirror{
-      			position: absolute;
-				z-index: 1;
-      		}
-      		#slide{
-      			width: 100%;
-      			height: 100%;
-      			position: relative;
-      			top: 28px;
-      			border: none;
-      		}
-			.chat-box{
-				height: 80%;
-				background-color: gray;
-				overflow: auto;
-			}
-			.chat-box img{
-				padding: 10; 
-			}
-		
-			.emoticon-box{
-				height: 20%;
-				overflow-x: scroll; 
-				white-space: nowrap;
-			}
-		</style>
-
+		<% styles.forEach( function ( file ) { %>
+    	<link rel="stylesheet" type="text/css" href="<%= file %>" /><% }); %>
+	
 		<% scripts.forEach( function ( file ) { %>
 		<script type="text/javascript" src="<%= file %>"></script><% }); %>		
 		
 	</head>
-
 
 	<body ng-app="socket">
 
