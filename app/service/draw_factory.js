@@ -47,6 +47,9 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 	};
 	this.setDelete = function(remove) {
 		listener.remove = {
+			// call: function() {
+			// 	remove();
+			// }
 			onSelect: function(e) {
 				remove(e.target);
 			}
@@ -234,6 +237,7 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 				DrawManager.clear();
 				break;
 			case self.tools.DELETE:
+				DrawManager.canGroupDrag(false);
 				DrawManager.canDrag(true);
 
 				setBind(listener.remove);
@@ -330,6 +334,9 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 					cs.on("selection:cleared", function(e) {
 						callback.onUnSelect(e);
 					});
+				}
+				if (callback.call) {
+					callback.call();
 				}
 			});
 

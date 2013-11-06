@@ -22,18 +22,22 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 	var line, text;
 	var id, groups;
 	var canvas, current;
-	var n;
+	// var n;
 
 	function setId(obj) {
 		// var n = canvas.getObjects().indexOf(obj);
-		// var n = -1;
-		// canvas.forEachObject(function(obj) {
-		// 	if (!(current instanceof fabric.Group)) {
-		// 		n++;
-		// 	}
-		// });
+		var n = 0;
+		angular.forEach(current.getObjects(), function(child, key) {
+			if (!(child instanceof fabric.Group)) {
+				if (child == obj) {
+					return;
+				} else {
+					n++;
+				}
+			}
+		});
 		obj.set({
-			"id": n++
+			"id": n
 		});
 	}
 	this.getName = function() {
@@ -104,14 +108,17 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 	};
 	this.remove = function(indexs) {
 		angular.forEach(indexs, function(index, key) {
-			var obj = current.item(index);
-			console.log(obj);
-			if (current instanceof fabric.Group) {
-				current.remove(obj);
-			} else {
-				canvas.remove(obj);
-			}
+			angular.forEach(current.getObjects(), function(obj, key) {
+				if (obj.get("id") == index) {
+
+					current.remove(obj);
+
+					console.log(index);
+					return;
+				}
+			});
 		});
+		console.log(canvas);
 		canvas.renderAll();
 	}
 	this.draw = function(data, x, y) {
@@ -131,13 +138,14 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 			strokeLineJoin: data.strokeLineJoin
 		});
 		self.disableMove(path);
+
 		if (current instanceof fabric.Group) {
 			current.addWithUpdate(path);
 		} else {
 			canvas.remove(data)
-			setId(path);
 			canvas.add(path)
 		}
+		setId(path);
 		canvas.renderAll();
 	};
 	this.setDraw = function() {
@@ -162,9 +170,9 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 				if (current instanceof fabric.Group) {
 					current.addWithUpdate(line);
 				} else {
-					setId(line);
 					current.add(line);
 				}
+				setId(line);
 				self.disableMove(line);
 				canvas.calcOffset();
 				canvas.renderAll();
@@ -186,9 +194,9 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 		if (current instanceof fabric.Group) {
 			current.addWithUpdate(text);
 		} else {
-			setId(text);
 			current.add(text);
 		}
+		setId(text);
 		self.disableMove(text);
 		canvas.calcOffset();
 		canvas.renderAll();
@@ -272,30 +280,33 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 		// var objs = [];
 		// console.log(indexs)
 		if (current instanceof fabric.Group) {
-			angular.forEach(current.getObjects(), function(obj, key) {
-				if (indexs.indexOf(key) != -1) {
-					if (data.pos) {
-						obj.set({
-							"left": obj.get("left") + data.pos.x,
-							"top": obj.get("top") + data.pos.y
-						});
+			angular.forEach(indexs, function(index, key) {
+				angular.forEach(current.getObjects(), function(obj, key) {
+					if (obj.get("id") == index) {
+						if (data.pos) {
+							obj.set({
+								"left": obj.get("left") + data.pos.x,
+								"top": obj.get("top") + data.pos.y
+							});
+						}
+						if (data.scale || data.flip) {
+							// var center = obj.getCenterPoint();
+							// obj.translateToOriginPoint(center, scale.point.x, scale.point.y);
+							obj.set({
+								"scaleX": data.scale.x,
+								"scaleY": data.scale.y,
+								"flipX": data.flip.x,
+								"flipY": data.flip.y
+							});
+						}
+						if (data.angle) {
+							obj.set({
+								"angle": data.angle
+							});
+						}
+						return;
 					}
-					if (data.scale || data.flip) {
-						// var center = obj.getCenterPoint();
-						// obj.translateToOriginPoint(center, scale.point.x, scale.point.y);
-						obj.set({
-							"scaleX": data.scale.x,
-							"scaleY": data.scale.y,
-							"flipX": data.flip.x,
-							"flipY": data.flip.y
-						});
-					}
-					if (data.angle) {
-						obj.set({
-							"angle": data.angle
-						});
-					}
-				}
+				});
 			});
 			// adjustPosition();
 			canvas.calcOffset();

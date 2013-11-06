@@ -22,12 +22,12 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 				var id, name;
 				if (user) {
 					name = user.name;
-					// if (name != Room.user) {
-					id = user.id;
-					if (Room.users.indexOf(id) == -1) {
-						Room.users.push(name);
+					if (name != Room.user) {
+						id = user.id;
+						if (Room.users.indexOf(id) == -1) {
+							Room.users.push(name);
+						}
 					}
-					// }
 				}
 				DrawManager.setCurrent(id)
 			}
