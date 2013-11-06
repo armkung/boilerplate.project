@@ -9,7 +9,7 @@ app.directive('group', function(GroupManager, Room, Canvas) {
 				scope.groups = GroupManager.getGroups(Room.users);
 			}, true);
 
-			scope.toggle = function(index) {
+			scope.toggle = function(index) {				
 				scope.groups[index].isHide = !scope.groups[index].isHide;
 				if (scope.groups[index].isHide) {
 					GroupManager.hide(index);

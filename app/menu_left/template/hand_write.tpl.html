@@ -1,4 +1,8 @@
 <div ng-swipe-up="isHide = false" ng-swipe-down="isHide = true">
+	<div style="display:none;">
+		<canvas id="data"/>
+	</div>
+
 	<div class="pad">
 		<canvas id="draw" hand-writer tool="{{tool}}" text="{{text}}" send="{{isSend}}"></canvas>
 		<input id="textbox" ng-model="text">
@@ -7,4 +11,5 @@
 		<button ng-repeat="t in tools" ng-click="changeTool($index)">{{t}}</button>
 		<button ng-repeat="a in attrs" ng-click="changeAttr($index)">{{a}}</button>
 	</div>
+	
 </div>

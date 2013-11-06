@@ -17,7 +17,8 @@ app.service('GroupManager', function($rootScope, Canvas) {
 						groups.push({
 							user: user,
 							id: key,
-							isHide: false
+							isHide: false,
+							image: getImage(obj)
 						});
 						// self.hide(groups.length - 1);
 					}
@@ -32,6 +33,15 @@ app.service('GroupManager', function($rootScope, Canvas) {
 		});
 
 		return groups;
+	};
+
+	function getImage(obj) {
+		var canvas = Canvas.newCanvas("data", Canvas.width, Canvas.height);
+		canvas.setBackgroundColor("white");
+		canvas.add(obj);
+		canvas.renderAll();
+
+		return canvas.toDataURL();
 	};
 	this.showAll = function() {
 		angular.forEach(groups, function(group, key) {
