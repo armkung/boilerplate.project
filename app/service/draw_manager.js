@@ -102,6 +102,18 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 		obj.set('hasControls', true);
 		obj.set('hasRotatingPoint', true);
 	};
+	this.remove = function(indexs) {
+		angular.forEach(indexs, function(index, key) {
+			var obj = current.item(index);
+			console.log(obj);
+			if (current instanceof fabric.Group) {
+				current.remove(obj);
+			} else {
+				canvas.remove(obj);
+			}
+		});
+		canvas.renderAll();
+	}
 	this.draw = function(data, x, y) {
 		var paths = [];
 		angular.forEach(data.path, function(value, key) {

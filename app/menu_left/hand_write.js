@@ -23,10 +23,10 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 				if (user) {
 					name = user.name;
 					// if (name != Room.user) {
-						id = user.id;
-						if (Room.users.indexOf(id) == -1) {
-							Room.users.push(name);
-						}
+					id = user.id;
+					if (Room.users.indexOf(id) == -1) {
+						Room.users.push(name);
+					}
 					// }
 				}
 				DrawManager.setCurrent(id)
@@ -72,6 +72,12 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 				DrawManager.setCurrentPosition(data.n, data.data);
 			}
 
+			function remove(data) {
+				setCurrent(data.user);
+
+				DrawManager.remove(data.n);
+			}
+
 			var strokeColor, fillColor, strokeSize, fontSize;
 			DataManager.getData(type, function(data) {
 				if (data.name == DrawManager.getName()) {
@@ -93,6 +99,9 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 							break;
 						case DrawFactory.tools.DRAG_OBJECT:
 							drag(data);
+							break;
+						case DrawFactory.tools.DELETE:
+							remove(data);
 							break;
 					}
 					if (data.pos) {
@@ -128,7 +137,13 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 			// }, function(data) {
 			// 	DrawFactory.setAnimate(data, draw);
 			// });
-
+			DrawFactory.setDelete(function(data) {
+				var obj = {};
+				obj.type = DrawFactory.tools.DELETE;
+				obj.n = DrawManager.getIndex(data);
+				remove(obj);
+				sendData(obj);
+			});
 			DrawFactory.setDragObject(function(data, attr) {
 				var obj = {};
 				obj.type = DrawFactory.tools.DRAG_OBJECT;
@@ -169,8 +184,11 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 			});
 
 			scope.$watch('tool', function() {
-				Input.hide();
-				DrawFactory.setTool(scope.tool);
+				if (scope.tool != null) {
+					Input.hide();
+					DrawFactory.setTool(scope.tool);
+					scope.tool = null;
+				}
 			});
 			$rootScope.$on('attr', function(e, attr) {
 				var callback = {};

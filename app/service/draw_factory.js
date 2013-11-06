@@ -7,7 +7,8 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 		TEXT: "Text",
 		DRAW: "Draw",
 		LINE: "Line",
-		ANIMATE: "Animate"
+		ANIMATE: "Animate",
+		DELETE: "Delete"
 	};
 	this.attrs = {
 		COLOR_STROKE: "Line Color",
@@ -44,6 +45,13 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 			}
 		};
 	};
+	this.setDelete = function(remove) {
+		listener.remove = {
+			onSelect: function(e) {
+				remove(e.target);
+			}
+		};
+	}
 	this.setText = function(text) {
 		listener.text = {
 			onDown: function(pos) {
@@ -224,6 +232,11 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 				break;
 			case self.tools.CLEAR:
 				DrawManager.clear();
+				break;
+			case self.tools.DELETE:
+				DrawManager.canDrag(true);
+
+				setBind(listener.remove);
 				break;
 			default:
 				DrawManager.canDrag(false);
