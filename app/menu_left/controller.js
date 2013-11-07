@@ -63,7 +63,6 @@ app.controller('HandWriteCtrl', function($scope, $rootScope, DrawFactory, Canvas
 	$scope.tools = [];
 	$scope.attrs = [];
 	$scope.isSend = true;
-	$scope.tool = DrawFactory.tools.DRAW;
 	angular.forEach(DrawFactory.tools, function(value, key) {
 		$scope.tools.push(value);
 	});
@@ -77,6 +76,7 @@ app.controller('HandWriteCtrl', function($scope, $rootScope, DrawFactory, Canvas
 	};
 	$scope.changeTool = function(index) {
 		$scope.tool = $scope.tools[index];
+		$rootScope.$broadcast('tool', $scope.tool);
 	};
 	$scope.changeAttr = function(index) {
 		$rootScope.$broadcast('attr', $scope.attrs[index]);
@@ -109,7 +109,6 @@ app.controller('SlideCtrl', function($scope, $rootScope, DrawFactory, SlideManag
 	$scope.tools = [];
 	$scope.attrs = [];
 	$scope.isSend = true;
-	$scope.tool = DrawFactory.tools.DRAW;
 	angular.forEach(DrawFactory.tools, function(value, key) {
 		$scope.tools.push(value);
 	});
@@ -118,6 +117,7 @@ app.controller('SlideCtrl', function($scope, $rootScope, DrawFactory, SlideManag
 	});
 	$scope.changeTool = function(index) {
 		$scope.tool = $scope.tools[index];
+		$rootScope.$broadcast('tool', $scope.tool);
 		if ($scope.tool == DrawFactory.tools.MODE) {
 			$scope.isShow = true;
 		}

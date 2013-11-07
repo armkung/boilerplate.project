@@ -8,12 +8,11 @@ app.directive('chat', function() {
 app.directive('emoticon', function() {
 	return {
 		restrict: 'E',
-		template: '<img width="{{size}}" height="{{size}}" ng-repeat="emo in emotions" ng-src="{{url+emo}}" ng-click="select(index)" class="emoticon">',
+		template: '<img ng-repeat="emo in emotions" ng-src="{{url+emo}}" ng-click="select(index)" class="emoticon">',
 		scope: {
 			emotion: '='
 		},
 		link: function(scope, iElement, iAttrs) {
-			scope.size = iElement.parent().height() - 15;
 
 			scope.url = "assets/emoticon/";
 			scope.emotions = [];

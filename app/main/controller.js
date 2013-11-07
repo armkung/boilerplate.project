@@ -9,7 +9,9 @@ app.controller('LoginCtrl', function($scope, $state, GoogleService, LoginManager
 		});
 	});
 });
-app.controller('MainCtrl', function($scope, $state, LoginManager) {
+app.controller('MainCtrl', function($scope, $state, $rootScope, LoginManager, DrawFactory) {
+	var isSwipe = true;
+	$scope.isShow = false;
 	LoginManager.isTeacher(function() {
 		$scope.access = 'teacher';
 	});
@@ -17,7 +19,15 @@ app.controller('MainCtrl', function($scope, $state, LoginManager) {
 		$scope.access = 'student';
 	});
 	$state.go('main.home_' + $scope.access);
-	console.log($scope.access)
+
+	$scope.checkSwipe = function(isShow) {
+		if (isSwipe) {
+			$scope.isShow = isShow;
+		}
+	};
+	$rootScope.$on('tool', function(e, tool) {
+		isSwipe = tool == DrawFactory.tools.MODE;
+	});
 });
 app.controller('MenuRightCtrl', function($scope, $rootScope, $state) {
 	// var menu = ["Chat", "Group"];

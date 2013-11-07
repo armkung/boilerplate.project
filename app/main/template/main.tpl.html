@@ -1,4 +1,4 @@
-<div ng-controller="MainCtrl" ng-swipe-left="isShow = true" ng-swipe-right="isShow = false">
+<div ng-controller="MainCtrl" ng-swipe-left="checkSwipe(true)" ng-swipe-right="checkSwipe(false)">
 
 	<menu-left class="navbar navbar-fixed-top"></menu-left>
 	
@@ -10,11 +10,11 @@
 			<div class="well col-md-3 col-lg-3 visible-md visible-lg fit-height">
 				<menu-right></menu-right>
 			</div>					
-		</div>
-	</div>
-	<div class="visible-xs visible-sm">
-		<div ng-show="isShow" class="nav-right">
-			<menu-right></menu-right>
+			<div ng-show="isShow">
+				<div class="well visible-xs visible-sm fit-height">
+					<menu-right></menu-right>
+				</div>
+			</div>	
 		</div>
 	</div>
 

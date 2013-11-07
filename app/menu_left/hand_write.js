@@ -3,7 +3,6 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 		restrict: 'A',
 		scope: {
 			text: '@',
-			tool: '@',
 			send: '@'
 		},
 		link: function(scope, iElement, iAttr) {
@@ -183,12 +182,13 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 				}
 			});
 
-			scope.$watch('tool', function() {
-				if (scope.tool != null) {
+			$rootScope.$on('tool', function(e, tool) {
+				scope.tool = tool;
+				// if (scope.tool != null) {
 					Input.hide();
-					DrawFactory.setTool(scope.tool);
-					scope.tool = null;
-				}
+					DrawFactory.setTool(tool);
+				// 	scope.tool = null;
+				// }
 			});
 			$rootScope.$on('attr', function(e, attr) {
 				var callback = {};

@@ -19,8 +19,8 @@ body{
 	padding: 10; 
 }
 .nav-right{
-	position: absolute;
-	z-index: 99;
+	position: relative;
+	z-index: 9;
 	width: 200;
 	height: 1000;
 }
@@ -70,9 +70,10 @@ body{
 }
 #slide{
 	width: 100%;
-	height: 28+100%;
+	height: 100%;
+	/*height: (100%)+28;*/
 	position: relative;
-	/*top: 28px;*/
+	top: 28px;
 	border: none;
 }
 .chat-box{
@@ -84,6 +85,12 @@ body{
 	height: 20%;
 	overflow-x: scroll; 
 	white-space: nowrap;
+}
+.emoticon-box img{
+	height: 100%;
+}
+.hidden{
+	display: none;
 }
 .control-area{
 	position: relative;

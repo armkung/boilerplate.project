@@ -1,10 +1,10 @@
 <div ng-swipe-up="checkSwipe(false)" ng-swipe-down="checkSwipe(true)">
 
 	<div class="pad">
-		<div class="control-area" ng-show="isShow" ng-click="nextIndex(false)"></div>
 		<div class="control-area" ng-show="isShow" ng-click="prevIndex(false)"></div>
+		<div class="control-area" ng-show="isShow" ng-click="nextIndex(false)"></div>
 		<div class="mirror" fit-size>
-			<canvas id="mirror-1" hand-writer tool="{{tool}}" text="{{text}}" send="{{isSend}}">
+			<canvas id="mirror-1" hand-writer text="{{text}}" send="{{isSend}}">
 			</canvas>	
 			<input 	id="textbox" ng-model="text">	
 		</div>	
