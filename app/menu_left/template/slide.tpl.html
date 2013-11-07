@@ -1,11 +1,14 @@
-<div ng-swipe-left="nextIndex(false)" ng-swipe-right="prevIndex(false)" ng-swipe-up="checkSwipe(false)" ng-swipe-down="checkSwipe(true)">
+<div ng-swipe-up="checkSwipe(false)" ng-swipe-down="checkSwipe(true)">
 
 	<div class="pad">
-		<div class="mirror">
-			<canvas id="mirror-1" hand-writer tool="{{tool}}" text="{{text}}" send="{{isSend}}"></	canvas>	
+		<div class="control-area" ng-show="isShow" ng-click="nextIndex(false)"></div>
+		<div class="control-area" ng-show="isShow" ng-click="prevIndex(false)"></div>
+		<div class="mirror" fit-size>
+			<canvas id="mirror-1" hand-writer tool="{{tool}}" text="{{text}}" send="{{isSend}}">
+			</canvas>	
 			<input 	id="textbox" ng-model="text">	
 		</div>	
-		<div class="slide-pad">	
+		<div class="slide-pad" fit-size>
 			<slide send="{{isSend}}"></slide>
 		</div>
 	</div>

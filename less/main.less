@@ -52,10 +52,10 @@ body{
 	/*background-color: gray;*/
 }
 .slide-pad{
-	position: relative;
-
+	/*position: relative;*/
+	position: absolute;
+	z-index: 0;
 	/*top: -28px;*/
-	height: 100%;
 	overflow: hidden;
 }
 .mirror{
@@ -78,4 +78,13 @@ body{
 	height: 20%;
 	overflow-x: scroll; 
 	white-space: nowrap;
+}
+.control-area{
+	position: relative;
+	z-index: 2;
+
+	/*background-color: red;*/
+	float: left;
+	width: 50%;
+	height: 100%;
 }

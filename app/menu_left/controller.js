@@ -88,6 +88,7 @@ app.controller('SlideCtrl', function($scope, $rootScope, DrawFactory, SlideManag
 	$scope.isEnd = false;
 	$scope.nextIndex = function(isSwipe) {
 		if ($scope.tool == DrawFactory.tools.MODE || isSwipe) {
+			console.log("kk")
 			SlideManager.next();
 			$scope.isStart = SlideManager.isStart();
 			$scope.isEnd = SlideManager.isEnd();
@@ -95,6 +96,7 @@ app.controller('SlideCtrl', function($scope, $rootScope, DrawFactory, SlideManag
 	};
 	$scope.prevIndex = function(isSwipe) {
 		if ($scope.tool == DrawFactory.tools.MODE || isSwipe) {
+			console.log("kk")
 			SlideManager.prev();
 			$scope.isStart = SlideManager.isStart();
 			$scope.isEnd = SlideManager.isEnd();
@@ -105,7 +107,7 @@ app.controller('SlideCtrl', function($scope, $rootScope, DrawFactory, SlideManag
 			$scope.isHide = isHide;
 		}
 	};
-	
+
 	$scope.tools = [];
 	$scope.attrs = [];
 	$scope.isSend = true;
@@ -118,6 +120,9 @@ app.controller('SlideCtrl', function($scope, $rootScope, DrawFactory, SlideManag
 	});
 	$scope.changeTool = function(index) {
 		$scope.tool = $scope.tools[index];
+		if ($scope.tool == DrawFactory.tools.MODE) {
+			$scope.isShow = true;
+		}
 	};
 	$scope.changeAttr = function(index) {
 		$rootScope.$broadcast('attr', $scope.attrs[index]);
