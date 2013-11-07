@@ -16,7 +16,7 @@ app.directive('menuRight', function() {
 app.directive('fitSize', function() {
 	return {
 		restrict: 'AC',
-		link: function(scope, iElement) {
+		link: function(scope, iElement, iAttrs) {
 			$(iElement).width($('.pad').width());
 			$(iElement).height($('.pad').height());
 		}

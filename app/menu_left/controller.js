@@ -88,7 +88,6 @@ app.controller('SlideCtrl', function($scope, $rootScope, DrawFactory, SlideManag
 	$scope.isEnd = false;
 	$scope.nextIndex = function(isSwipe) {
 		if ($scope.tool == DrawFactory.tools.MODE || isSwipe) {
-			console.log("kk")
 			SlideManager.next();
 			$scope.isStart = SlideManager.isStart();
 			$scope.isEnd = SlideManager.isEnd();
@@ -96,7 +95,6 @@ app.controller('SlideCtrl', function($scope, $rootScope, DrawFactory, SlideManag
 	};
 	$scope.prevIndex = function(isSwipe) {
 		if ($scope.tool == DrawFactory.tools.MODE || isSwipe) {
-			console.log("kk")
 			SlideManager.prev();
 			$scope.isStart = SlideManager.isStart();
 			$scope.isEnd = SlideManager.isEnd();
