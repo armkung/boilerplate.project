@@ -8,7 +8,7 @@ app.directive('chat', function() {
 app.directive('emoticon', function() {
 	return {
 		restrict: 'E',
-		template: '<img ng-repeat="emo in emotions" ng-src="{{url+emo}}" ng-click="select(index)" class="emoticon">',
+		template: '<img class="fit-height" ng-repeat="emo in emotions" ng-src="{{url+emo}}" ng-click="select(index)">',
 		scope: {
 			emotion: '='
 		},
