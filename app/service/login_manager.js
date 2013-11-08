@@ -1,25 +1,24 @@
 app.service('LoginManager', function($q, $http) {
 	var self = this;
 
-
 	var user;
-	var deferred;
+	var deferred = $q.defer();
 	this.level = {
 		TEACHER: "teacher",
 		STUDENT: "student"
 	};
 	this.getUser = function() {
-		return user;
+		return deferred.promise;
 	};
-	// this.isTeacher = function() {
-	// 	return user && user.accessLevel == self.level.TEACHER;
-	// };
+	this.hasLogin = function() {
+		return angular.isUndefined(user);
+	}
 	this.login = function(data) {
-		deferred = $q.defer();
+		// deferred = $q.defer();
 		user = data;
 		user.accessLevel = self.level.TEACHER;
 		// user.accessLevel = self.level.STUDENT;
-		deferred.resolve();
+		deferred.resolve(user);
 		var obj = {
 			username: user.username,
 			email: user.email
@@ -32,14 +31,17 @@ app.service('LoginManager', function($q, $http) {
 		// });
 		return deferred.promise;
 	};
-	this.isTeacher = function(callback) {
-		if (user && user.accessLevel == self.level.TEACHER) {
-			callback();
-		}
+	this.getAccess = function() {
+		return user.accessLevel;
 	};
-	this.isStudent = function(callback) {
-		if (user && user.accessLevel == self.level.STUDENT) {
-			callback();
-		}
-	};
+	// this.isTeacher = function(callback) {
+	// 	if (user && user.accessLevel == self.level.TEACHER) {
+	// 		callback();
+	// 	}
+	// };
+	// this.isStudent = function(callback) {
+	// 	if (user && user.accessLevel == self.level.STUDENT) {
+	// 		callback();
+	// 	}
+	// };
 });

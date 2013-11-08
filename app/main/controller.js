@@ -1,25 +1,26 @@
-app.controller('LoginCtrl', function($scope, $state, GoogleService, LoginManager) {
+app.controller('LoginCtrl', function($scope, $state, $modalInstance, GoogleService, LoginManager) {
 	GoogleService.load().then(function() {
 		GoogleService.getUser().then(function(data) {
-			console.log(data);
+			// console.log(data);
 
 			LoginManager.login(data).then(function() {
-				$state.go('main');
+				$modalInstance.dismiss('cancel');
+				$state.go('main.home');
 			});
 		});
 	});
 });
-app.controller('MainCtrl', function($scope, $state, $rootScope, LoginManager, DrawFactory) {
+app.controller('MenuLeftCtrl', function($scope, $sce, LoginManager) {
+	LoginManager.getUser().then(function(user) {
+		$scope.name = user.username;
+	});
+	$scope.logout = function() {
+		$scope.url = $sce.trustAsResourceUrl("https://accounts.google.com/logout");
+	};
+});
+app.controller('MainCtrl', function($scope, $state, $rootScope, DrawFactory) {
 	var isSwipe = true;
 	$scope.isShow = false;
-	LoginManager.isTeacher(function() {
-		$scope.access = 'teacher';
-	});
-	LoginManager.isStudent(function() {
-		$scope.access = 'student';
-	});
-	$state.go('main.home_' + $scope.access);
-
 	$scope.checkSwipe = function(isShow) {
 		if (isSwipe) {
 			$scope.isShow = isShow;
@@ -27,6 +28,13 @@ app.controller('MainCtrl', function($scope, $state, $rootScope, LoginManager, Dr
 	};
 	$rootScope.$on('tool', function(e, tool) {
 		isSwipe = tool == DrawFactory.tools.MODE;
+	});
+});
+app.controller('AccessCtrl', function($state, LoginManager) {
+	var route = $state.current.name;
+	LoginManager.getUser().then(function(user) {
+		var access = LoginManager.getAccess();
+		$state.go(route + "_" + access);
 	});
 });
 app.controller('MenuRightCtrl', function($scope, $rootScope, $state) {

@@ -1,7 +1,8 @@
 app.directive('menuLeft', function() {
 	return {
 		restrict: 'E',
-		templateUrl: 'main/template/menu_left.tpl.html'
+		templateUrl: 'main/template/menu_left.tpl.html',
+		controller: 'MenuLeftCtrl'
 	};
 });
 

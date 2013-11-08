@@ -1,5 +1,5 @@
 var app = angular.module('socket', ['templates-app',
-	'templates-common', 'ui.router', 'ngGesture', 'chieffancypants.loadingBar'
+	'templates-common', 'ui.router', 'ui.bootstrap', 'ngGesture', 'chieffancypants.loadingBar'
 ]);
 
 app.constant('host_node', 'http://localhost:8080');
@@ -10,14 +10,11 @@ app.config(function(cfpLoadingBarProvider) {
 })
 
 app.config(function($stateProvider, $urlRouterProvider) {
-	$urlRouterProvider.otherwise('login');
+	$urlRouterProvider.otherwise('/main');
 	$stateProvider.state('main', {
 		url: "/main",
-		templateUrl: 'main/template/main.tpl.html'
-	}).state('login', {
-		url: "/login",
-		templateUrl: 'main/template/login.tpl.html',
-		controller: 'LoginCtrl'
+		templateUrl: 'main/template/main.tpl.html',
+		controller: 'MainCtrl'
 	}).state('main.draw', {
 		url: '/draw',
 		templateUrl: 'menu_left/template/hand_write.tpl.html',
@@ -25,6 +22,9 @@ app.config(function($stateProvider, $urlRouterProvider) {
 	}).state('main.drive', {
 		url: '/drive',
 		templateUrl: 'menu_left/template/drive.tpl.html',
+	}).state('main.home', {
+		url: '/home',
+		controller: 'AccessCtrl'
 	}).state('main.home_teacher', {
 		url: '/home/teacher',
 		templateUrl: 'menu_left/template/home_teacher.tpl.html',
@@ -37,6 +37,9 @@ app.config(function($stateProvider, $urlRouterProvider) {
 		url: '/slide',
 		templateUrl: 'menu_left/template/slide.tpl.html',
 		controller: 'SlideCtrl'
+	}).state('main.quiz', {
+		url: '/quiz',
+		controller: 'AccessCtrl'
 	}).state('main.quiz_teacher', {
 		url: '/quiz/teacher',
 		templateUrl: 'menu_left/template/quiz_teacher.tpl.html',
@@ -47,13 +50,15 @@ app.config(function($stateProvider, $urlRouterProvider) {
 		controller: 'QuizStudentCtrl'
 	});
 
-}).run(function($rootScope, $state, LoginManager) {
-	// $rootScope.$on("$stateChangeStart", function($currentRoute, $previousRoute) {
-	// 	var user = LoginManager.getUser();
-	// 	if (!user) {
-	// 		$state.go('login');
-	// 	}
-	// });
+}).run(function($rootScope, $modal, LoginManager) {
+	$rootScope.$on("$stateChangeSuccess", function($currentRoute, $previousRoute) {
+		if (LoginManager.hasLogin()) {
+			$modal.open({
+				templateUrl: 'main/template/login.tpl.html',
+				controller: 'LoginCtrl'
+			})
+		}
+	});
 });
 
 app.factory('Socket', function($rootScope, host_node) {
