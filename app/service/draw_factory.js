@@ -55,7 +55,7 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 				remove(e.target);
 			}
 		};
-	}
+	};
 	this.setText = function(text) {
 		listener.text = {
 			onDown: function(pos) {

@@ -14,11 +14,11 @@ app.controller('QuizStudentCtrl', function($scope, QuizManager, DataManager) {
 		$scope.isEnd = false;
 		$scope.selected = false;
 		$scope.next = function() {
-			if (index != 0) {
+			if (index !== 0) {
 				var obj = {};
 				obj.question = index - 1;
 				obj.answer = select;
-				console.log(select)
+				console.log(select);
 				DataManager.setData(type, obj);
 			}
 			if (index < n) {
@@ -28,10 +28,10 @@ app.controller('QuizStudentCtrl', function($scope, QuizManager, DataManager) {
 			} else {
 				$scope.isEnd = true;
 			}
-		}
+		};
 		$scope.select = function(index) {
 			select = index;
-		}
+		};
 		$scope.next(index);
 	});
 });
@@ -40,14 +40,14 @@ app.controller('QuizTeacherCtrl', function($scope, QuizManager, DataManager) {
 		var type = DataManager.types.QUIZ;
 		$scope.quiz = [];
 		angular.forEach(data, function(quiz, key) {
-			var obj = {}
+			var obj = {};
 			obj.question = quiz.question;
 			obj.answer = [];
 			angular.forEach(quiz.answer, function(answer, key) {
 				obj.answer.push({
 					name: answer,
 					n: 0
-				})
+				});
 			});
 			$scope.quiz.push(obj);
 		});
@@ -81,6 +81,7 @@ app.controller('HandWriteCtrl', function($scope, $rootScope, DrawFactory, Canvas
 	$scope.changeAttr = function(index) {
 		$rootScope.$broadcast('attr', $scope.attrs[index]);
 	};
+	$scope.changeTool($scope.tools.indexOf(DrawFactory.tools.MODE));
 });
 
 app.controller('SlideCtrl', function($scope, $rootScope, DrawFactory, SlideManager) {
@@ -125,11 +126,13 @@ app.controller('SlideCtrl', function($scope, $rootScope, DrawFactory, SlideManag
 	$scope.changeAttr = function(index) {
 		$rootScope.$broadcast('attr', $scope.attrs[index]);
 	};
+
+	$scope.changeTool($scope.tools.indexOf(DrawFactory.tools.MODE));
 });
 
 app.controller('RoomCtrl', function($scope, Room, Socket, LoginManager) {
-	// $scope.user = String.fromCharCode(Math.random() * 26 + 97);
 	LoginManager.getUser().then(function(user) {
+		// $scope.user = String.fromCharCode(Math.random() * 26 + 97);
 		$scope.user = user;
 
 		$scope.room = "";
@@ -162,7 +165,7 @@ app.controller('RoomCtrl', function($scope, Room, Socket, LoginManager) {
 			Room.user = $scope.user.username;
 			Socket.emit("create:room", {
 				room: $scope.room,
-				user: $scope.user,
+				user: $scope.user
 			});
 		};
 		$scope.close = function() {

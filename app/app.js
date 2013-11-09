@@ -7,7 +7,7 @@ app.constant('host_drupal', 'http://10.16.86.131');
 
 app.config(function(cfpLoadingBarProvider) {
 	cfpLoadingBarProvider.includeSpinner = false;
-})
+});
 
 app.config(function($stateProvider, $urlRouterProvider) {
 	$urlRouterProvider.otherwise('main');
@@ -17,11 +17,11 @@ app.config(function($stateProvider, $urlRouterProvider) {
 		controller: 'MainCtrl'
 	}).state('main.draw', {
 		url: '/draw',
-		templateUrl: 'menu_left/template/hand_write.tpl.html',
+		templateUrl: 'menu_left/template/draw_pad.tpl.html',
 		controller: 'HandWriteCtrl'
 	}).state('main.drive', {
 		url: '/drive',
-		templateUrl: 'menu_left/template/drive.tpl.html',
+		templateUrl: 'menu_left/template/drive.tpl.html'
 	}).state('main.home', {
 		url: '/home',
 		controller: 'AccessCtrl'
@@ -35,7 +35,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
 		controller: 'RoomCtrl'
 	}).state('main.slide', {
 		url: '/slide',
-		templateUrl: 'menu_left/template/slide.tpl.html',
+		templateUrl: 'menu_left/template/slide_pad.tpl.html',
 		controller: 'SlideCtrl'
 	}).state('main.quiz', {
 		url: '/quiz',
@@ -56,7 +56,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
 			$modal.open({
 				templateUrl: 'main/template/login.tpl.html',
 				controller: 'LoginCtrl'
-			})
+			});
 		}
 	});
 });
@@ -165,7 +165,7 @@ app.service("Canvas", function($q) {
 	this.types = {
 		DRAW: "draw",
 		MIRROR: "mirror"
-	}
+	};
 
 	this.newCanvas = function(id, w, h) {
 		$('#' + id)[0].width = w;

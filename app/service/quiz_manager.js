@@ -22,11 +22,11 @@ app.service("QuizManager", function($q, $http, host_drupal) {
                     var value = answer.split("|");
                     answers.push(value[1]);
                 });
-                obj.answer = answers
+                obj.answer = answers;
 
                 quizs.push(obj);
             });
-            console.log(quizs)
+            console.log(quizs);
             deferred.resolve(quizs);
         });
         return deferred.promise;

@@ -2,7 +2,7 @@ app.service('SlideManager', function($http, $q, $rootScope) {
 	var self = this;
 
 	// var host = "http://www.greedmonkey.com/kreang/index.php/test/print_file/";
-	var host_name = "https://docs.google.com/presentation/d/"
+	var host_name = "https://docs.google.com/presentation/d/";
 	var index_name = "#slide=";
 
 	// var slide = "1-oQjVefFucKtYkHP1dgLQdt3G6OsTTnjXvAw1EyZ8Lc";

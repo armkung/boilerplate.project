@@ -4,32 +4,22 @@ app.controller('LoginCtrl', function($scope, $state, $modalInstance, GoogleServi
 			// console.log(data);
 
 			LoginManager.login(data).then(function() {
-<<<<<<< HEAD
-				$modalInstance.dismiss('cancel');
-=======
 				$scope.$dismiss();
->>>>>>> group
 				$state.go('main.home');
 			});
 		});
 	});
 });
-<<<<<<< HEAD
-app.controller('MenuLeftCtrl', function($scope, $sce, LoginManager) {
-=======
+
 app.controller('MenuLeftCtrl', function($scope, $sce, $timeout, $window, LoginManager) {
->>>>>>> group
 	LoginManager.getUser().then(function(user) {
 		$scope.name = user.username;
 	});
 	$scope.logout = function() {
 		$scope.url = $sce.trustAsResourceUrl("https://accounts.google.com/logout");
-<<<<<<< HEAD
-=======
 		$timeout(function() {
 			$window.location.reload();
 		}, 1000);
->>>>>>> group
 	};
 });
 app.controller('MainCtrl', function($scope, $state, $rootScope, DrawFactory) {
@@ -56,7 +46,7 @@ app.controller('MenuRightCtrl', function($scope, $rootScope, $state) {
 	var types = {
 		GROUP: "group",
 		CHAT: "chat"
-	}
+	};
 	// checkRoute();
 	$rootScope.$on("$stateChangeSuccess", function($currentRoute, $previousRoute) {
 		checkRoute();

@@ -27,7 +27,7 @@ app.service('GroupManager', function($rootScope, Canvas) {
 			angular.forEach(groups, function(group, user) {
 				if (!(user in users)) {
 					canvas.item(group.id).remove();
-				};
+				}
 			});
 			canvas.renderAll();
 		});
@@ -42,7 +42,7 @@ app.service('GroupManager', function($rootScope, Canvas) {
 		canvas.renderAll();
 
 		return canvas.toDataURL();
-	};
+	}
 	this.showAll = function() {
 		angular.forEach(groups, function(group, key) {
 			self.show(key);

@@ -5,7 +5,7 @@ app.service('GoogleService', function($q) {
 		['oauth2', 'v2'],
 		['drive', 'v2'],
 		['plus', 'v1']
-	]
+	];
 
 	var defers = [];
 	var service = {};
@@ -44,7 +44,7 @@ app.service('GoogleService', function($q) {
 					username: username
 				});
 			});
-		})
+		});
 		return deferred.promise;
 	};
 	this.setPermission = function(id) {
@@ -71,7 +71,7 @@ app.service('GoogleService', function($q) {
 		request.execute(function(resp) {
 			self.setPermission(id).then(function() {
 				deferred.resolve(resp);
-			})
+			});
 		});
 		return deferred.promise;
 	};

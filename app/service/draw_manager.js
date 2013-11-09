@@ -42,7 +42,7 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 	}
 	this.getName = function() {
 		return id;
-	}
+	};
 	this.init = function(name) {
 		Canvas.init(name);
 		Canvas.getCanvas().then(function(cs) {
@@ -121,7 +121,7 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 		});
 		console.log(canvas);
 		canvas.renderAll();
-	}
+	};
 	this.draw = function(data, x, y) {
 		var paths = [];
 		angular.forEach(data.path, function(value, key) {
@@ -143,8 +143,8 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 		if (current instanceof fabric.Group) {
 			current.addWithUpdate(path);
 		} else {
-			canvas.remove(data)
-			canvas.add(path)
+			canvas.remove(data);
+			canvas.add(path);
 		}
 		setId(path);
 		canvas.renderAll();

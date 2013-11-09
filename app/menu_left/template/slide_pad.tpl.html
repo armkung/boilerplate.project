@@ -4,12 +4,12 @@
 		<div class="control-area" ng-show="isShow" ng-click="prevIndex(false)"></div>
 		<div class="control-area" ng-show="isShow" ng-click="nextIndex(false)"></div>
 		<div class="mirror" fit-size>
-			<canvas id="mirror-1" hand-writer text="{{text}}" send="{{isSend}}">
+			<canvas id="mirror-1" draw-pad text="{{text}}" send="{{isSend}}">
 			</canvas>	
 			<input 	id="textbox" ng-model="text">	
 		</div>	
 		<div class="slide-pad" fit-size>
-			<slide send="{{isSend}}"></slide>
+			<slide-pad send="{{isSend}}"></slide-pad>
 		</div>
 	</div>
 

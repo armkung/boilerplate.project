@@ -1,4 +1,4 @@
-app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFactory, Input, Room, DataManager) {
+app.directive("drawPad", function($rootScope, $timeout, DrawManager, DrawFactory, Input, Room, DataManager) {
 	return {
 		restrict: 'A',
 		scope: {
@@ -28,14 +28,14 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 						}
 					}
 				}
-				DrawManager.setCurrent(id)
+				DrawManager.setCurrent(id);
 			}
 
 			function draw(data) {
 				var pos = data.pos;
 				var id = data.user ? data.user.id : undefined;
 				DrawManager.newGroup(id);
-				setCurrent(data.user)
+				setCurrent(data.user);
 
 				DrawManager.setStrokeColor(pos.color);
 				DrawManager.setStrokeSize(pos.size);
@@ -46,7 +46,7 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 				var pos = data.pos;
 				var id = data.user ? data.user.id : undefined;
 				DrawManager.newGroup(id);
-				setCurrent(data.user)
+				setCurrent(data.user);
 
 				DrawManager.setStrokeColor(pos.color);
 				DrawManager.setStrokeSize(pos.size);
@@ -58,7 +58,7 @@ app.directive("handWriter", function($rootScope, $timeout, DrawManager, DrawFact
 				var pos = data.pos;
 				var id = data.user ? data.user.id : undefined;
 				DrawManager.newGroup(id);
-				setCurrent(data.user)
+				setCurrent(data.user);
 
 				DrawManager.setFillColor(pos.color);
 				DrawManager.setFontSize(pos.size);

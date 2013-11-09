@@ -61,7 +61,7 @@ app.service('PDFService', function($q, $timeout) {
 				page.render(renderContext).then(function() {
 					var stroke = 2;
 					fabric.Image.fromURL(slideCanvas.toDataURL(), function(img) {
-						console.log(drawCanvas)
+						console.log(drawCanvas);
 						drawCanvas.add(img);
 						img.set({
 							stroke: 'black',
@@ -84,36 +84,35 @@ app.service('PDFService', function($q, $timeout) {
 
 						drawCanvas.remove(img);
 						if (i == n) {
-							var data = self.save();
-							deferred.resolve(data);
+							deferred.resolve(self.save());
 							// $timeout.cancel(stop);
 							return;
 							// return self.save();
 						} else {
-							self.addPage(i)
+							self.addPage(i);
 							i++;
 							render();
 						}
 					});
 				});
 			});
-		}
+		};
 		render();
 		// }, DELAY);
 		return deferred.promise;
 	};
 	this.addImage = function(data, i, w, h) {
-		var page = doc.internal.pageSize
+		var page = doc.internal.pageSize;
 		var k = Math.min(page.width / w, page.height / h) * SCALE;
 		w *= k;
 		h *= k;
-		var x = Math.abs(page.width - w) / 2
+		var x = Math.abs(page.width - w) / 2;
 		var y = page.height * ((i - 1) % 2) / 2;
 		doc.addImage(data, 'jpeg', x, y, w, h);
 	};
 
 	this.addPage = function(i) {
-		if (i % 2 == 0) {
+		if (i % 2 === 0) {
 			doc.addPage();
 		}
 	};
@@ -121,5 +120,5 @@ app.service('PDFService', function($q, $timeout) {
 		// doc.output('datauri');
 		return doc.output('datauristring');
 		// doc.save(name + '.pdf');
-	}
+	};
 });

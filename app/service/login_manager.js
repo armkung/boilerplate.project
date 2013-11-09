@@ -8,17 +8,14 @@ app.service('LoginManager', function($q, $http) {
 		STUDENT: "student"
 	};
 	this.getUser = function() {
-<<<<<<< HEAD
-=======
 		if(user){
 			deferred.resolve(user);	
 		}
->>>>>>> group
 		return deferred.promise;
 	};
 	this.hasLogin = function() {
 		return angular.isUndefined(user);
-	}
+	};
 	this.login = function(data) {
 		// deferred = $q.defer();
 		user = data;
