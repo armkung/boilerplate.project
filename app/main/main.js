@@ -14,6 +14,20 @@ app.directive('menuRight', function() {
 	};
 });
 
+app.directive('isVisible', function() {
+	return {
+		restrict: 'AC',
+		scope: {
+			isVisible: '='
+		},
+		link: function(scope, iElement, iAttrs) {
+			var display = iElement.css('display');
+			scope.isVisible = display != 'none';
+			// console.log(scope.isVisible)
+		}
+	};
+});
+
 app.directive('fitSize', function() {
 	return {
 		restrict: 'AC',

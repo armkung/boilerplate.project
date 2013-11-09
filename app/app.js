@@ -1,5 +1,5 @@
-var app = angular.module('socket', ['templates-app',
-	'templates-common', 'ui.router', 'ui.bootstrap', 'ngGesture', 'chieffancypants.loadingBar'
+var app = angular.module('socket', ['templates-app', 'templates-common',
+	'ui.router', 'ui.bootstrap', 'ngGesture', 'chieffancypants.loadingBar'
 ]);
 
 app.constant('host_node', 'http://localhost:8080');
@@ -10,7 +10,7 @@ app.config(function(cfpLoadingBarProvider) {
 })
 
 app.config(function($stateProvider, $urlRouterProvider) {
-	$urlRouterProvider.otherwise('/main');
+	$urlRouterProvider.otherwise('main');
 	$stateProvider.state('main', {
 		url: "/main",
 		templateUrl: 'main/template/main.tpl.html',
@@ -101,7 +101,8 @@ app.factory("DataManager", function(Canvas, Socket) {
 		types: {
 			POS: "pos",
 			SLIDE: "slide",
-			QUIZ: "quiz"
+			QUIZ: "quiz",
+			MSG: "msg"
 		},
 		initData: function(type) {
 			Socket.emit("init:" + type);

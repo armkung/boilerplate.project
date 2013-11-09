@@ -1,12 +1,11 @@
 <div>
 	<div class="chat-box">
-		<div ng-repeat="msg in msgs">
+		<div ng-repeat="msg in msgs track by $index">
 			<img ng-src="{{msg}}" class="emotion">
 		</div>
 	</div>
-	<!-- <button ng-click="sendMsg()">Send</button>
-	<input type="text" ng-model="text"> -->
+
 	<div class="emoticon-box">
-		<emoticon emotion="img"></emoticon>
+		<img class="fit-height" ng-repeat="emo in emotions" ng-src="{{url+emo}}" ng-click="select($index)">
 	</div>
 </div>

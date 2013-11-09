@@ -8,6 +8,12 @@ app.service('LoginManager', function($q, $http) {
 		STUDENT: "student"
 	};
 	this.getUser = function() {
+<<<<<<< HEAD
+=======
+		if(user){
+			deferred.resolve(user);	
+		}
+>>>>>>> group
 		return deferred.promise;
 	};
 	this.hasLogin = function() {

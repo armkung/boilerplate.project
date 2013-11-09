@@ -4,17 +4,19 @@
 	
 	<div class="fluid-container">
 		<div class="row fit-height">
+			
 			<div class="well col-md-9 col-lg-9 fit-height">
 				<ui-view></ui-view>
 			</div>
-			<div class="well col-md-3 col-lg-3 visible-md visible-lg fit-height">
+
+			<div is-visible="isDesktop" class="visible-md visible-lg"></div>
+			<div ng-if="isDesktop" class="well col-md-3 col-lg-3 fit-height">
 				<menu-right></menu-right>
-			</div>					
-			<div ng-show="isShow" class="nav-right">
-				<div class="visible-xs visible-sm fit-height">
-					<menu-right></menu-right>
-				</div>
-			</div>	
+			</div>
+			<div ng-if="!isDesktop" class="nav-right fit-height">
+				<menu-right ng-show="isShow"></menu-right>
+			</div>
+
 		</div>
 	</div>
 

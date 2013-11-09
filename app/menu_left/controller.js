@@ -129,48 +129,51 @@ app.controller('SlideCtrl', function($scope, $rootScope, DrawFactory, SlideManag
 
 app.controller('RoomCtrl', function($scope, Room, Socket, LoginManager) {
 	// $scope.user = String.fromCharCode(Math.random() * 26 + 97);
-	$scope.user = LoginManager.getUser();
-	$scope.room = "";
-	Room.room = $scope.room;
+	LoginManager.getUser().then(function(user) {
+		$scope.user = user;
 
-	Socket.on("leave:room", function(user) {
-		var index = Room.users.indexOf(user);
-		if (index != -1) {
-			Room.users.splice(index, 1);
-		}
+		$scope.room = "";
+		Room.room = $scope.room;
+
+		Socket.on("leave:room", function(user) {
+			var index = Room.users.indexOf(user);
+			if (index != -1) {
+				Room.users.splice(index, 1);
+			}
+		});
+		$scope.list = function() {
+			Socket.emit("list:room", {}, function(rooms) {
+				$scope.rooms = rooms;
+			});
+		};
+		$scope.list();
+		$scope.connect = function() {
+			Room.room = $scope.room;
+			Room.user = $scope.user.username;
+			Socket.emit("connect:room", {
+				room: $scope.room,
+				user: $scope.user
+			}, function(id) {
+
+			});
+		};
+		$scope.create = function() {
+			Room.room = $scope.room;
+			Room.user = $scope.user.username;
+			Socket.emit("create:room", {
+				room: $scope.room,
+				user: $scope.user,
+			});
+		};
+		$scope.close = function() {
+			Socket.emit("close:room", {}, function(emails) {
+				console.log(emails);
+			});
+		};
+		$scope.disconnect = function() {
+			Socket.emit("leave:room");
+			Socket.disconnect();
+		};
+		$scope.connect();
 	});
-	$scope.list = function() {
-		Socket.emit("list:room", {}, function(rooms) {
-			$scope.rooms = rooms;
-		});
-	};
-	$scope.list();
-	$scope.connect = function() {
-		Room.room = $scope.room;
-		Room.user = $scope.user.username;
-		Socket.emit("connect:room", {
-			room: $scope.room,
-			user: $scope.user
-		}, function(id) {
-
-		});
-	};
-	$scope.create = function() {
-		Room.room = $scope.room;
-		Room.user = $scope.user.username;
-		Socket.emit("create:room", {
-			room: $scope.room,
-			user: $scope.user,
-		});
-	};
-	$scope.close = function() {
-		Socket.emit("close:room", {}, function(emails) {
-			console.log(emails);
-		});
-	};
-	$scope.disconnect = function() {
-		Socket.emit("leave:room");
-		Socket.disconnect();
-	};
-	$scope.connect();
 });
