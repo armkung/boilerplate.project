@@ -1,0 +1,11 @@
+<div ng-hide="isHide">
+	<div class="tool">
+		<button ng-repeat="tool in toolLeft" ng-click="changeToolLeft($index)">{{tool}}</button>
+	</div>
+
+	<selector class="attr"></selector>		
+
+	<div class="tool">
+		<button ng-repeat="tool in toolRight" ng-click="changeToolRight($index)">{{tool}}</button>
+	</div>
+</div>

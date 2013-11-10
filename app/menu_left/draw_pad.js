@@ -190,13 +190,13 @@ app.directive("drawPad", function($rootScope, $timeout, DrawManager, DrawFactory
 				// 	scope.tool = null;
 				// }
 			});
-			$rootScope.$on('attr', function(e, attr) {
-				var callback = {};
-				callback.strokeColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
-				callback.fillColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
-				callback.strokeSize = Math.floor(Math.random() * 10) + 4;
-				callback.fontSize = Math.floor(Math.random() * 20) + 28;
-				DrawFactory.setAttr(attr, callback);
+			$rootScope.$on('attr', function(e, obj) {
+				// var callback = {};
+				// callback.strokeColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+				// callback.fillColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+				// callback.strokeSize = Math.floor(Math.random() * 10) + 4;
+				// callback.fontSize = Math.floor(Math.random() * 20) + 28;
+				DrawFactory.setAttr(obj.attr, obj.data);
 			});
 			$rootScope.$on("$stateChangeSuccess", function($currentRoute, $previousRoute) {
 				DrawManager.saveData();

@@ -60,28 +60,28 @@ app.controller('QuizTeacherCtrl', function($scope, QuizManager, DataManager) {
 });
 
 app.controller('HandWriteCtrl', function($scope, $rootScope, DrawFactory, Canvas) {
-	$scope.tools = [];
-	$scope.attrs = [];
+	// $scope.tools = [];
+	// $scope.attrs = [];
 	$scope.isSend = true;
-	angular.forEach(DrawFactory.tools, function(value, key) {
-		$scope.tools.push(value);
-	});
-	angular.forEach(DrawFactory.attrs, function(value, key) {
-		$scope.attrs.push(value);
-	});
+	// angular.forEach(DrawFactory.tools, function(value, key) {
+	// 	$scope.tools.push(value);
+	// });
+	// angular.forEach(DrawFactory.attrs, function(value, key) {
+	// 	$scope.attrs.push(value);
+	// });
 	$scope.checkSwipe = function(isHide) {
 		if ($scope.tool == DrawFactory.tools.MODE) {
 			$scope.isHide = isHide;
 		}
 	};
-	$scope.changeTool = function(index) {
-		$scope.tool = $scope.tools[index];
-		$rootScope.$broadcast('tool', $scope.tool);
-	};
-	$scope.changeAttr = function(index) {
-		$rootScope.$broadcast('attr', $scope.attrs[index]);
-	};
-	$scope.changeTool($scope.tools.indexOf(DrawFactory.tools.MODE));
+	// $scope.changeTool = function(index) {
+	// 	$scope.tool = $scope.tools[index];
+	// 	$rootScope.$broadcast('tool', $scope.tool);
+	// };
+	// $scope.changeAttr = function(index) {
+	// 	$rootScope.$broadcast('attr', $scope.attrs[index]);
+	// };
+	// $scope.changeTool($scope.tools.indexOf(DrawFactory.tools.MODE));
 });
 
 app.controller('SlideCtrl', function($scope, $rootScope, DrawFactory, SlideManager) {
@@ -107,27 +107,31 @@ app.controller('SlideCtrl', function($scope, $rootScope, DrawFactory, SlideManag
 		}
 	};
 
-	$scope.tools = [];
-	$scope.attrs = [];
+	// $scope.tools = [];
+	// $scope.attrs = [];
 	$scope.isSend = true;
-	angular.forEach(DrawFactory.tools, function(value, key) {
-		$scope.tools.push(value);
-	});
-	angular.forEach(DrawFactory.attrs, function(value, key) {
-		$scope.attrs.push(value);
-	});
-	$scope.changeTool = function(index) {
-		$scope.tool = $scope.tools[index];
-		$rootScope.$broadcast('tool', $scope.tool);
-		if ($scope.tool == DrawFactory.tools.MODE) {
+	// angular.forEach(DrawFactory.tools, function(value, key) {
+	// 	$scope.tools.push(value);
+	// });
+	// angular.forEach(DrawFactory.attrs, function(value, key) {
+	// 	$scope.attrs.push(value);
+	// });
+	// $scope.changeTool = function(index) {
+	// 	$scope.tool = $scope.tools[index];
+	// $rootScope.$broadcast('tool', $scope.tool);
+	$rootScope.$on('tool', function(e, tool) {
+		if (tool == DrawFactory.tools.MODE) {
 			$scope.isShow = true;
+		} else {
+			$scope.isShow = false;
 		}
-	};
-	$scope.changeAttr = function(index) {
-		$rootScope.$broadcast('attr', $scope.attrs[index]);
-	};
+	});
+	// };
+	// $scope.changeAttr = function(index) {
+	// 	$rootScope.$broadcast('attr', $scope.attrs[index]);
+	// };
 
-	$scope.changeTool($scope.tools.indexOf(DrawFactory.tools.MODE));
+	// $scope.changeTool($scope.tools.indexOf(DrawFactory.tools.MODE));
 });
 
 app.controller('RoomCtrl', function($scope, Room, Socket, LoginManager) {

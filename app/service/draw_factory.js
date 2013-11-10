@@ -8,14 +8,12 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 		TEXT: "Text",
 		DRAW: "Draw",
 		LINE: "Line",
-		ANIMATE: "Animate",
+		// ANIMATE: "Animate",
 		DELETE: "Delete"
 	};
 	this.attrs = {
-		COLOR_STROKE: "Line Color",
-		COLOR_FILL: "Text Color",
-		SIZE_STROKE: "Line Size",
-		SIZE_FONT: "Text Size"
+		COLOR: "Color",
+		SIZE: "Size"
 	};
 	var listener = {};
 	// var canvas = Canvas.getCanvas();
@@ -248,19 +246,15 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 				DrawManager.canGroupDrag(false);
 		}
 	};
-	this.setAttr = function(attr, callback) {
+	this.setAttr = function(attr, data) {
 		switch (attr) {
-			case self.attrs.COLOR_STROKE:
-				DrawManager.setStrokeColor(callback.strokeColor);
+			case self.attrs.COLOR:
+				DrawManager.setStrokeColor(data);
+				DrawManager.setFillColor(data);
 				break;
-			case self.attrs.COLOR_FILL:
-				DrawManager.setFillColor(callback.fillColor);
-				break;
-			case self.attrs.SIZE_STROKE:
-				DrawManager.setStrokeSize(callback.strokeSize);
-				break;
-			case self.attrs.SIZE_FONT:
-				DrawManager.setFontSize(callback.fontSize);
+			case self.attrs.SIZE:
+				DrawManager.setStrokeSize(data);
+				DrawManager.setFontSize(data);
 				break;
 		}
 	};

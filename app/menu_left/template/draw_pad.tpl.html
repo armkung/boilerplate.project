@@ -7,9 +7,11 @@
 		<canvas id="draw" draw-pad text="{{text}}" send="{{isSend}}"></canvas>
 		<input id="textbox" ng-model="text">
 	</div>
-	<div class="toolbar" ng-hide="isHide">
+
+	<tool-bar class="toolbar" tool="tool" is-hide="isHide"></tool-bar>	
+<!-- 	<div class="toolbar" ng-hide="isHide">
 		<button ng-repeat="t in tools" ng-click="changeTool($index)">{{t}}</button>
 		<button ng-repeat="a in attrs" ng-click="changeAttr($index)">{{a}}</button>
-	</div>
+	</div> -->
 	
 </div>

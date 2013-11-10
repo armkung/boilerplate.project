@@ -13,15 +13,16 @@
 		</div>
 	</div>
 
-	<div class="toolbar" style="position: absolute;z-index=99">
-		<div>
+	<div class="toolbar">
+		<tool-bar class="toolbar" tool="tool" is-hide="isHide"></tool-bar>	
+		<!-- <div>
 			<button ng-click="prevIndex(true)" ng-hide="isStart">Prev</button>
 			<button ng-click="nextIndex(true)" ng-hide="isEnd">Next</button>
 		</div>
 		<div ng-hide="isHide">
 			<button ng-repeat="t in tools" ng-click="changeTool($index)">{{t}}</button>
 			<button ng-repeat="a in attrs" ng-click="changeAttr($index)">{{a}}</button>
-		</div>
+		</div> -->
 	</div>
 	
 </div>
