@@ -38,10 +38,8 @@ body{
 	margin-right: auto;      		
 }
 .list{
+	position: relative;
 	overflow-y: hidden;
-}
-.item{
-	overflow-y: auto;
 }
 .pad{
 	height: 90%;
@@ -83,11 +81,12 @@ body{
 .chat-box{
 	height: 80%;
 	background-color: @chat_box_color;
-	overflow: auto;
+	overflow-y: hidden;
 }
 .emoticon-box{
+	position: relative;
 	height: 20%;
-	overflow-x: scroll; 
+	overflow: hidden; 
 	white-space: nowrap;
 }
 .control-area{

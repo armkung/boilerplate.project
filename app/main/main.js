@@ -14,6 +14,20 @@ app.directive('menuRight', function() {
 	};
 });
 
+app.directive('scrollBar', function() {
+	return {
+		restrict: 'AC',
+		link: function(scope, iElement, iAttrs) {
+			iElement.perfectScrollbar({
+				// useBothWheelAxes: true
+			});
+
+			// iElement.scrollTop(100);
+			// iElement.perfectScrollbar('update');
+		}
+	};
+});
+
 app.directive('isVisible', function() {
 	return {
 		restrict: 'AC',

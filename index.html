@@ -5,8 +5,6 @@
 		<% styles.forEach( function ( file ) { %>
     	<link rel="stylesheet" type="text/css" href="<%= file %>" /><% }); %>
 	
-		<% scripts.forEach( function ( file ) { %>
-		<script type="text/javascript" src="<%= file %>"></script><% }); %>		
 		
 	</head>
 
@@ -14,5 +12,7 @@
 
 		<ui-view></ui-view>
     
+		<% scripts.forEach( function ( file ) { %>
+		<script type="text/javascript" src="<%= file %>"></script><% }); %>		
 	</body>
 </html>

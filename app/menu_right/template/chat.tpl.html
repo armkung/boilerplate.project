@@ -1,11 +1,11 @@
 <div>
-	<div class="chat-box">
+	<div class="chat-box list" scroll-bar>
 		<div ng-repeat="msg in msgs track by $index">
 			<img ng-src="{{msg}}" class="emotion">
 		</div>
 	</div>
 
-	<div class="emoticon-box">
+	<div class="emoticon-box" scroll-bar>
 		<img class="fit-height" ng-repeat="emo in emotions" ng-src="{{url+emo}}" ng-click="select($index)">
 	</div>
 </div>
