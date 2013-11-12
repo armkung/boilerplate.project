@@ -13,8 +13,8 @@
 			<div ng-if="isDesktop" class="well col-md-3 col-lg-3 fit-height">
 				<menu-right></menu-right>
 			</div>
-			<div ng-if="!isDesktop" class="nav-right fit-height">
-				<menu-right ng-show="isShow"></menu-right>
+			<div ng-if="!isDesktop" ng-show="isShow" class="nav-right fit-height">
+				<menu-right></menu-right>
 			</div>
 
 		</div>

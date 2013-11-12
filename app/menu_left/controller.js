@@ -69,6 +69,7 @@ app.controller('HandWriteCtrl', function($scope, $rootScope, DrawFactory, Canvas
 	// angular.forEach(DrawFactory.attrs, function(value, key) {
 	// 	$scope.attrs.push(value);
 	// });
+	$scope.isHide = false;
 	$scope.checkSwipe = function(isHide) {
 		if ($scope.tool == DrawFactory.tools.MODE) {
 			$scope.isHide = isHide;
@@ -101,6 +102,7 @@ app.controller('SlideCtrl', function($scope, $rootScope, DrawFactory, SlideManag
 			$scope.isEnd = SlideManager.isEnd();
 		}
 	};
+	$scope.isHide = false;
 	$scope.checkSwipe = function(isHide) {
 		if ($scope.tool == DrawFactory.tools.MODE) {
 			$scope.isHide = isHide;
