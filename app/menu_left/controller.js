@@ -69,10 +69,16 @@ app.controller('HandWriteCtrl', function($scope, $rootScope, DrawFactory, Canvas
 	// angular.forEach(DrawFactory.attrs, function(value, key) {
 	// 	$scope.attrs.push(value);
 	// });
-	$scope.isHide = false;
-	$scope.checkSwipe = function(isHide) {
+	$scope.hideTool = false;
+	$scope.hideMenu = true;
+	$scope.checkToolSwipe = function(hideTool) {
 		if ($scope.tool == DrawFactory.tools.MODE) {
-			$scope.isHide = isHide;
+			$scope.hideTool = hideTool;
+		}
+	};
+	$scope.checkMenuSwipe = function(hideMenu) {
+		if ($scope.tool == DrawFactory.tools.MODE) {
+			$scope.hideMenu = hideMenu;
 		}
 	};
 	// $scope.changeTool = function(index) {
@@ -102,12 +108,25 @@ app.controller('SlideCtrl', function($scope, $rootScope, DrawFactory, SlideManag
 			$scope.isEnd = SlideManager.isEnd();
 		}
 	};
-	$scope.isHide = false;
-	$scope.checkSwipe = function(isHide) {
+	$scope.hideTool = false;
+	$scope.hideMenu = true;
+	$scope.checkToolSwipe = function(hideTool) {
 		if ($scope.tool == DrawFactory.tools.MODE) {
-			$scope.isHide = isHide;
+			$scope.hideTool = hideTool;
 		}
 	};
+	$scope.checkMenuSwipe = function(hideMenu) {
+		if ($scope.tool == DrawFactory.tools.MODE) {
+			$scope.hideMenu = hideMenu;
+		}
+	};
+	$rootScope.$on('tool', function(e, tool) {
+		if (tool == DrawFactory.tools.MODE) {
+			$scope.isShow = true;
+		} else {
+			$scope.isShow = false;
+		}
+	});
 
 	// $scope.tools = [];
 	// $scope.attrs = [];
@@ -121,13 +140,6 @@ app.controller('SlideCtrl', function($scope, $rootScope, DrawFactory, SlideManag
 	// $scope.changeTool = function(index) {
 	// 	$scope.tool = $scope.tools[index];
 	// $rootScope.$broadcast('tool', $scope.tool);
-	$rootScope.$on('tool', function(e, tool) {
-		if (tool == DrawFactory.tools.MODE) {
-			$scope.isShow = true;
-		} else {
-			$scope.isShow = false;
-		}
-	});
 	// };
 	// $scope.changeAttr = function(index) {
 	// 	$rootScope.$broadcast('attr', $scope.attrs[index]);

@@ -23,16 +23,16 @@ app.controller('MenuLeftCtrl', function($scope, $sce, $timeout, $window, LoginMa
 	};
 });
 app.controller('MainCtrl', function($scope, $state, $rootScope, DrawFactory) {
-	var isSwipe = true;
-	$scope.isShow = false;
-	$scope.checkSwipe = function(isShow) {
-		if (isSwipe) {
-			$scope.isShow = isShow;
-		}
-	};
-	$rootScope.$on('tool', function(e, tool) {
-		isSwipe = tool == DrawFactory.tools.MODE;
-	});
+	// var isSwipe = true;
+	// $scope.isShow = false;
+	// $scope.checkSwipe = function(isShow) {
+	// 	if (isSwipe) {
+	// 		$scope.isShow = isShow;
+	// 	}
+	// };
+	// $rootScope.$on('tool', function(e, tool) {
+	// 	isSwipe = tool == DrawFactory.tools.MODE;
+	// });
 });
 app.controller('AccessCtrl', function($state, LoginManager) {
 	var route = $state.current.name;
@@ -57,6 +57,7 @@ app.controller('MenuRightCtrl', function($scope, $rootScope, $state) {
 
 	function checkRoute() {
 		var route = $state.current.url;
+		console.log(route)
 		// $scope.isHide = route == "/home/teacher" || route == "/home/student";
 		switch (route) {
 			case "/draw":

@@ -33,13 +33,20 @@ app.directive('driveSlide', function($q, cfpLoadingBar, GoogleService, SlideMana
 
 				var deferred = $q.defer();
 				SlideManager.setMax(deferred);
-				GoogleService.getFile($scope.id).then(function(data) {
+				$scope.getPdf($scope.id).then(function(pdf) {
+					deferred.resolve(pdf.pdfInfo.numPages);
+				});
+			};
+			$scope.getPdf = function(id) {
+				var deferred = $q.defer();
+				GoogleService.getFile(id).then(function(data) {
 					var url = data.exportLinks['application/pdf'];
 					PDFService.load(url).then(function(pdf) {
 						$scope.pdf = pdf;
-						deferred.resolve(pdf.pdfInfo.numPages);
+						deferred.resolve(pdf);
 					});
 				});
+				return deferred.promise;
 			};
 			$scope.share = function() {
 				GoogleService.shareFile(id).then(function(data) {
@@ -71,31 +78,36 @@ app.directive('driveSlide', function($q, cfpLoadingBar, GoogleService, SlideMana
 			};
 
 			$scope.saveSlide = function() {
+				cfpLoadingBar.start();
 				var name = "test";
-				Canvas.getCanvas().then(function() {
+				// Canvas.getCanvas().then(function() {
 
-					if ($scope.id) {
-						if ($scope.pdf) {
-							var n = pdf.pdfInfo.numPages;
-							var mirrors = [];
-							for (var i = 1; i <= n; i++) {
-								var cs = loadCanvas(Canvas.types.MIRROR + "-" + i);
-								mirrors.push(cs);
-							}
+				var id = SlideManager.slide;
+				if (id) {
+					$scope.getPdf(id).then(function(pdf) {
 
-							PDFService.init(mirrors);
-							PDFService.render(pdf, n).then(function(data) {
-								console.log(data);
-								var obj = {};
-								obj.type = "application/pdf";
-								obj.data = data.split(",")[1];
-								obj.fileName = name;
-								GoogleService.insertFile(obj);
-							});
+						var n = pdf.pdfInfo.numPages;
+						var mirrors = [];
+						for (var i = 1; i <= n; i++) {
+							var cs = loadCanvas(Canvas.types.MIRROR + "-" + i);
+							mirrors.push(cs);
 						}
 
-					}
-				});
+						PDFService.init(mirrors);
+						PDFService.render(pdf, n).then(function(data) {
+							console.log(data);
+							var obj = {};
+							obj.type = "application/pdf";
+							obj.data = data.split(",")[1];
+							obj.fileName = name;
+							GoogleService.insertFile(obj).then(function(data){
+								cfpLoadingBar.complete();
+							});
+						});
+
+					});
+				}
+				// });
 			};
 		}
 	};

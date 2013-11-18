@@ -6,14 +6,6 @@ app.directive('menuLeft', function() {
 	};
 });
 
-app.directive('menuRight', function() {
-	return {
-		restrict: 'E',
-		templateUrl: 'main/template/menu_right.tpl.html',
-		controller: 'MenuRightCtrl'
-	};
-});
-
 app.directive('scrollBar', function() {
 	return {
 		restrict: 'AC',
@@ -46,8 +38,8 @@ app.directive('fitSize', function() {
 	return {
 		restrict: 'AC',
 		link: function(scope, iElement, iAttrs) {
-			$(iElement).width($('.pad').width());
-			$(iElement).height($('.pad').height());
+			$(iElement).width(iElement.parent().width());
+			$(iElement).height(iElement.parent().height());
 		}
 	};
 });

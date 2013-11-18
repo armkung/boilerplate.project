@@ -153,7 +153,6 @@ app.service('GoogleService', function($q) {
 
 
 		request.execute(function(resp) {
-			console.log(resp);
 			deferred.resolve(resp);
 		});
 

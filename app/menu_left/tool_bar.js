@@ -4,7 +4,7 @@ app.directive('toolBar', function($rootScope, DrawFactory) {
 		templateUrl: 'menu_left/template/tool_bar.tpl.html',
 		scope: {
 			tool: '=',
-			isHide: '='
+			isHide: '@'
 		},
 		link: function(scope, iElement, iAttrs) {
 			var tools = DrawFactory.tools;
