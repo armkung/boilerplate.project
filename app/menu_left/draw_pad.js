@@ -1,9 +1,9 @@
-app.directive("drawPad", function($rootScope, $timeout, DrawManager, DrawFactory, Input, Room, DataManager) {
+app.directive("drawPad", function($rootScope, $window, $timeout, DrawManager, DrawFactory, Input, Room, DataManager) {
 	return {
 		restrict: 'A',
 		scope: {
 			text: '@',
-			send: '@'
+			send: '='
 		},
 		link: function(scope, iElement, iAttr) {
 			var type = DataManager.types.POS;
@@ -11,6 +11,7 @@ app.directive("drawPad", function($rootScope, $timeout, DrawManager, DrawFactory
 			DrawManager.init(id);
 
 			function sendData(obj) {
+				console.log(scope.send)
 				if (scope.send) {
 					obj.name = DrawManager.getName();
 					DataManager.setData(type, obj);
@@ -185,8 +186,8 @@ app.directive("drawPad", function($rootScope, $timeout, DrawManager, DrawFactory
 			$rootScope.$on('tool', function(e, tool) {
 				scope.tool = tool;
 				// if (scope.tool != null) {
-					Input.hide();
-					DrawFactory.setTool(tool);
+				Input.hide();
+				DrawFactory.setTool(tool);
 				// 	scope.tool = null;
 				// }
 			});

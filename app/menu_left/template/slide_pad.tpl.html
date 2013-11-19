@@ -7,18 +7,18 @@
 			<div class="control-area" ng-show="isShow" ng-click="prevIndex(false)"></div>
 			<div class="control-area" ng-show="isShow" ng-click="nextIndex(false)"></div>
 			<div class="mirror" fit-size>
-				<canvas id="mirror-1" draw-pad text="{{text}}" send="{{isSend}}">
+				<canvas id="mirror-1" draw-pad text="{{text}}" send="isSend">
 				</canvas>
 				<input 	id="textbox" ng-model="text">
 				<tool-bar class="toolbar" tool="tool" is-hide="{{hideTool&&!isDesktop}}"></tool-bar>
 			</div>
 			<div class="slide-pad" fit-size>
-				<slide-pad send="{{isSend}}"></slide-pad>
+				<slide-pad send="isSend"></slide-pad>
 			</div>
 		</div>
 
-		<div ng-if="isDesktop" class="well col-md-3 col-lg-3">
-			<chat></chat>
+		<div ng-if="isDesktop" class="col-md-3 col-lg-3 fit-height">
+			<chat class="well"></chat>
 		</div>
 		<div ng-if="!isDesktop" ng-hide="hideMenu" class="nav-right">
 			<chat></chat>

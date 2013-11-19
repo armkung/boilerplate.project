@@ -11,7 +11,7 @@ app.directive('driveQuiz', function() {
 		}
 	};
 });
-app.directive('driveSlide', function($q, cfpLoadingBar, GoogleService, SlideManager, Canvas, DrawManager, PDFService) {
+app.directive('driveSlide', function($rootScope, $q, cfpLoadingBar, GoogleService, SlideManager, Canvas, DrawManager, PDFService) {
 	return {
 		restrict: 'E',
 		templateUrl: 'menu_left/template/drive_slide.tpl.html',
@@ -25,7 +25,12 @@ app.directive('driveSlide', function($q, cfpLoadingBar, GoogleService, SlideMana
 					cfpLoadingBar.complete();
 				});
 			});
+			$rootScope.$watch('slideSelected', function() {
+				$scope.selected = $rootScope.slideSelected;
+			});
 			$scope.select = function(index) {
+				$rootScope.slideSelected = index;
+
 				var id = $scope.datas[index].id;
 				SlideManager.setSlide(id);
 				console.log(id);
@@ -100,7 +105,7 @@ app.directive('driveSlide', function($q, cfpLoadingBar, GoogleService, SlideMana
 							obj.type = "application/pdf";
 							obj.data = data.split(",")[1];
 							obj.fileName = name;
-							GoogleService.insertFile(obj).then(function(data){
+							GoogleService.insertFile(obj).then(function(data) {
 								cfpLoadingBar.complete();
 							});
 						});

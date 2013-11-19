@@ -7,6 +7,7 @@ app.service("QuizManager", function($q, $http, host_drupal) {
         question: "ques2",
         answer: ["a", "b", "c", "d"]
     }];
+    this.index = 0;
     this.node = 8;
     this.load = function() {
         var deferred = $q.defer();

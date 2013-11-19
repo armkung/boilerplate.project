@@ -6,7 +6,7 @@
 	<div class="row">
 
 		<div class="pad col-md-9 col-lg-9">
-			<canvas id="draw" draw-pad text="{{text}}" send="{{isSend}}"></canvas>
+			<canvas id="draw" draw-pad text="{{text}}" send="true" fit-size></canvas>
 			<input id="textbox" ng-model="text">
 			<tool-bar class="toolbar" tool="tool" is-hide="{{hideTool&&!isDesktop}}"></tool-bar>
 		</div>

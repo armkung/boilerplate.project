@@ -3,7 +3,7 @@ app.directive('slidePad', function($q, $sce, $state, cfpLoadingBar, DrawManager,
 		restrict: 'E',
 		template: '<iframe id="slide" ng-src="{{url}}"></iframe>',
 		scope: {
-			send: '@'
+			send: '='
 		},
 		link: function(scope, iElement, iAttr) {
 			var id = "mirror";

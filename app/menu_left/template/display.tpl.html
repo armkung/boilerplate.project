@@ -1,0 +1,11 @@
+<div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-body">
+			<img ng-src="{{url+item}}" ng-repeat="item in items" ng-click="select($index)">
+		</div>
+		<div class="modal-footer">
+			<button ng-click="ok()">Ok</button>
+			<button ng-click="cancel()">Cancel</button>
+		</div>	
+	</div>
+</div>'

@@ -1,6 +1,13 @@
-<div>
-	<select ng-model="room" ng-options="room for room in rooms"></select>
+<div class="container">
+	<!-- <select ng-model="room" ng-options="room for room in rooms"></select> -->
 	<button ng-click="list()">List</button>		
 	<button ng-click="connect()">Connect</button>		
 	<button ng-click="disconnect()">Disconnect</button>
+
+	<div ng-repeat="room in rooms">
+		<div class="well" ng-class="{selected: selected==$index}" ng-click="select($index)">
+			<img ng-src="{{room.display}}"/>
+			{{room.name}}
+		</div>
+	</div>
 </div>

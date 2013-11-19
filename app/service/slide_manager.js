@@ -8,6 +8,7 @@ app.service('SlideManager', function($http, $q, $rootScope) {
 	// var slide = "1-oQjVefFucKtYkHP1dgLQdt3G6OsTTnjXvAw1EyZ8Lc";
 	// var slide, index;
 	var deferred;
+	this.index = 0;
 	this.setMax = function(df) {
 		deferred = df;
 	};

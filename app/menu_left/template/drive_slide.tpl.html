@@ -6,7 +6,7 @@
 	<button ng-click="saveDraw()">Save Draw</button>
 	<div class="container fit-height list" scroll-bar>
 		<div class="row">
-			<div class="well col-lg-8" ng-repeat="data in datas" ng-click="select($index)">
+			<div class="well col-lg-8" ng-class="{selected: selected==$index}" ng-repeat="data in datas" ng-click="select($index)">
 				{{data.title}}
 			</div>
 		</div>
