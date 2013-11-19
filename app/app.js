@@ -29,11 +29,11 @@ app.config(function($stateProvider, $urlRouterProvider) {
 	}).state('main.home_teacher', {
 		url: '/home/teacher',
 		templateUrl: 'menu_left/template/home_teacher.tpl.html',
-		controller: 'RoomCtrl'
+		controller: 'HomeTeacherCtrl'
 	}).state('main.home_student', {
 		url: '/home/student',
 		templateUrl: 'menu_left/template/home_student.tpl.html',
-		controller: 'RoomCtrl'
+		controller: 'HomeStudentCtrl'
 	}).state('main.slide', {
 		url: '/slide',
 		templateUrl: 'menu_left/template/slide_pad.tpl.html',

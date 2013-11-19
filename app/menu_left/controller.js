@@ -74,15 +74,7 @@ app.controller('QuizTeacherCtrl', function($scope, QuizManager, DataManager) {
 });
 
 app.controller('HandWriteCtrl', function($scope, $rootScope, DrawFactory, Canvas) {
-	// $scope.tools = [];
-	// $scope.attrs = [];
 	$scope.isSend = true;
-	// angular.forEach(DrawFactory.tools, function(value, key) {
-	// 	$scope.tools.push(value);
-	// });
-	// angular.forEach(DrawFactory.attrs, function(value, key) {
-	// 	$scope.attrs.push(value);
-	// });
 	$scope.hideTool = false;
 	$scope.hideMenu = true;
 	$scope.checkToolSwipe = function(hideTool) {
@@ -95,14 +87,6 @@ app.controller('HandWriteCtrl', function($scope, $rootScope, DrawFactory, Canvas
 			$scope.hideMenu = hideMenu;
 		}
 	};
-	// $scope.changeTool = function(index) {
-	// 	$scope.tool = $scope.tools[index];
-	// 	$rootScope.$broadcast('tool', $scope.tool);
-	// };
-	// $scope.changeAttr = function(index) {
-	// 	$rootScope.$broadcast('attr', $scope.attrs[index]);
-	// };
-	// $scope.changeTool($scope.tools.indexOf(DrawFactory.tools.MODE));
 });
 
 app.controller('SlideCtrl', function($scope, $rootScope, DrawFactory, SlideManager) {
@@ -122,6 +106,7 @@ app.controller('SlideCtrl', function($scope, $rootScope, DrawFactory, SlideManag
 			$scope.isEnd = SlideManager.isEnd();
 		}
 	};
+	$scope.isSend = true;
 	$scope.hideTool = false;
 	$scope.hideMenu = true;
 	$scope.checkToolSwipe = function(hideTool) {
@@ -142,31 +127,45 @@ app.controller('SlideCtrl', function($scope, $rootScope, DrawFactory, SlideManag
 		}
 	});
 
-	// $scope.tools = [];
-	// $scope.attrs = [];
-	$scope.isSend = true;
-	// angular.forEach(DrawFactory.tools, function(value, key) {
-	// 	$scope.tools.push(value);
-	// });
-	// angular.forEach(DrawFactory.attrs, function(value, key) {
-	// 	$scope.attrs.push(value);
-	// });
-	// $scope.changeTool = function(index) {
-	// 	$scope.tool = $scope.tools[index];
-	// $rootScope.$broadcast('tool', $scope.tool);
-	// };
-	// $scope.changeAttr = function(index) {
-	// 	$rootScope.$broadcast('attr', $scope.attrs[index]);
-	// };
-
-	// $scope.changeTool($scope.tools.indexOf(DrawFactory.tools.MODE));
 });
 
-app.controller('RoomCtrl', function($scope, Room, Socket, LoginManager) {
+app.controller('HomeTeacherCtrl', function($scope, Room, Socket, LoginManager) {
+	LoginManager.getUser().then(function(user) {
+		$scope.user = user;
+		$scope.room = "";
+		Room.room = $scope.room;
+		$scope.display = "";
+
+		Socket.on("leave:room", function(user) {
+			var index = Room.users.indexOf(user);
+			if (index != -1) {
+				Room.users.splice(index, 1);
+			}
+		});
+		$scope.create = function() {
+			if ($scope.room != "") {
+				Room.room = $scope.room;
+				Room.user = $scope.user.username;
+				Socket.emit("create:room", {
+					room: $scope.room,
+					user: $scope.user
+				});
+			} else {
+				alert("Input Room name");
+			}
+		};
+		$scope.close = function() {
+			Socket.emit("close:room", {}, function(emails) {
+				console.log(emails);
+			});
+		};
+
+	});
+});
+app.controller('HomeStudentCtrl', function($scope, Room, Socket, LoginManager) {
 	LoginManager.getUser().then(function(user) {
 		// $scope.user = String.fromCharCode(Math.random() * 26 + 97);
 		$scope.user = user;
-
 		$scope.room = "";
 		Room.room = $scope.room;
 
@@ -181,34 +180,27 @@ app.controller('RoomCtrl', function($scope, Room, Socket, LoginManager) {
 				$scope.rooms = rooms;
 			});
 		};
-		$scope.list();
 		$scope.connect = function() {
-			Room.room = $scope.room;
-			Room.user = $scope.user.username;
-			Socket.emit("connect:room", {
-				room: $scope.room,
-				user: $scope.user
-			}, function(id) {
+			if ($scope.room != "") {
+				Room.room = $scope.room;
+				Room.user = $scope.user.username;
+				Socket.emit("connect:room", {
+					room: $scope.room,
+					user: $scope.user
+				}, function(id) {
 
-			});
-		};
-		$scope.create = function() {
-			Room.room = $scope.room;
-			Room.user = $scope.user.username;
-			Socket.emit("create:room", {
-				room: $scope.room,
-				user: $scope.user
-			});
-		};
-		$scope.close = function() {
-			Socket.emit("close:room", {}, function(emails) {
-				console.log(emails);
-			});
+				});
+			} else {
+				alert("Input Room name");
+			}
 		};
 		$scope.disconnect = function() {
 			Socket.emit("leave:room");
 			Socket.disconnect();
 		};
+		$scope.list();
+
+		$scope.room = "public";
 		$scope.connect();
 	});
 });
