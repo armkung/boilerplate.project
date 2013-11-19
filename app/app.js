@@ -1,5 +1,6 @@
 var app = angular.module('socket', ['templates-app', 'templates-common',
-	'ui.router', 'ui.bootstrap', 'ngGesture', 'chieffancypants.loadingBar', 'colorpicker.module'
+	'ui.router', 'ui.bootstrap', 'ngGesture', 'chieffancypants.loadingBar',
+	'colorpicker.module', 'highcharts-ng'
 ]);
 
 app.constant('host_node', 'http://localhost:8080');

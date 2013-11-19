@@ -1,62 +1,76 @@
 app.controller('QuizStudentCtrl', function($scope, QuizManager, DataManager) {
-	// QuizManager.load().then(function(data) {
-	// 	$('#slickQuiz').slickQuiz({
-	// 		json: data,
-	// 		skipStartButton: true
-	// 	});
+	// QuizManager.load().then(function(quiz) {
+	var quiz = QuizManager.quiz;
+	var type = DataManager.types.QUIZ;
+	var index = 0,
+		select = 0,
+		n = quiz.length;
+	$scope.isEnd = false;
+	$scope.selected = false;
+	$scope.next = function() {
+		if (index !== 0) {
+			var obj = {};
+			obj.question = index - 1;
+			obj.answer = select;
+			console.log(select);
+			DataManager.setData(type, obj);
+		}
+		if (index < n) {
+			$scope.question = quiz[index].question;
+			$scope.answer = quiz[index].answer;
+			index++;
+		} else {
+			$scope.isEnd = true;
+		}
+	};
+	$scope.select = function(index) {
+		select = index;
+	};
+	$scope.next(index);
 	// });
-	QuizManager.load().then(function(quiz) {
-		var type = DataManager.types.QUIZ;
-		// var quiz = QuizManager.quiz;
-		var index = 0,
-			select = 0,
-			n = quiz.length;
-		$scope.isEnd = false;
-		$scope.selected = false;
-		$scope.next = function() {
-			if (index !== 0) {
-				var obj = {};
-				obj.question = index - 1;
-				obj.answer = select;
-				console.log(select);
-				DataManager.setData(type, obj);
-			}
-			if (index < n) {
-				$scope.question = quiz[index].question;
-				$scope.answer = quiz[index].answer;
-				index++;
-			} else {
-				$scope.isEnd = true;
-			}
-		};
-		$scope.select = function(index) {
-			select = index;
-		};
-		$scope.next(index);
-	});
 });
 app.controller('QuizTeacherCtrl', function($scope, QuizManager, DataManager) {
-	QuizManager.load().then(function(data) {
-		var type = DataManager.types.QUIZ;
-		$scope.quiz = [];
-		angular.forEach(data, function(quiz, key) {
-			var obj = {};
-			obj.question = quiz.question;
-			obj.answer = [];
-			angular.forEach(quiz.answer, function(answer, key) {
-				obj.answer.push({
-					name: answer,
-					n: 0
-				});
-			});
-			$scope.quiz.push(obj);
-		});
+	$scope.chartConfig = QuizManager.chartConfig;
+	console.log($scope.chartConfig)
 
-		DataManager.getData(type, function(data) {
-			$scope.quiz[data.question].answer[data.answer].n += 1;
-			console.log($scope.quiz);
+
+	// QuizManager.load().then(function(data) {
+	var data = QuizManager.quiz;
+	var type = DataManager.types.QUIZ;
+	var current = 0;
+	$scope.quiz = [];
+	angular.forEach(data, function(quiz, key) {
+		var obj = {};
+		obj.question = quiz.question;
+		obj.answer = {
+			name: [],
+			data: []
+		};
+		angular.forEach(quiz.answer, function(answer, key) {
+			obj.answer.name.push(answer);
+			obj.answer.data.push(0);
 		});
+		$scope.quiz.push(obj);
 	});
+	console.log($scope.quiz)
+
+	DataManager.getData(type, function(data) {
+		// $scope.chartConfig.title.text = $scope.quiz[data.question].question;
+		var series = $scope.quiz[data.question].answer.data;
+		series[data.answer]++;
+		if (data.question == current) {
+			$scope.chartConfig.series[0].data = series;
+		}
+	});
+
+	$scope.changeIndex = function(index) {
+		current = index;
+		var quiz = $scope.quiz[index];
+		$scope.chartConfig.title.text = quiz.question;
+		$scope.chartConfig.series[0].data = quiz.answer.data;
+	};
+	$scope.changeIndex(0);
+	// });
 });
 
 app.controller('HandWriteCtrl', function($scope, $rootScope, DrawFactory, Canvas) {

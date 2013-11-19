@@ -1,11 +1,4 @@
 <div>
-	<div ng-repeat="q in quiz">
-		<div>
-			{{q.question}}
-		</div>
-		<div ng-repeat="answer in q.answer">
-			{{answer.n}}
-			{{answer.name}}
-		</div>
-	</div>
+	<button style="display:inline;" ng-repeat="q in quiz" ng-click="changeIndex($index)">{{$index}}</button>
+	<highchart class="fit-height" config="chartConfig" ></highchart>
 </div>
