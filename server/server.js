@@ -91,6 +91,29 @@ io.sockets.on('connection', function(socket) {
 
 		console.log("User : '" + user.username + "' join Room : '" + room + "'")
 	}
+
+	function logOutUser(room) {
+		var users = logger.logData[room].users;
+
+		function getUserName(id) {
+			for (name in users) {
+				if (users[name].id == id) {
+					return name;
+				}
+			}
+			return "";
+		}
+		var clients = io.sockets.clients(room)
+		if (clients) {
+			for (var i = 0; i < clients.length; i++) {
+				var name = getUserName(clients[i].id);
+				socket.set('userName', name);
+				clients[i].disconnect();
+			}
+			logger.save(room);
+		}
+	}
+
 	socket.on('list:room', function(data, callback) {
 		var host = io.sockets.manager.rooms;
 		var rooms = [];
@@ -133,19 +156,15 @@ io.sockets.on('connection', function(socket) {
 	socket.on('close:room', function(data, callback) {
 		socket.get('roomName', function(err, room) {
 			if (room != null) {
-				var clients = io.sockets.clients(room)
-				if (clients) {
-					callback(logger.getEmails());
+				logOutUser(room);
 
-					for (var i = 0; i < clients.length; i++) {
-						clients[i].disconnect();
-					}
-					logger.save(room);
+				if (callback) {
+					callback(logger.getEmails());
 				}
 			}
 		});
 	});
-	socket.on('leave:room', function() {
+	socket.on('disconnect:room', function() {
 		socket.get('roomName', function(err, room) {
 			if (room != null) {
 				socket.get('userName', function(err, user) {
@@ -160,9 +179,15 @@ io.sockets.on('connection', function(socket) {
 		socket.get('roomName', function(err, room) {
 			if (room != null) {
 				socket.get('userName', function(err, user) {
+					var owner = logger.logData[room].room.owner;
+					if (user == owner) {
+						logOutUser(room);
+					}
+
 					console.log("User : " + user + " disconnect");
 					socket.leave(room)
 					socket.broadcast.to(room).emit('leave:room', getId());
+
 				});
 			}
 		});

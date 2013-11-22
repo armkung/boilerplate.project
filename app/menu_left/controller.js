@@ -150,6 +150,7 @@ app.controller('HomeTeacherCtrl', function($scope, $modal, Room, Socket, LoginMa
 				Socket.emit("create:room", {
 					room: {
 						name: $scope.room,
+						owner: $scope.user.username,
 						display: $scope.display
 					},
 					user: $scope.user
@@ -188,9 +189,9 @@ app.controller('HomeTeacherCtrl', function($scope, $modal, Room, Socket, LoginMa
 			});
 		};
 
-		// $scope.room = "public";
-		// $scope.display = "";
-		// $scope.create();
+		$scope.room = "public";
+		$scope.display = "";
+		$scope.create();
 	});
 });
 
@@ -235,15 +236,15 @@ app.controller('HomeStudentCtrl', function($scope, $rootScope, Room, Socket, Log
 			}
 		};
 		$scope.disconnect = function() {
-			Socket.emit("leave:room");
+			Socket.emit("disconnect:room");
 			Socket.disconnect();
 		};
 		$scope.list();
 
-		// $scope.room = {
-		// 	name: "public",
-		// 	display: ""
-		// };
-		// $scope.connect();
+		$scope.room = {
+			name: "public",
+			display: ""
+		};
+		$scope.connect();
 	});
 });
