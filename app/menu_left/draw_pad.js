@@ -11,7 +11,6 @@ app.directive("drawPad", function($rootScope, $window, $timeout, DrawManager, Dr
 			DrawManager.init(id);
 
 			function sendData(obj) {
-				console.log(scope.send)
 				if (scope.send) {
 					obj.name = DrawManager.getName();
 					DataManager.setData(type, obj);
