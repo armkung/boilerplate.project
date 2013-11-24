@@ -1,4 +1,4 @@
-app.service('LoginManager', function($q, $http) {
+app.service('LoginManager', function($q, $http, host_drupal) {
 	var self = this;
 
 	var user;
@@ -8,8 +8,8 @@ app.service('LoginManager', function($q, $http) {
 		STUDENT: "student"
 	};
 	this.getUser = function() {
-		if(user){
-			deferred.resolve(user);	
+		if (user) {
+			deferred.resolve(user);
 		}
 		return deferred.promise;
 	};
@@ -17,24 +17,22 @@ app.service('LoginManager', function($q, $http) {
 		return angular.isUndefined(user);
 	};
 	this.login = function(data) {
-		// deferred = $q.defer();
 		user = data;
-		if(user.username == "Arm Kung"){
-			user.accessLevel = self.level.STUDENT;
-		}else{
-			user.accessLevel = self.level.TEACHER;			
-		}
-		deferred.resolve(user);
+		// if (user.username == "Arm Kung") {
+		// 	user.accessLevel = self.level.STUDENT;
+		// } else {
+		// 	user.accessLevel = self.level.TEACHER;
+		// }
+		// deferred.resolve(user);
 		var obj = {
 			username: user.username,
 			email: user.email
 		};
-		// $http.jsonp("http://172.168.1.186/drupal/greedmonkey/regis?username=" 
-		// 	+ user.username + "&email=" + user.email + "&callback=JSON_CALLBACK").then(function(data) {
-		// 	var roles = data.data;
-		// 	user.accessLevel = roles[1];
-		// 	deferred.resolve(user.accessLevel);			
-		// });
+		$http.jsonp(host_drupal + "/greedmonkey/login/" + user.email + "/" + user.username + "?callback=JSON_CALLBACK").then(function(data) {
+			var roles = data.data;
+			user.accessLevel = roles[1];
+			deferred.resolve(user.accessLevel);
+		});
 		return deferred.promise;
 	};
 	this.getAccess = function() {

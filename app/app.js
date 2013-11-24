@@ -4,7 +4,7 @@ var app = angular.module('socket', ['templates-app', 'templates-common',
 ]);
 
 app.constant('host_node', 'http://localhost:8080');
-app.constant('host_drupal', 'http://10.16.86.131');
+app.constant('host_drupal', 'http://science.kmutt.ac.th/drupal');
 
 app.config(function(cfpLoadingBarProvider) {
 	cfpLoadingBarProvider.includeSpinner = false;

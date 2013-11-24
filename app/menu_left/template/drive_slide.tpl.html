@@ -1,14 +1,20 @@
-<div>
-	<div style="display:none;">
-		<canvas id="data"/>
-	</div>
-	<button class="btn" ng-click="saveSlide()">Save Slide</button>
-	<button class="btn" ng-click="saveDraw()">Save Draw</button>
-	<div class="container fit-height list" scroll-bar>
-		<div class="row">
-			<div class="well col-lg-8" ng-class="{selected: selected==$index}" ng-repeat="data in datas" ng-click="select($index)">
-				{{data.title}}
-			</div>
+<div class="widget-box">	
+	<div class="widget-body">
+
+		<div style="display:none;">
+			<canvas id="data"/>
 		</div>
+		<button class="btn" ng-click="saveSlide()">Save Slide</button>
+		<button class="btn" ng-click="saveDraw()">Save Draw</button>
+		<div class="list fit-height" scroll-bar>
+			<!-- <div class="tab-pane active"> -->
+				<ul class="item-list">
+					<li class="item-grey clearfix" ng-class="{selected: selected==$index}" ng-repeat="data in datas" ng-click="select($index)">
+						{{data.title}}
+					</li>
+				</ul>
+			<!-- </div> -->
+		</div>
+
 	</div>
 </div>
