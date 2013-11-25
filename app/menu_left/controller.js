@@ -92,7 +92,6 @@ app.controller('HandWriteCtrl', function($scope, $rootScope, DrawFactory, Canvas
 app.controller('SlideCtrl', function($scope, $rootScope, LoginManager, DrawFactory, SlideManager) {
 	LoginManager.getUser().then(function(user) {
 		$scope.isSend = LoginManager.getAccess() == LoginManager.level.TEACHER;
-		console.log($scope.isSend)
 		$scope.isStart = true;
 		$scope.isEnd = false;
 		$scope.nextIndex = function(isSwipe) {

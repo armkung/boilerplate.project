@@ -29,7 +29,6 @@ app.directive('isVisible', function() {
 		link: function(scope, iElement, iAttrs) {
 			var display = iElement.css('display');
 			scope.isVisible = display != 'none';
-			console.log(display)
 		}
 	};
 });

@@ -50,8 +50,7 @@ app.service('SlideManager', function($http, $q, $rootScope) {
 	function changeIndex(k) {
 		var index = self.index + k;
 		index = Math.max(1, index);
-
-		return index <= self.max ? index : self.max;
+		return index <= self.max || angular.isUndefined(self.max) ? index : self.max;
 	}
 
 });

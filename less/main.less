@@ -2,7 +2,7 @@
 @draw_color: white;
 @loading_bar_color: red;
 @selected: blue;
-@navbar_height: 45;
+@navbar_height: 30px;
 @toolbar_height: 28;
 @display_width:100;
 @display_height:100;
@@ -42,9 +42,9 @@
 	height: @toolbar_height;
 	background-color: blue;
 }
-.color{
-	/*width: 100px;
-	height: 100px;*/
+.nav-tab {
+	line-height: @navbar_height !important; 
+	height: @navbar_height !important;
 }
 body,html{ 
 	width: 100%;
@@ -61,6 +61,7 @@ body{
 }
 .navbar{
 	z-index: 0;
+	min-height: @navbar_height !important;
 }
 #loading-bar .bar {
 	background: @loading_bar_color;

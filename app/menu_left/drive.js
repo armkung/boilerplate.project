@@ -33,7 +33,6 @@ app.directive('driveSlide', function($rootScope, $q, cfpLoadingBar, GoogleServic
 
 				var id = $scope.datas[index].id;
 				SlideManager.setSlide(id);
-				console.log(id);
 				$scope.id = id;
 
 				var deferred = $q.defer();
