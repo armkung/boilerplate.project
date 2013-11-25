@@ -1,0 +1,19 @@
+<div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-body">
+			<img class="width-20" ng-src="{{room.display}}"/>
+			<div class="inline">
+				<span>Name :</span>
+				<span>{{room.name}}</span>
+				<div>
+					<button class="inline" ng-click="ok()">Ok</button>
+					<button class="inline" ng-click="cancel()">Cancel</button>
+				</div>
+			</div>
+			<div>
+				<span>Description :</span><br/>
+				<span>{{room.description}}</span>
+			</div>
+		</div>
+	</div>
+</div>

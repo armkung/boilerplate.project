@@ -11,10 +11,14 @@ app.controller('LoginCtrl', function($scope, $state, $modalInstance, GoogleServi
 	});
 });
 
-app.controller('MenuLeftCtrl', function($scope, $sce, $timeout, $window, LoginManager) {
+app.controller('MenuLeftCtrl', function($scope, $sce, $timeout, $window, Room, LoginManager) {
 	LoginManager.getUser().then(function(user) {
-		$scope.name = user.username;
+		$scope.userName = user.username;
 	});
+	$scope.room = Room;
+	$scope.$watch('room.room', function() {
+		$scope.roomName = Room.room;
+	})
 	$scope.logout = function() {
 		$scope.url = $sce.trustAsResourceUrl("https://accounts.google.com/logout");
 		$timeout(function() {

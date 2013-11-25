@@ -151,7 +151,8 @@ app.controller('HomeTeacherCtrl', function($scope, $modal, Room, Socket, LoginMa
 					room: {
 						name: $scope.room,
 						owner: $scope.user.username,
-						display: $scope.display
+						display: $scope.display,
+						description: $scope.description
 					},
 					user: $scope.user
 				});
@@ -195,7 +196,7 @@ app.controller('HomeTeacherCtrl', function($scope, $modal, Room, Socket, LoginMa
 	});
 });
 
-app.controller('HomeStudentCtrl', function($scope, $rootScope, Room, Socket, LoginManager) {
+app.controller('HomeStudentCtrl', function($scope, $rootScope, $modal, Room, Socket, LoginManager) {
 	LoginManager.getUser().then(function(user) {
 
 		// $scope.user = String.fromCharCode(Math.random() * 26 + 97);
@@ -210,13 +211,12 @@ app.controller('HomeStudentCtrl', function($scope, $rootScope, Room, Socket, Log
 		$rootScope.$watch('roomSelected', function() {
 			$scope.selected = $rootScope.roomSelected;
 		});
-		$scope.select = function(index) {
-			$rootScope.roomSelected = index;
-			$scope.room = $scope.rooms[index];
-		};
+		// $scope.select = function(index) {
+		// 	$rootScope.roomSelected = index;
+		// 	$scope.room = $scope.rooms[index];
+		// };
 		$scope.list = function() {
 			Socket.emit("list:room", {}, function(rooms) {
-				console.log(rooms)
 				$scope.rooms = rooms;
 			});
 		};
@@ -224,7 +224,6 @@ app.controller('HomeStudentCtrl', function($scope, $rootScope, Room, Socket, Log
 			if ($scope.room.name != "") {
 				Room.room = $scope.room.name;
 				Room.user = $scope.user.username;
-				console.log($scope.room)
 				Socket.emit("connect:room", {
 					room: $scope.room,
 					user: $scope.user
@@ -238,6 +237,33 @@ app.controller('HomeStudentCtrl', function($scope, $rootScope, Room, Socket, Log
 		$scope.disconnect = function() {
 			Socket.emit("disconnect:room");
 			Socket.disconnect();
+		};
+		$scope.showDetail = function(index) {
+			var modal = $modal.open({
+				templateUrl: 'menu_left/template/detail.tpl.html',
+				resolve: {
+					room: function() {
+						return $scope.rooms[index];
+					},
+					index: function() {
+						return index;
+					}
+				},
+				controller: function($scope, $modalInstance, room, index) {
+					$scope.room = room;
+					$scope.ok = function() {
+						$modalInstance.close(index);
+					};
+					$scope.cancel = function() {
+						$modalInstance.dismiss('cancel');
+					};
+				}
+			});
+			modal.result.then(function(index) {
+				$rootScope.roomSelected = index;
+				$scope.room = $scope.rooms[index];
+				$scope.connect();
+			});
 		};
 		$scope.list();
 

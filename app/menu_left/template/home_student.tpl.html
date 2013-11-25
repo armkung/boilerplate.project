@@ -4,7 +4,7 @@
 	<button ng-click="connect()">Connect</button>		
 	<button ng-click="disconnect()">Disconnect</button>
 	<div class="room-list">
-		<div class="infobox infobox-dark" ng-repeat="room in rooms" ng-class="{'infobox-blue3': selected==$index,'infobox-blue': selected!=$index}" ng-click="select($index)">
+		<div class="infobox infobox-dark" ng-repeat="room in rooms" ng-class="{'infobox-blue3': selected==$index,'infobox-blue': selected!=$index}" ng-click="showDetail($index)">
 			<div class="infobox-data">
 				<img class="fit-height" ng-src="{{room.display}}"/>
 				<span>{{room.name}}</span>
