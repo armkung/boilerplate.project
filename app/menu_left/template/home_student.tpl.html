@@ -3,11 +3,12 @@
 	<button ng-click="list()">List</button>		
 	<button ng-click="connect()">Connect</button>		
 	<button ng-click="disconnect()">Disconnect</button>
-
-	<div ng-repeat="room in rooms">
-		<div class="well" ng-class="{selected: selected==$index}" ng-click="select($index)">
-			<img ng-src="{{room.display}}"/>
-			{{room.name}}
+	<div class="room-list">
+		<div class="infobox infobox-dark" ng-repeat="room in rooms" ng-class="{'infobox-blue3': selected==$index,'infobox-blue': selected!=$index}" ng-click="select($index)">
+			<div class="infobox-data">
+				<img class="fit-height" ng-src="{{room.display}}"/>
+				<span>{{room.name}}</span>
+			</div>
 		</div>
 	</div>
 </div>
