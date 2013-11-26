@@ -16,6 +16,7 @@ app.controller('QuizStudentCtrl', function($scope, QuizManager, DataManager) {
 			DataManager.setData(type, obj);
 		}
 		if (index < n) {
+			$scope.index = index + 1;
 			$scope.question = quiz[index].question;
 			$scope.answer = quiz[index].answer;
 			index++;
@@ -72,7 +73,68 @@ app.controller('QuizTeacherCtrl', function($scope, QuizManager, DataManager) {
 	$scope.changeIndex(0);
 	// });
 });
+app.controller('DriveCtrl', function($scope, cfpLoadingBar, Room, DrawManager, Canvas, SlideManager, PDFService, GoogleService) {
+	function loadCanvas(name) {
+		var id = "data";
+		var cs = Canvas.newCanvas(id, Canvas.width, Canvas.height);
+		DrawManager.getObject(cs, name);
+		return cs;
+	}
 
+	var name = Room.room;
+
+	$scope.saveDraw = function() {
+		cfpLoadingBar.start();
+
+		var type = "image/png";
+		name = name + "-Draw";
+
+		var cs = loadCanvas(Canvas.types.DRAW);
+		var data = cs.toDataURL({
+			format: type.split("/")
+		});
+
+		var obj = {};
+		obj.type = type;
+		obj.data = data.split(",")[1];
+		obj.fileName = name;
+		GoogleService.insertFile(obj).then(function(data) {
+			cfpLoadingBar.complete();
+		});
+
+	};
+	$scope.saveSlide = function() {
+		cfpLoadingBar.start();
+		name = name + "-Slide";
+		// Canvas.getCanvas().then(function() {
+
+		var id = SlideManager.slide;
+		if (id) {
+			PDFService.getPdf(id).then(function(pdf) {
+
+				var n = pdf.pdfInfo.numPages;
+				var mirrors = [];
+				for (var i = 1; i <= n; i++) {
+					var cs = loadCanvas(Canvas.types.MIRROR + "-" + i);
+					mirrors.push(cs);
+				}
+
+				PDFService.init(mirrors);
+				PDFService.render(pdf, n).then(function(data) {
+					var obj = {};
+					obj.type = "application/pdf";
+					obj.data = data.split(",")[1];
+					obj.fileName = name;
+					GoogleService.insertFile(obj).then(function(data) {
+						cfpLoadingBar.complete();
+					});
+				});
+
+			});
+		}
+		// });
+	};
+});
 app.controller('HandWriteCtrl', function($scope, $rootScope, DrawFactory, Canvas) {
 	$scope.isSend = true;
 	$scope.hideTool = false;
@@ -92,6 +154,7 @@ app.controller('HandWriteCtrl', function($scope, $rootScope, DrawFactory, Canvas
 app.controller('SlideCtrl', function($scope, $rootScope, LoginManager, DrawFactory, SlideManager) {
 	LoginManager.getUser().then(function(user) {
 		$scope.isSend = LoginManager.getAccess() == LoginManager.level.TEACHER;
+		console.log($scope.isSend)
 		$scope.isStart = true;
 		$scope.isEnd = false;
 		$scope.nextIndex = function(isSwipe) {

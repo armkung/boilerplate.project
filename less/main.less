@@ -3,9 +3,10 @@
 @loading_bar_color: red;
 @selected: blue;
 @navbar_height: 30px;
+@margin_left_answer: 100px;
 @toolbar_height: 28;
-@display_width:100;
-@display_height:100;
+@display_width: 100;
+@display_height: 100;
 .display{
 	display: block;
 	margin-left: auto;
@@ -33,9 +34,9 @@
 	width: 35%;
 	height: @toolbar_height;
 	background-color: red;
-}*/
-.attr{
-	position: relative;
+	}*/
+	.attr{
+		position: relative;
 
 	/*float: left;
 	width: 30%;*/
@@ -45,6 +46,9 @@
 .nav-tab {
 	line-height: @navbar_height !important; 
 	height: @navbar_height !important;
+}
+.answer{
+	margin-left: @margin_left_answer;
 }
 body,html{ 
 	width: 100%;
@@ -136,14 +140,14 @@ body{
 }
 /*.inline{
 	display: inline;
-}*/
-.block{
-	display: inline-block;
-}
-.room-list{
-	margin: auto;
-}
-.modal {
-	display: block;
-	overflow: hidden;
-}
+	}*/
+	.block{
+		display: inline-block;
+	}
+	.room-list{
+		margin: auto;
+	}
+	.modal {
+		display: block;
+		overflow: hidden;
+	}

@@ -1,14 +1,18 @@
-<div>
-    <div ng-hide="isEnd">
-        <div>{{question}}</div>
-        <div ng-repeat="ans in answer">
-            <input type="radio" name="answer" ng-click="select($index)" ng-checked="$index==0"/>
-            {{ans}}
-        </div>
-        <button ng-click="next()">Next</button>
-    </div>    
+<div class="widget-box">
+	<div class="widget-header header-color-dark">
+		<h5 class="bigger-180 lighter">{{index}}. {{question}}</h5>
+	</div>
+	<div class="widget-body" ng-hide="isEnd">
+		<div class="widget-main padding-5 answer" ng-repeat="ans in answer">
+			<input type="radio" name="answer" ng-click="select($index)" ng-checked="$index==0"/>
+			<span class="bigger-180">{{ans}}</span>
+		</div>
+		<div class="widget-toolbox clearfix">
+			<button class="btn pull-right" ng-click="next()">Next</button>
+		</div>
+	</div>    
 
-    <div ng-show="isEnd">
-        Finish!!!!
-    </div>
+	<div class="widget-body" ng-show="isEnd">
+		Finish!!!!
+	</div>
 </div>

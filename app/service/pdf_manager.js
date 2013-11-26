@@ -1,4 +1,4 @@
-app.service('PDFService', function($q, $timeout) {
+app.service('PDFService', function($q, $timeout, GoogleService) {
 	var self = this;
 
 	var SCALE = 0.8;
@@ -30,6 +30,18 @@ app.service('PDFService', function($q, $timeout) {
 			canvasContext: ctx
 		};
 	};
+	this.getPdf = function(id) {
+		var deferred = $q.defer();
+		GoogleService.getFile(id).then(function(data) {
+			var url = data.exportLinks['application/pdf'];
+			self.load(url).then(function(pdf) {				
+				deferred.resolve(pdf);
+			});
+		});
+		return deferred.promise;
+	};
+
+
 
 	function setScale(page) {
 		var drawCanvas = mirrors[0];

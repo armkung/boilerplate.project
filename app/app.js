@@ -22,7 +22,8 @@ app.config(function($stateProvider, $urlRouterProvider) {
 		controller: 'HandWriteCtrl'
 	}).state('main.drive', {
 		url: '/drive',
-		templateUrl: 'menu_left/template/drive.tpl.html'
+		templateUrl: 'menu_left/template/drive.tpl.html',
+		controller: 'DriveCtrl'
 	}).state('main.home', {
 		url: '/home',
 		controller: 'AccessCtrl'

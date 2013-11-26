@@ -1,10 +1,16 @@
-<div  class="container fit-height">
-	<ul ng-init="tab = 'slide'">
-		<li><a ng-click="tab = 'slide'">Slide</a></li>
-		<li><a ng-click="tab = 'quiz'">Quiz</a></li>
-	</ul>
+<div class="widget-box">
+	<div class="widget-header">
+		<div class="inline" ng-init="tab = 'slide'">
+			<button class="btn btn-app btn-xs no-radius" ng-click="tab = 'slide'">Slide</a></li>
+			<button class="btn btn-app btn-xs no-radius" ng-click="tab = 'quiz'">Quiz</a></li>
+		</div>
+		<div class="widget-toolbar">
+			<button class="btn btn-xs bigger" ng-click="saveSlide()">Save Slide</button>
+			<button class="btn btn-xs bigger" ng-click="saveDraw()">Save Draw</button>
+		</div>
+	</div>
 
-	<div ng-switch on="tab">
+	<div class="widget-body" ng-switch on="tab">
 		<drive-slide ng-switch-when="slide"></drive-slide>
 		<drive-quiz ng-switch-when="quiz"></drive-quiz>
 	</div>
