@@ -347,7 +347,7 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 		// }
 	};
 	this.canDrag = function(canDrag) {
-		angular.forEach(canvas.getObjects(), function(obj, key) {
+		canvas.forEachObject(function(obj) {
 			if (!(obj instanceof fabric.Group)) {
 				if (canDrag) {
 					self.enableMove(obj);
@@ -359,7 +359,7 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 		});
 	};
 	this.canGroupDrag = function(canDrag) {
-		angular.forEach(canvas.getObjects(), function(obj, key) {
+		canvas.forEachObject(function(obj) {
 			if (obj instanceof fabric.Group) {
 				if (canDrag) {
 					self.enableMove(obj);
@@ -374,11 +374,13 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 		// canvas.clear();
 		// Canvas.removeId(id)		
 		// self.init(id);
-		angular.forEach(canvas.getObjects(), function(obj, key) {
+
+		canvas.forEachObject(function(obj) {
 			if (!(obj instanceof fabric.Group)) {
 				canvas.remove(obj);
 			}
 		});
+		canvas.renderAll();
 		n = 0;
 	};
 

@@ -21,7 +21,7 @@ app.directive('toolBar', function($rootScope, DrawFactory) {
 			};
 
 			function sendTool() {
-				$rootScope.$broadcast('tool', scope.tool);				
+				$rootScope.$broadcast('tool', scope.tool);
 			}
 			// scope.changeAttr = function(index) {
 			// 	$rootScope.$broadcast('attr', scope.attrs[index]);
@@ -53,6 +53,19 @@ app.directive('selector', function($rootScope, DrawFactory) {
 				});
 			})
 
+			$('#slider').slider({
+				value: 5,
+				range: "min",
+				min: 1,
+				max: 50,
+				step: 1,
+				slide: function(event, ui) {
+					$rootScope.$broadcast('attr', {
+						attr: attrs.SIZE,
+						data: ui.value
+					});
+				}
+			});
 		}
 	};
 });
