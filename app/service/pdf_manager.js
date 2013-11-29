@@ -12,7 +12,7 @@ app.service('PDFService', function($q, $timeout, GoogleService) {
 	var mirrors, slideCanvas;
 	this.load = function(url) {
 		var deferred = $q.defer();
-		// PDFJS.disableWorker = true;
+		PDFJS.disableWorker = true;
 		PDFJS.getDocument(url).then(function(pdf) {
 			// pdf.getPage(1).then(function(page) {			
 			deferred.resolve(pdf);

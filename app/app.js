@@ -52,7 +52,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
 		controller: 'QuizStudentCtrl'
 	});
 
-}).run(function($rootScope, $modal, LoginManager) {
+}).run(function($rootScope, $modal, LoginManager, cfpLoadingBar) {
 	$rootScope.$on("$stateChangeSuccess", function($currentRoute, $previousRoute) {
 		if (LoginManager.hasLogin()) {
 			$modal.open({
@@ -60,6 +60,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
 				controller: 'LoginCtrl'
 			});
 		}
+		cfpLoadingBar.complete();
 	});
 });
 

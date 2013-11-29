@@ -1,14 +1,27 @@
-<div class="container">
-	<!-- <select ng-model="room" ng-options="room for room in rooms"></select> -->
-	<button class="btn btn-app" ng-click="list()">List</button>		
-	<button class="btn btn-app" ng-click="connect()">Connect</button>		
-	<button class="btn btn-app" ng-click="disconnect()">Disconnect</button>
-	<div class="room-list">
-		<div class="infobox infobox-dark" ng-repeat="room in rooms" ng-class="{'infobox-blue3': selected==$index,'infobox-blue': selected!=$index}" ng-click="showDetail($index)">
-			<div class="infobox-data">
-				<img class="fit-height" ng-src="{{room.display}}"/>
-				<span>{{room.name}}</span>
+<div class="widget-box">
+
+	<div class="widget-header header-color-blue">
+		<h5 class="bigger-160">Rooms</h5>
+
+		<div class="widget-toolbar width-10 align-center">
+			<!-- <button class="btn btn-app" ng-click="list()">List</button>	 -->
+			<a href="#main/home/student" data-action="reload">
+				<i class="icon-refresh bigger-210" ng-click="list()"></i>
+			</a>
+		</div>
+		<!-- <button class="btn btn-app" ng-click="connect()">Connect</button>		
+		<button class="btn btn-app" ng-click="disconnect()">Disconnect</button> -->
+	</div>
+
+	<div class="widget-body fit-height">
+		<div class="room-list">
+			<div class="infobox infobox-dark" ng-repeat="room in rooms" ng-class="{'infobox-blue3': selected==$index,'infobox-blue': selected!=$index}" ng-click="showDetail($index)">
+				<div class="infobox-data">
+					<img class="fit-height" ng-src="{{room.display}}"/>
+					<span>{{room.name}}</span>
+				</div>
 			</div>
 		</div>
 	</div>
+
 </div>

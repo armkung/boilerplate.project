@@ -109,17 +109,15 @@ app.service("DrawManager", function(Canvas, $rootScope) {
 	};
 	this.remove = function(indexs) {
 		angular.forEach(indexs, function(index, key) {
-			angular.forEach(current.getObjects(), function(obj, key) {
-				if (obj.get("id") == index) {
-
-					current.remove(obj);
-
-					console.log(index);
-					return;
+			canvas.forEachObject(function(obj) {
+				if (!(obj instanceof fabric.Group)) {
+					if (obj.get("id") == index) {
+						current.remove(obj);
+						return;
+					}
 				}
 			});
 		});
-		console.log(canvas);
 		canvas.renderAll();
 	};
 	this.draw = function(data, x, y) {

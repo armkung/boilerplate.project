@@ -179,15 +179,18 @@ io.sockets.on('connection', function(socket) {
 		socket.get('roomName', function(err, room) {
 			if (room != null) {
 				socket.get('userName', function(err, user) {
-					var owner = logger.logData[room].room.owner;
-					if (user == owner) {
-						logOutUser(room);
+					var data = logger.logData[room];
+					if (data) {
+						var owner = data.room.owner
+						if (user == owner) {
+							// logOutUser(room);
+							logger.save(room);
+						}
+
+						// console.log("User : " + user + " disconnect");
+						socket.leave(room)
+						socket.broadcast.to(room).emit('leave:room', getId());
 					}
-
-					// console.log("User : " + user + " disconnect");
-					socket.leave(room)
-					socket.broadcast.to(room).emit('leave:room', getId());
-
 				});
 			}
 		});
@@ -196,12 +199,15 @@ io.sockets.on('connection', function(socket) {
 	socket.on('init:pos', function() {
 		socket.get('roomName', function(err, room) {
 			if (room != null) {
-				var pos = logger.logData[room].pos;
-				for (var i = 0; i < pos.length; i++) {
-					if (pos[i].user.id != getId()) {
-						socket.emit('send:pos', pos[i]);
-					}
-				};
+				var data = logger.logData[room];
+				if (data) {
+					var pos = data.pos;
+					for (var i = 0; i < pos.length; i++) {
+						if (pos[i].user.id != getId()) {
+							socket.emit('send:pos', pos[i]);
+						}
+					};
+				}
 
 				// console.log(getId() + " Init pos");
 			}
@@ -254,8 +260,11 @@ io.sockets.on('connection', function(socket) {
 	socket.on('init:slide', function() {
 		socket.get('roomName', function(err, room) {
 			if (room != null) {
-				var slide = logger.logData[room].slide;
-				socket.emit('send:slide', slide);
+				var data = logger.logData[room];
+				if (data) {
+					var slide = data.slide;
+					socket.emit('send:slide', slide);
+				}
 				// console.log(getId() + " Init slide");
 			}
 		});

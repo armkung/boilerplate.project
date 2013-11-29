@@ -1,17 +1,17 @@
-<div class="widget-box" ng-hide="isHide">	
-	<div class="widget-body">
+<div ng-hide="isHide">	
+	<!-- <div class="widget-body"> -->
 		<!-- <div class="widget-main"> -->
 
-			<div class="width-35 pull-left">
+			<div class="width-40 pull-left">
 				<button ng-repeat="tool in toolLeft" ng-click="changeToolLeft($index)">{{tool}}</button>
 			</div>
 
-			<selector class="width-30 pull-left attr"></selector>		
+			<selector class="width-20 pull-left attr"></selector>		
 
-			<div class="width-35 pull-left">
+			<div class="width-40 pull-left">
 				<button ng-repeat="tool in toolRight" ng-click="changeToolRight($index)">{{tool}}</button>
 			</div>
 
 		<!-- </div> -->
-	</div>
+	<!-- </div> -->
 </div>

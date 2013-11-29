@@ -206,13 +206,13 @@ app.service("DrawFactory", function(Canvas, DrawManager, $timeout) {
 				setBind(listener.draw);
 				break;
 			case self.tools.LINE:
-				// DrawManager.canDrag(false);
-				// DrawManager.canGroupDrag(false);
+				DrawManager.canDrag(false);
+				DrawManager.canGroupDrag(false);
 				setBind(listener.line);
 				break;
 			case self.tools.TEXT:
-				// DrawManager.canDrag(false);
-				// DrawManager.canGroupDrag(false);
+				DrawManager.canDrag(false);
+				DrawManager.canGroupDrag(false);
 				setBind(listener.text);
 				break;
 			case self.tools.ANIMATE:
