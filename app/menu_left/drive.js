@@ -42,14 +42,17 @@ app.directive('driveSlide', function($rootScope, $q, cfpLoadingBar, GoogleServic
 					deferred.resolve(pdf.pdfInfo.numPages);
 				});
 			};
-			
+
 			$scope.share = function() {
 				GoogleService.shareFile(id).then(function(data) {
 					console.log(data);
 				});
 			};
 
-		
+			$scope.toDate = function(date) {
+				return new Date(date).toUTCString();
+			}
+
 		}
 	};
 });

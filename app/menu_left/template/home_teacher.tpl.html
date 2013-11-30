@@ -1,14 +1,14 @@
 <div>
 	<div class="pull-left">
 		<label>Name</label>
-		<input type="text" ng-model="room">
+		<input type="text" ng-model="room.name">
 		<div>
 			<label>Description</label><br/>
-			<textarea style="width:200;height:200;" class="block" placeholder="Input detail" ng-model="description"></textarea>	
+			<textarea style="width:200;height:200;" class="block" placeholder="Input detail" ng-model="room.description"></textarea>	
 		</div>
 	</div>
 	<div class="pull-right">
-		<img class="display" ng-src="{{display}}" ng-click="selectDisplay()"/>
+		<img class="display" ng-src="{{room.display}}" ng-click="selectDisplay()"/>
 		<div>
 			<button ng-click="create()">Create Room</button>
 			<button ng-click="close()">Close Room</button>

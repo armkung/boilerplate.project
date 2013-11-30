@@ -184,7 +184,7 @@ io.sockets.on('connection', function(socket) {
 						var owner = data.room.owner
 						if (user == owner) {
 							// logOutUser(room);
-							logger.save(room);
+							// logger.save(room);
 						}
 
 						// console.log("User : " + user + " disconnect");

@@ -4,16 +4,18 @@
 			<button class="btn btn-app btn-xs no-radius btn-light" ng-click="tab = 'slide'">
 				Slide
 			</button>
-			<button class="btn btn-app btn-xs no-radius btn-light" ng-click="tab = 'quiz'">
+			<button class="btn btn-app btn-xs no-radius btn-light" ng-click="tab = 'quiz'" ng-show="hasQuiz">
 				Quiz
 			</button>
 		</div>
 		<div class="widget-toolbar">
 			<button class="btn btn-xs bigger" ng-click="saveSlide()">
-				<span class="bigger-140">Save Slide</span>
+				<i class="icon-save bigger-180"></i>
+				<span class="bigger-140"> Slide</span>
 			</button>
 			<button class="btn btn-xs bigger" ng-click="saveDraw()">
-				<span class="bigger-140">Save Draw</span>
+				<i class="icon-save bigger-180"></i>
+				<span class="bigger-140"> Draw</span>
 			</button>
 		</div>
 	</div>

@@ -73,67 +73,71 @@ app.controller('QuizTeacherCtrl', function($scope, QuizManager, DataManager) {
 	$scope.changeIndex(0);
 	// });
 });
-app.controller('DriveCtrl', function($scope, cfpLoadingBar, Room, DrawManager, Canvas, SlideManager, PDFService, GoogleService) {
-	function loadCanvas(name) {
-		var id = "data";
-		var cs = Canvas.newCanvas(id, Canvas.width, Canvas.height);
-		DrawManager.getObject(cs, name);
-		return cs;
-	}
+app.controller('DriveCtrl', function($scope, cfpLoadingBar, Room, LoginManager, DrawManager, Canvas, SlideManager, PDFService, GoogleService) {
+	LoginManager.getUser().then(function(user) {
+		$scope.hasQuiz = LoginManager.getAccess() == LoginManager.level.TEACHER;
 
-	var name = Room.room;
-
-	$scope.saveDraw = function() {
-		cfpLoadingBar.start();
-
-		var type = "image/png";
-		name = name + "-Draw";
-
-		var cs = loadCanvas(Canvas.types.DRAW);
-		var data = cs.toDataURL({
-			format: type.split("/")
-		});
-
-		var obj = {};
-		obj.type = type;
-		obj.data = data.split(",")[1];
-		obj.fileName = name;
-		GoogleService.insertFile(obj).then(function(data) {
-			cfpLoadingBar.complete();
-		});
-
-	};
-	$scope.saveSlide = function() {
-		cfpLoadingBar.start();
-		name = name + "-Slide";
-		// Canvas.getCanvas().then(function() {
-
-		var id = SlideManager.slide;
-		if (id) {
-			PDFService.getPdf(id).then(function(pdf) {
-
-				var n = pdf.pdfInfo.numPages;
-				var mirrors = [];
-				for (var i = 1; i <= n; i++) {
-					var cs = loadCanvas(Canvas.types.MIRROR + "-" + i);
-					mirrors.push(cs);
-				}
-
-				PDFService.init(mirrors);
-				PDFService.render(pdf, n).then(function(data) {
-					var obj = {};
-					obj.type = "application/pdf";
-					obj.data = data.split(",")[1];
-					obj.fileName = name;
-					GoogleService.insertFile(obj).then(function(data) {
-						cfpLoadingBar.complete();
-					});
-				});
-
-			});
+		function loadCanvas(name) {
+			var id = "data";
+			var cs = Canvas.newCanvas(id, Canvas.width, Canvas.height);
+			DrawManager.getObject(cs, name);
+			return cs;
 		}
-		// });
-	};
+
+		var name = Room.room;
+
+		$scope.saveDraw = function() {
+			cfpLoadingBar.start();
+
+			var type = "image/png";
+			name = name + "-Draw";
+
+			var cs = loadCanvas(Canvas.types.DRAW);
+			var data = cs.toDataURL({
+				format: type.split("/")
+			});
+
+			var obj = {};
+			obj.type = type;
+			obj.data = data.split(",")[1];
+			obj.fileName = name;
+			GoogleService.insertFile(obj).then(function(data) {
+				cfpLoadingBar.complete();
+			});
+
+		};
+		$scope.saveSlide = function() {
+			cfpLoadingBar.start();
+			name = name + "-Slide";
+			// Canvas.getCanvas().then(function() {
+
+			var id = SlideManager.slide;
+			if (id) {
+				PDFService.getPdf(id).then(function(pdf) {
+
+					var n = pdf.pdfInfo.numPages;
+					var mirrors = [];
+					for (var i = 1; i <= n; i++) {
+						var cs = loadCanvas(Canvas.types.MIRROR + "-" + i);
+						mirrors.push(cs);
+					}
+
+					PDFService.init(mirrors);
+					PDFService.render(pdf, n).then(function(data) {
+						var obj = {};
+						obj.type = "application/pdf";
+						obj.data = data.split(",")[1];
+						obj.fileName = name;
+						GoogleService.insertFile(obj).then(function(data) {
+							cfpLoadingBar.complete();
+						});
+					});
+
+				});
+			}
+			// });
+		};
+	});
 });
 app.controller('HandWriteCtrl', function($scope, $rootScope, DrawFactory, Canvas) {
 	$scope.isSend = true;
@@ -192,11 +196,17 @@ app.controller('SlideCtrl', function($scope, $rootScope, LoginManager, DrawFacto
 	});
 });
 
-app.controller('HomeTeacherCtrl', function($scope, $modal, Room, Socket, LoginManager) {
+app.controller('HomeTeacherCtrl', function($scope, $modal, $rootScope, Room, Socket, LoginManager) {
 	LoginManager.getUser().then(function(user) {
+		if (angular.isUndefined($rootScope.room)) {
+			$rootScope.room = {
+				name: "",
+				display: "",
+				description: ""
+			};
+		}
 		$scope.user = user;
-		$scope.room = "";
-		$scope.display = "";
+		$scope.room = $rootScope.room;
 
 		Socket.on("leave:room", function(user) {
 			var index = Room.users.indexOf(user);
@@ -205,15 +215,15 @@ app.controller('HomeTeacherCtrl', function($scope, $modal, Room, Socket, LoginMa
 			}
 		});
 		$scope.create = function() {
-			if ($scope.room != "") {
-				Room.room = $scope.room;
+			if ($scope.room.name != "") {
+				Room.room = $scope.room.name;
 				Room.user = $scope.user.username;
 				Socket.emit("create:room", {
 					room: {
-						name: $scope.room,
+						name: $scope.room.name,
 						owner: $scope.user.username,
-						display: $scope.display,
-						description: $scope.description
+						display: $scope.room.display,
+						description: $scope.room.description
 					},
 					user: $scope.user
 				});
@@ -247,12 +257,12 @@ app.controller('HomeTeacherCtrl', function($scope, $modal, Room, Socket, LoginMa
 			});
 			modal.result.then(function(url) {
 				console.log()
-				$scope.display = url;
+				$scope.room.display = url;
 			});
 		};
 
-		$scope.room = "public";
-		$scope.display = "";
+		$scope.room.name = "public";
+		$scope.room.display = "";
 		$scope.create();
 	});
 });
@@ -328,10 +338,8 @@ app.controller('HomeStudentCtrl', function($scope, $rootScope, $modal, Room, Soc
 		};
 		$scope.list();
 
-		$scope.room = {
-			name: "public",
-			display: ""
-		};
+		$scope.room.name = "public";
+		$scope.room.display = "";
 		$scope.connect();
 	});
 });
