@@ -56,9 +56,16 @@ app.service("DrawFactory", ["Canvas", "DrawManager",
 			};
 		};
 		this.setText = function(text) {
+			var isText = false;
 			listener.text = {
 				onDown: function(pos) {
-					text(pos);
+					if (isText) {
+						text();
+						isText = false;
+					} else {
+						text(pos);
+						isText = true;
+					}
 				}
 			};
 		};

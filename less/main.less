@@ -10,6 +10,10 @@
 @display_width: 100;
 @display_height: 100;
 @item_left: 20px;
+.pagination{
+	z-index: 99;
+	top: 30px;
+}
 .picker{
 	width: 30px;
 	height: 30px;
@@ -84,7 +88,7 @@ body{
 	min-height: @navbar_height !important;
 }
 #loading-bar .bar {
-	background: @loading_bar_color;
+	background: @loading_bar_color !important;
 }
 .fluid-container{
 	padding-left: 15px;
@@ -165,8 +169,11 @@ body{
 	margin: auto;
 }
 .modal{
-	display: block;
-	overflow: hidden;
+	display: block !important;
+	overflow: hidden !important;
+}
+.margin-10{
+	margin-left: 10px;
 }
 .width-10{
 	width: 10%;

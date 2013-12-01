@@ -38,16 +38,11 @@ app.directive('selector', ["$rootScope", "$modal", "DrawFactory",
 	function($rootScope, $modal, DrawFactory) {
 		return {
 			restrict: 'E',
-			template: '<div class="width-100 fit-height" ng-click="dialog()"><div id="color"></div></div>',
+			template: '<div class="width-100 fit-height" ng-click="dialog()"><div id="color" class="pull-left"></div>' +
+				'<div class="pull-left white margin-10"><i id ="size" class="icon-circle-blank align-middle"></i>' +
+				'<span class="bigger-140 align-middle">{{selector.size}}<span></div></div>',
 			// templateUrl: 'menu_left/template/attribute.tpl.html',
 			link: function(scope, iElement, iAttrs) {
-				var element = $('#color');
-				scope.attr = 'rgb(0,0,0)';
-				var size = iElement.height();
-				var border = element.outerWidth() - element.width();
-				element.width(size - border);
-				element.height(size - border);
-
 				if (angular.isUndefined($rootScope.selector)) {
 					$rootScope.selector = {
 						alpha: 100,
@@ -55,12 +50,26 @@ app.directive('selector', ["$rootScope", "$modal", "DrawFactory",
 						color: '#000000'
 					};
 				}
-				var attrs = DrawFactory.attrs;
+				scope.attr = 'rgb(0,0,0)';
 				scope.selector = $rootScope.selector;
+
+				var eColor = $('#color');
+				var size = iElement.height();
+				var border = eColor.outerWidth() - eColor.width();
+				eColor.width(size - border);
+				eColor.height(size - border);
 				scope.$watch('selector.color', function() {
-					element.css('background-color', scope.selector.color);
+					eColor.css('background-color', scope.selector.color);
 				})
 
+				var eSize = $('#size');
+				scope.$watch('selector.size', function() {
+					var scale = (scope.selector.size / 50.0) * 100;
+					eSize.css('font-size', (100 + scale) + "%");
+				})
+
+
+				var attrs = DrawFactory.attrs;
 				scope.dialog = function() {
 					var modal = $modal.open({
 						backdrop: false,
@@ -128,7 +137,7 @@ app.directive('slider', function() {
 				value: scope.size,
 				range: "min",
 				min: 1,
-				max: scope.max,
+				max: iAttrs.max,
 				step: 1,
 				slide: function(event, ui) {
 					scope.size = ui.value;
@@ -153,7 +162,7 @@ app.directive('picker', ["$rootScope",
 					'#ffad46', '#42d692', '#16a765', '#7bd148', '#b3dc6c',
 					'#fbe983', '#fad165', '#92e1c0', '#9fe1e7', '#9fc6e7',
 					'#4986e7', '#9a9cff', '#b99aff', '#c2c2c2', '#cabdbf',
-					'#cca6ac', '#f691b2', '#cd74e6', '#a47ae2'
+					'#cca6ac', '#f691b2', '#cd74e6', '#a47ae2', '#ffffff'
 				];
 				scope.select = function(index) {
 					$rootScope.colorSelected = index;

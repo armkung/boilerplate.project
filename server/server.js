@@ -56,6 +56,19 @@ var Logger = function() {
 		}
 	}
 
+	this.logQuiz = function(quiz) {
+		if (data[room]) {
+			if (quiz.node) {
+				data[room].quiz = {
+					node: quiz.node,
+					data: []
+				}
+			} else {
+				data[room].quiz.data.push(quiz);
+			}
+		}
+	}
+
 	this.save = function(room) {
 		// var xml = builder.create("data");	
 		// console.log(data[room].pos)
@@ -94,21 +107,10 @@ io.sockets.on('connection', function(socket) {
 
 	function logOutUser(room) {
 		var users = logger.logData[room].users;
-
-		function getUserName(id) {
-			for (name in users) {
-				if (users[name].id == id) {
-					return name;
-				}
-			}
-			return "";
-		}
 		var clients = io.sockets.clients(room)
 		if (clients) {
 			for (var i = 0; i < clients.length; i++) {
-				var name = getUserName(clients[i].id);
-				socket.set('userName', name);
-				clients[i].disconnect();
+				clients[i].leave(room);
 			}
 			logger.save(room);
 		}
@@ -183,8 +185,7 @@ io.sockets.on('connection', function(socket) {
 					if (data) {
 						var owner = data.room.owner
 						if (user == owner) {
-							// logOutUser(room);
-							// logger.save(room);
+							logOutUser(room);
 						}
 
 						// console.log("User : " + user + " disconnect");
@@ -280,11 +281,25 @@ io.sockets.on('connection', function(socket) {
 		});
 	});
 
+	socket.on('init:quiz', function() {
+		socket.get('roomName', function(err, room) {
+			if (room != null) {
+				var data = logger.logData[room];
+				if (data) {
+					var quiz = data.quiz;
+					socket.emit('send:quiz', quiz);
+				}
+				// console.log(getId() + " Init slide");
+			}
+		});
+	});
 	socket.on('send:quiz', function(data) {
 		socket.get('roomName', function(err, room) {
 			if (room != null) {
 				socket.broadcast.to(room).emit('send:quiz', data);
-				console.log("Send quiz");
+				// console.log("Send quiz");
+
+				logger.logQuiz(data);
 			}
 		});
 	});

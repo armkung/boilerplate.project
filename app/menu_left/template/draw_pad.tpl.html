@@ -7,7 +7,7 @@
 
 		<div class="pad col-md-9 col-lg-9">
 			<canvas id="draw" draw-pad text="{{text}}" send="true" fit-size></canvas>
-			<input id="textbox" ng-model="text">
+			<input type="text"  id="textbox" ng-model="text">
 			<tool-bar class="toolbar fluid-container" tool="tool" is-hide="{{hideTool&&!isDesktop}}"></tool-bar>
 		</div>
 

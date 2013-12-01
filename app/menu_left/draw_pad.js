@@ -117,19 +117,25 @@ app.directive("drawPad", ["$rootScope", "DrawManager", "DrawFactory", "Input", "
 				});
 				DataManager.initData(type);
 
-				Input.init(function() {
-					var obj = {};
-					obj.pos = {
-						text: scope.text,
-						x: pos.x,
-						y: pos.y
-					};
-					obj.type = DrawFactory.tools.TEXT;
-					obj.pos.color = DrawManager.getFillColor();
-					obj.pos.size = DrawManager.getFontSize();
-					text(obj);
-					sendData(obj);
-				});
+				function drawText() {
+					if (scope.text != "") {
+						var obj = {};
+						obj.pos = {
+							text: scope.text,
+							x: pos.x,
+							y: pos.y
+						};
+						obj.type = DrawFactory.tools.TEXT;
+						obj.pos.color = DrawManager.getFillColor();
+						obj.pos.size = DrawManager.getFontSize();
+						text(obj);
+						sendData(obj);
+						
+						Input.hide();
+						scope.text = ""
+					}
+				}
+				Input.init(drawText);
 				Input.hide();
 
 				// DataManager.loadData(type, {
@@ -166,9 +172,13 @@ app.directive("drawPad", ["$rootScope", "DrawManager", "DrawFactory", "Input", "
 					sendData(obj);
 				});
 				DrawFactory.setText(function(data) {
-					pos = data;
-					Input.show(pos.x, pos.y);
-					$rootScope.$apply();
+					if (data) {
+						pos = data;
+						Input.show(pos.x, pos.y);
+						$rootScope.$apply();
+					} else {
+						drawText();
+					}
 				});
 				DrawFactory.setLine(function(pos) {
 					var obj = {};

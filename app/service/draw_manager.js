@@ -2,10 +2,12 @@ app.service("DrawManager", ["Canvas", "$rootScope",
 	function(Canvas, $rootScope) {
 		var self = this;
 
+		var scaleFont = 20;
 		this.strokeColor = 'black';
 		this.fillColor = 'black';
 		this.strokeSize = 5;
-		this.fontSize = 30;
+		this.fontSize = 5;
+
 		var drawOption = {
 			color: self.strokeColor,
 			width: self.strokeSize
@@ -226,8 +228,8 @@ app.service("DrawManager", ["Canvas", "$rootScope",
 		};
 		this.setFontSize = function(size) {
 			if (size) {
+				textOption.fontSize = scaleFont + size;
 				self.fontSize = size;
-				textOption.fontSize = size;
 			}
 		};
 		this.getStrokeColor = function() {
@@ -382,6 +384,6 @@ app.service("DrawManager", ["Canvas", "$rootScope",
 			canvas.renderAll();
 			n = 0;
 		};
-		
+
 	}
 ]);

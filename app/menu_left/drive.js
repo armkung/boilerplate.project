@@ -1,16 +1,33 @@
-app.directive('driveQuiz', function() {
-	return {
-		restrict: 'E',
-		templateUrl: 'menu_left/template/drive_quiz.tpl.html',
-		link: function(scope) {
-			scope.datas = ["a", "b"];
-			scope.select = function(index) {
-				var id = scope.datas[index];
-				console.log(id);
-			};
-		}
-	};
-});
+app.directive('driveQuiz', ["$rootScope", "cfpLoadingBar", "QuizManager", "LoginManager",
+	function($rootScope, cfpLoadingBar, QuizManager, LoginManager) {
+		return {
+			restrict: 'E',
+			templateUrl: 'menu_left/template/drive_quiz.tpl.html',
+			link: function(scope) {
+				LoginManager.getUser().then(function(user) {
+					var name = user.username;
+					QuizManager.list(name).then(function(data) {
+						scope.datas = data;
+					});
+				});
+				$rootScope.$watch('quizSelected', function() {
+					scope.selected = $rootScope.quizSelected;
+				});
+				scope.select = function(index) {
+					$rootScope.quizSelected = index;
+
+					var id = scope.datas[index].node;
+					QuizManager.node = id;
+					scope.id = id;
+
+					QuizManager.load().then(function(quizs) {
+						console.log(quizs);
+					});
+				};
+			}
+		};
+	}
+]);
 app.directive('driveSlide', ["$rootScope", "$q", "cfpLoadingBar", "GoogleService", "SlideManager", "PDFService",
 	function($rootScope, $q, cfpLoadingBar, GoogleService, SlideManager, PDFService) {
 		return {

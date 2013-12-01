@@ -208,13 +208,11 @@ app.service("Canvas", ["$q",
 app.service("Input", function() {
 	var self = this;
 	var txt;
-
-	this.init = function(calback) {
+	this.init = function(callback) {
 		txt = $("#textbox");
 		txt.bind('keydown', function(e) {
 			if (e.keyCode == 13) {
-				calback();
-				self.hide();
+				callback();
 			}
 		});
 	};

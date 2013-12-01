@@ -1,80 +1,96 @@
-app.controller('QuizStudentCtrl', ["$scope", "QuizManager", "DataManager",
-	function($scope, QuizManager, DataManager) {
-		// QuizManager.load().then(function(quiz) {
-		var quiz = QuizManager.quiz;
+app.controller('QuizStudentCtrl', ["$scope", "$rootScope", "QuizManager", "DataManager",
+	function($scope, $rootScope, QuizManager, DataManager) {
 		var type = DataManager.types.QUIZ;
-		var index = 0,
-			select = 0,
-			n = quiz.length;
-		$scope.isEnd = false;
-		$scope.selected = false;
-		$scope.next = function() {
-			if (index !== 0) {
-				var obj = {};
-				obj.question = index - 1;
-				obj.answer = select;
-				console.log(select);
-				DataManager.setData(type, obj);
+		if (angular.isUndefined($rootScope.isEnd)) {
+			$rootScope.isEnd = false;
+		}
+		DataManager.getData(type, function(data) {
+			// $scope.chartConfig.title.text = $scope.quiz[data.question].question;
+			if (data && (data.node != QuizManager.node || !$rootScope.isEnd)) {
+				if (data.node != QuizManager.node) {
+					$rootScope.index = 0;
+					$rootScope.isEnd = false;
+				}
+				QuizManager.node = data.node;
+				QuizManager.load().then(function(quiz) {
+					// var quiz = QuizManager.quiz;
+					var index = $rootScope.index,
+						select = 0,
+						n = quiz.length;
+					$scope.selected = false;
+					$scope.next = function() {
+						if (index !== 0) {
+							var obj = {};
+							obj.question = index - 1;
+							obj.answer = select;
+							// console.log(select);
+							DataManager.setData(type, obj);
+							$rootScope.index++;
+						}
+						if (index < n) {
+							$scope.index = index + 1;
+							$scope.question = quiz[index].question;
+							$scope.answer = quiz[index].answer;
+							index++;
+						} else {
+							$rootScope.isEnd = true;
+						}
+					};
+					$scope.select = function(index) {
+						select = index;
+					};
+					$scope.next($rootScope.index);
+				});
 			}
-			if (index < n) {
-				$scope.index = index + 1;
-				$scope.question = quiz[index].question;
-				$scope.answer = quiz[index].answer;
-				index++;
-			} else {
-				$scope.isEnd = true;
-			}
-		};
-		$scope.select = function(index) {
-			select = index;
-		};
-		$scope.next(index);
-		// });
+		});
+
+		DataManager.initData(type);
 	}
 ]);
 app.controller('QuizTeacherCtrl', ["$scope", "QuizManager", "DataManager",
 	function($scope, QuizManager, DataManager) {
-		$scope.chartConfig = QuizManager.chartConfig;
-		console.log($scope.chartConfig)
-
-
-		// QuizManager.load().then(function(data) {
-		var data = QuizManager.quiz;
 		var type = DataManager.types.QUIZ;
-		var current = 0;
-		$scope.quiz = [];
-		angular.forEach(data, function(quiz, key) {
-			var obj = {};
-			obj.question = quiz.question;
-			obj.answer = {
-				name: [],
-				data: []
-			};
-			angular.forEach(quiz.answer, function(answer, key) {
-				obj.answer.name.push(answer);
-				obj.answer.data.push(0);
+		if (angular.isDefined(QuizManager.node)) {
+			DataManager.setData(type, {
+				node: QuizManager.node
 			});
-			$scope.quiz.push(obj);
-		});
-		console.log($scope.quiz)
+			QuizManager.load().then(function(data) {
+				// var data = QuizManager.quiz;
+				$scope.current = 0;
+				$scope.quiz = [];
+				angular.forEach(data, function(quiz, key) {
+					var obj = {};
+					obj.question = quiz.question;
+					obj.answer = {
+						name: [],
+						data: []
+					};
+					angular.forEach(quiz.answer, function(answer, key) {
+						obj.answer.name.push(answer);
+						obj.answer.data.push(0);
+					});
+					QuizManager.setMaxChoice(obj.answer.data.length);
+					$scope.quiz.push(obj);
+				});
+				$scope.chartConfig = QuizManager.chartConfig;
+				DataManager.getData(type, function(data) {
+					// $scope.chartConfig.title.text = $scope.quiz[data.question].question;
+					var series = $scope.quiz[data.question].answer.data;
+					series[data.answer]++;
+					if (data.question == $scope.current) {
+						$scope.chartConfig.series[0].data = series;
+					}
+				});
 
-		DataManager.getData(type, function(data) {
-			// $scope.chartConfig.title.text = $scope.quiz[data.question].question;
-			var series = $scope.quiz[data.question].answer.data;
-			series[data.answer]++;
-			if (data.question == current) {
-				$scope.chartConfig.series[0].data = series;
-			}
-		});
-
-		$scope.changeIndex = function(index) {
-			current = index;
-			var quiz = $scope.quiz[index];
-			$scope.chartConfig.title.text = quiz.question;
-			$scope.chartConfig.series[0].data = quiz.answer.data;
-		};
-		$scope.changeIndex(0);
-		// });
+				$scope.changeIndex = function(index) {
+					$scope.current = index;
+					var quiz = $scope.quiz[index];
+					$scope.chartConfig.title.text = quiz.question;
+					$scope.chartConfig.series[0].data = quiz.answer.data;
+				};
+				$scope.changeIndex(0);
+			});
+		}
 	}
 ]);
 app.controller('DriveCtrl', ["$scope", "cfpLoadingBar", "Room", "LoginManager", "DrawManager", "Canvas", "SlideManager", "PDFService", "GoogleService",

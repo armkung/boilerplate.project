@@ -1,4 +1,8 @@
-<div>
-	<button style="display:inline;" ng-repeat="q in quiz" ng-click="changeIndex($index)">{{$index}}</button>
+<div class="fit-height">
+	<ul class="pagination position-absolute">
+		<li ng-class="{active: current==$index}" ng-repeat="q in quiz" ng-click="changeIndex($index)">
+			<a>{{$index}}</a>
+		</li>
+	</ul>
 	<highchart class="fit-height" config="chartConfig" ></highchart>
 </div>

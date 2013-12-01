@@ -1,22 +1,39 @@
 app.service("QuizManager", ["$q", "$http", "host_drupal",
     function($q, $http, host_drupal) {
         var self = this;
-        this.quiz = [{
-            question: "ques",
-            answer: ["a", "b", "c", "d"]
-        }, {
-            question: "ques2",
-            answer: ["a", "b", "c", "d"]
-        }];
+        // this.quiz = [{
+        //     question: "ques",
+        //     answer: ["a", "b", "c", "d"]
+        // }, {
+        //     question: "ques2",
+        //     answer: ["a", "b", "c", "d"]
+        // }];
         this.index = 0;
-        this.node = 8;
+
+        this.list = function(name) {
+            var deferred = $q.defer();
+
+            $http.jsonp(host_drupal + '/rest/views/list_webform?args=' + name + '&callback=JSON_CALLBACK').then(function(data) {
+                var items = data.data;
+                var quizs = [];
+                angular.forEach(items, function(item, key) {
+                    quizs.push({
+                        title: item["title"],
+                        date: item["updated date"],
+                        node: item["nid"]
+                    });
+                });
+                deferred.resolve(quizs);
+            });
+
+            return deferred.promise;
+        };
         this.load = function() {
             var deferred = $q.defer();
-            $http.jsonp(host_drupal + '/drupal/rest/node/' + self.node + '?callback=JSON_CALLBACK').then(function(data) {
+            $http.jsonp(host_drupal + '/rest/node/' + self.node + '?callback=JSON_CALLBACK').then(function(data) {
                 var items = data.data.webform.components;
                 var quizs = [];
                 angular.forEach(items, function(item, key) {
-                    console.log(item);
                     var obj = {};
                     obj.question = item.name;
                     var answers = [];
@@ -28,12 +45,21 @@ app.service("QuizManager", ["$q", "$http", "host_drupal",
 
                     quizs.push(obj);
                 });
-                console.log(quizs);
                 deferred.resolve(quizs);
             });
             return deferred.promise;
         };
 
+        var data = {
+            series: [],
+            categories: []
+        };
+        this.setMaxChoice = function(n) {
+            for (var i = 1; i <= n; i++) {
+                data.series.push(0);
+                data.categories.push(i + "");
+            }
+        };
         this.chartConfig = {
             //Main Highcharts options. Any Highchart options are valid here.
             //will be ovverriden by values specified below.
@@ -45,7 +71,7 @@ app.service("QuizManager", ["$q", "$http", "host_drupal",
 
             //Series object - a list of series using normal highcharts series options.
             series: [{
-                data: [0, 0, 0, 0],
+                data: data.series,
                 showInLegend: false
             }],
             //Title configuration
@@ -57,7 +83,7 @@ app.service("QuizManager", ["$q", "$http", "host_drupal",
             //Configuration for the xAxis. Currently only one x axis can be dynamically controlled.
             //properties currentMin and currentMax provied 2-way binding to the chart's maximimum and minimum
             xAxis: {
-                categories: ['1', '2', '3', '4'],
+                categories: data.categories,
                 title: {
                     text: 'Choices'
                 }

@@ -1,7 +1,11 @@
-<div class="container fit-height list" scroll-bar> 
-	<div class="row">
-		<div class="well col-lg-8 fit-height" ng-repeat="data in datas" ng-click="select($index)">
-			{{data}}
-		</div>
-	</div>
+<div class="list fit-height" scroll-bar>
+
+	<ul class="item-list">
+		<li class="item-grey clearfix" ng-class="{selected: selected==$index}" ng-repeat="data in datas" ng-click="select($index)">
+			<i class="green icon-list-alt bigger-160 align-middle"></i>
+			<span>{{data.title}}</span>
+			<span class="pull-right">{{data.date}}</span>
+		</li>
+	</ul>
+
 </div>
