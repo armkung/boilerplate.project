@@ -38,10 +38,12 @@ app.directive('selector', ["$rootScope", "$modal", "DrawFactory",
 	function($rootScope, $modal, DrawFactory) {
 		return {
 			restrict: 'E',
-			template: '<div class="width-100 fit-height" ng-click="dialog()"><div id="color" class="pull-left"></div>' +
-				'<div class="pull-left white margin-10"><i id ="size" class="icon-circle-blank align-middle"></i>' +
-				'<span class="bigger-140 align-middle">{{selector.size}}<span></div></div>',
-			// templateUrl: 'menu_left/template/attribute.tpl.html',
+			template: '<div class="width-100 fit-height" ng-click="dialog()"><div id="attr">' +
+				'<div id="color" class="pull-left"></div>' +
+				'<div class="pull-left white margin-10">' +
+				'<i id ="size" class="icon-circle align-middle"></i>' +
+				'<span class="bigger-140 align-middle">{{selector.size}}<span>' +
+				'</div></div></div>',
 			link: function(scope, iElement, iAttrs) {
 				if (angular.isUndefined($rootScope.selector)) {
 					$rootScope.selector = {
@@ -68,6 +70,8 @@ app.directive('selector', ["$rootScope", "$modal", "DrawFactory",
 					eSize.css('font-size', (100 + scale) + "%");
 				})
 
+				var eAttr = $('#attr');
+				eAttr.css('margin-left', (eAttr.width() - size) / 2 + "px");
 
 				var attrs = DrawFactory.attrs;
 				scope.dialog = function() {

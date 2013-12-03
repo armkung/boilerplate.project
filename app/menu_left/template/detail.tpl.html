@@ -1,18 +1,22 @@
 <div class="modal-dialog">
 	<div class="modal-content">
 		<div class="modal-body">
-			<img class="width-20" ng-src="{{room.display}}"/>
-			<div class="inline">
-				<span>Name :</span>
-				<span>{{room.name}}</span>
-				<div>
-					<button class="inline btn" ng-click="ok()">Ok</button>
-					<button class="inline btn" ng-click="cancel()">Cancel</button>
+			<div class="bigger-180 inline">
+				<img class="width-30  pull-left" ng-src="{{room.display}}"/>
+				<div class="margin-30 pull-left">
+					<span class="bolder">Name :</span>
+					<span>{{room.name}}</span>
+					<br>
+					<span class="bolder">Owner :</span>
+					<span>{{room.owner}}</span>
+					<br>
+					<button class="inline btn btn-success icon-ok" ng-click="ok()">Join</button>
+					<button class="inline btn btn-warning icon-remove" ng-click="cancel()">Cancel</button>
 				</div>
 			</div>
-			<div>
-				<span>Description :</span><br/>
-				<span>{{room.description}}</span>
+			<div class="bigger-180">
+				<span class="bolder">Description :</span><br/>
+				<span class="margin-10">{{room.description}}</span>
 			</div>
 		</div>
 	</div>

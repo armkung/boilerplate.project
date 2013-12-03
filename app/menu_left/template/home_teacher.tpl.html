@@ -1,17 +1,18 @@
-<div>
-	<div class="pull-left">
-		<label>Name</label>
-		<input type="text" ng-model="room.name">
-		<div>
-			<label>Description</label><br/>
-			<textarea style="width:200;height:200;" class="block" placeholder="Input detail" ng-model="room.description"></textarea>	
+<div class="align-center">
+	<div class="inline">
+		<img class="display pull-left" ng-src="{{room.display}}" ng-click="selectDisplay()"/>
+		<div class="margin-30 pull-left">
+			<label class="bigger-180 bolder">Name : </label>
+			<input type="text" maxlength="45" ng-model="room.name">
+			<hr>
+			<button class="btn icon-plus bigger-130" ng-click="create()"> Create Room</button>
+			<button class="btn icon-remove bigger-130" ng-click="close()"> Close Room</button>
 		</div>
 	</div>
-	<div class="pull-right">
-		<img class="display" ng-src="{{room.display}}" ng-click="selectDisplay()"/>
-		<div>
-			<button ng-click="create()">Create Room</button>
-			<button ng-click="close()">Close Room</button>
-		</div>
+	<br>
+	<div class="inline">
+		<label class="bigger-180 bolder">Description</label>
+		<br>
+		<textarea style="max-width:400;width:400;height:200" placeholder="Input detail" ng-model="room.description"></textarea>	
 	</div>
 </div>

@@ -5,8 +5,8 @@
 
 		<div class="widget-toolbar width-10 align-center">
 			<!-- <button class="btn btn-app" ng-click="list()">List</button>	 -->
-			<a href="#main/home/student" data-action="reload">
-				<i class="icon-refresh bigger-210" ng-click="list()"></i>
+			<a href="#main/home/student">
+				<i class="icon-refresh bigger-210 white" ng-click="list()"></i>
 			</a>
 		</div>
 		<!-- <button class="btn btn-app" ng-click="connect()">Connect</button>		
@@ -17,8 +17,8 @@
 		<div class="room-list">
 			<div class="infobox infobox-dark" ng-repeat="room in rooms" ng-class="{'infobox-blue3': selected==$index,'infobox-blue': selected!=$index}" ng-click="showDetail($index)">
 				<div class="infobox-data">
-					<img class="fit-height" ng-src="{{room.display}}"/>
-					<span>{{room.name}}</span>
+					<img class="fit-height pull-left" ng-src="{{room.display}}"/>
+					<div class="infobox-room pull-left bigger-110">{{room.name}}</div>
 				</div>
 			</div>
 		</div>
