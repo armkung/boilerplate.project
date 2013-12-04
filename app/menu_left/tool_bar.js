@@ -11,12 +11,17 @@ app.directive('toolBar', ["$rootScope", "DrawFactory",
 				var tools = DrawFactory.tools;
 				scope.toolLeft = [tools.MODE, tools.DRAG_OBJECT, tools.DRAG_GROUP, tools.CLEAR];
 				scope.toolRight = [tools.DRAW, tools.LINE, tools.TEXT, tools.DELETE];
-
+				scope.leftSelected = 0;
+				scope.rightSelected = -1;
 				scope.changeToolLeft = function(index) {
+					scope.leftSelected = index;
+					scope.rightSelected = -1;
 					scope.tool = scope.toolLeft[index];
 					sendTool();
 				};
 				scope.changeToolRight = function(index) {
+					scope.leftSelected = -1;
+					scope.rightSelected = index;
 					scope.tool = scope.toolRight[index];
 					sendTool();
 				};
@@ -41,7 +46,8 @@ app.directive('selector', ["$rootScope", "$modal", "DrawFactory",
 			template: '<div class="width-100 fit-height" ng-click="dialog()"><div id="attr">' +
 				'<div id="color" class="pull-left"></div>' +
 				'<div class="pull-left white margin-10">' +
-				'<i id ="size" class="icon-circle align-middle"></i>' +
+			// '<i id ="size" class="icon-circle align-middle"></i>' +
+			'<div id ="size" class="icon-circle align-middle"></div>' +
 				'<span class="bigger-140 align-middle">{{selector.size}}<span>' +
 				'</div></div></div>',
 			link: function(scope, iElement, iAttrs) {
@@ -65,13 +71,14 @@ app.directive('selector', ["$rootScope", "$modal", "DrawFactory",
 				})
 
 				var eSize = $('#size');
+				eSize.parent().css('margin-top', "6px");
 				scope.$watch('selector.size', function() {
 					var scale = (scope.selector.size / 50.0) * 100;
 					eSize.css('font-size', (100 + scale) + "%");
 				})
 
 				var eAttr = $('#attr');
-				eAttr.css('margin-left', (eAttr.width() - size) / 2 + "px");
+				eAttr.css('margin-left', "30%");
 
 				var attrs = DrawFactory.attrs;
 				scope.dialog = function() {

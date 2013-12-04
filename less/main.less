@@ -7,9 +7,10 @@
 @attr_color: #2e6589;
 @navbar_height: 36px;
 @margin_left_answer: 100px;
-@toolbar_height: 30px;
-@display_size: 140px;
+@toolbar_height: 38px;
+@display_size: 110px;
 @item_left: 20px;
+@font: 'Droid Sans';
 .pagination{
 	z-index: 99;
 	top: 30px;
@@ -45,12 +46,18 @@
 }
 .nav-right{
 	position: fixed;
-	z-index: 99;
+	z-index: 9999;
 	top: 0;
 	right: 0;
-	width: 40%;
+	width: 35%;
 	height: 100%;
 }
+.tool{
+	height: @toolbar_height;
+}
+/*.icon-tool{
+	height: @toolbar_height-11;
+}*/
 .attr{
 	position: relative;
 	/*float: left;
@@ -71,6 +78,7 @@
 	margin-top: 10px;
 }
 body,html{ 
+	font-family: @font !important;
 	width: 100%;
 	height: 100%; 
 	margin: 0; 
@@ -106,8 +114,9 @@ body{
 }
 .toolbar{
 	position: absolute;
+	z-index: 9;
 	width: 100%;
-	bottom: -@toolbar_height*3/4;
+	bottom: 18-@toolbar_height;
 	left: 0;
 	background-color: @toolbar_color;
 	/*position: relative;

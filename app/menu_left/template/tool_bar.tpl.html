@@ -1,12 +1,27 @@
 <div ng-hide="isHide">	
+
+	<div class="width-40 pull-left">
+		<div class="tool inline btn btn-xs btn-primary width-25" ng-repeat="tool in toolLeft" ng-click="changeToolLeft($index)" ng-class="{active: leftSelected==$index}">
+			<span class="tool" ng-class="{'icon-{{tool}}': true}"></span>
+		</div>
+	</div>
+
+	<selector class="width-20 pull-left attr"></selector>		
+
+	<div class="width-40 pull-left">
+		<div class="tool inline btn btn-xs btn-primary width-25" ng-repeat="tool in toolRight" ng-click="changeToolRight($index)" ng-class="{active: rightSelected==$index}">
+			<span class="tool" ng-class="{'icon-{{tool}}': true}"></span>
+		</div>
+	</div>
+
 	<!-- <div class="widget-body"> -->
 	<!-- <div class="widget-main"> -->
 
-	<div class="width-40 pull-left">
+<!-- 	<div class="width-40 pull-left">
 		<div data-toggle="buttons" class="btn-group">
-			<label class="btn btn-sm btn-primary" ng-repeat="tool in toolLeft" ng-click="changeToolLeft($index)">
+			<label class="btn btn-sm btn-primary width-25" ng-repeat="tool in toolLeft" ng-click="changeToolLeft($index)">
 				<input type="radio">
-				{{tool}}
+				<i ng-class="tool"></i>
 			</label>
 		</div>
 	</div>
@@ -15,12 +30,12 @@
 
 	<div class="width-40 pull-left">
 		<div data-toggle="buttons" class="btn-group">
-			<label class="btn btn-sm btn-primary" ng-repeat="tool in toolRight" ng-click="changeToolRight($index)">
+			<label class="btn btn-sm btn-primary width-25" ng-repeat="tool in toolRight" ng-click="changeToolRight($index)">
 				<input type="radio">
-				{{tool}}
+				<i ng-class="tool"></i>
 			</label>
 		</div>
-	</div>
+	</div> -->
 
 	<!-- </div> -->
 	<!-- </div> -->

@@ -10,11 +10,11 @@
 				<canvas id="mirror-1" draw-pad text="{{text}}" send="isSend">
 				</canvas>
 				<input type="text" id="textbox" ng-model="text">
-				<tool-bar class="toolbar fluid-container" tool="tool" is-hide="{{hideTool&&!isDesktop}}"></tool-bar>
 			</div>
 			<div class="slide-pad" fit-size>
 				<slide-pad send="isSend"></slide-pad>
 			</div>
+			<tool-bar class="toolbar" tool="tool" is-hide="{{hideTool&&!isDesktop}}"></tool-bar>
 		</div>
 
 		<div ng-if="isDesktop" class="well col-md-3 col-lg-3 fit-height">

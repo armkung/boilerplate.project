@@ -8,7 +8,7 @@
 		<div class="pad col-md-9 col-lg-9">
 			<canvas id="draw" draw-pad text="{{text}}" send="true" fit-size></canvas>
 			<input type="text"  id="textbox" ng-model="text">
-			<tool-bar class="toolbar fluid-container" tool="tool" is-hide="{{hideTool&&!isDesktop}}"></tool-bar>
+			<tool-bar class="toolbar" tool="tool" is-hide="{{hideTool&&!isDesktop}}"></tool-bar>
 		</div>
 
 		<div ng-if="isDesktop" class="well col-md-3 col-lg-3 fit-height">

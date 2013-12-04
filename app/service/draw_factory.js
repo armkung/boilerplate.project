@@ -2,15 +2,15 @@ app.service("DrawFactory", ["Canvas", "DrawManager",
 	function(Canvas, DrawManager) {
 		var self = this;
 		this.tools = {
-			MODE: "Mode",
-			DRAG_GROUP: "Group Drag",
-			DRAG_OBJECT: "Drag",
-			CLEAR: "Clear",
-			TEXT: "Text",
-			DRAW: "Draw",
-			LINE: "Line",
+			MODE: "catch",
+			DRAG_GROUP: "drag_group",
+			DRAG_OBJECT: "drag",
+			CLEAR: "clear",
+			TEXT: "text",
+			DRAW: "write",
+			LINE: "line",
 			// ANIMATE: "Animate",
-			DELETE: "Delete"
+			DELETE: "delete"
 		};
 		this.attrs = {
 			COLOR: "Color",
