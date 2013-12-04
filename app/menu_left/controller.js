@@ -310,8 +310,8 @@ app.controller('HomeStudentCtrl', ["$scope", "$rootScope", "$modal", "Room", "So
 					Room.users.splice(index, 1);
 				}
 			});
-			$rootScope.$watch('roomSelected', function() {
-				$scope.selected = $rootScope.roomSelected;
+			$rootScope.$watch('selected', function() {
+				$rootScope.roomSelected = $scope.selected;
 			});
 			// $scope.select = function(index) {
 			// 	$rootScope.roomSelected = index;
@@ -364,7 +364,7 @@ app.controller('HomeStudentCtrl', ["$scope", "$rootScope", "$modal", "Room", "So
 					]
 				});
 				modal.result.then(function(index) {
-					$rootScope.roomSelected = index;
+					$scope.selected = index;
 					$scope.room = $scope.rooms[index];
 					$scope.connect();
 				});

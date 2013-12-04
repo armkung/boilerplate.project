@@ -18,17 +18,17 @@ app.service('LoginManager', ["$q", "$http", "host_drupal",
 		};
 		this.login = function(user) {
 			self.user = user;
-			// if (user.username == "Arm Kung") {
-			// 	user.accessLevel = self.level.STUDENT;
-			// } else {
-			// 	user.accessLevel = self.level.TEACHER;
-			// }
-			// deferred.resolve(user);
-			$http.jsonp(host_drupal + "/greedmonkey/login/" + user.email + "/" + user.username + "?callback=JSON_CALLBACK").then(function(data) {
-				var roles = data.data;
-				user.accessLevel = roles[1];
-				deferred.resolve(user);
-			});
+			if (user.username == "Arm Kung") {
+				user.accessLevel = self.level.STUDENT;
+			} else {
+				user.accessLevel = self.level.TEACHER;
+			}
+			deferred.resolve(user);
+			// $http.jsonp(host_drupal + "/greedmonkey/login/" + user.email + "/" + user.username + "?callback=JSON_CALLBACK").then(function(data) {
+			// 	var roles = data.data;
+			// 	user.accessLevel = roles[1];
+			// 	deferred.resolve(user);
+			// });
 			return deferred.promise;
 		};
 		this.getAccess = function() {

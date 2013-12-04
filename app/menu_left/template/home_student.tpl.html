@@ -1,12 +1,12 @@
-<div class="widget-box">
+<div class="widget-box transparent card fit-height">
 
-	<div class="widget-header header-color-blue">
-		<h5 class="bigger-160">Rooms</h5>
+	<div class="widget-header">
+		<h5 class="bigger-160">Room</h5>
 
 		<div class="widget-toolbar width-10 align-center">
 			<!-- <button class="btn btn-app" ng-click="list()">List</button>	 -->
-			<a href="#main/home/student">
-				<i class="icon-refresh bigger-210 white" ng-click="list()"></i>
+			<a href="">
+				<i class="icon-refresh bigger-210" ng-click="list()"></i>
 			</a>
 		</div>
 		<!-- <button class="btn btn-app" ng-click="connect()">Connect</button>		
@@ -15,12 +15,16 @@
 
 	<div class="widget-body fit-height">
 		<div class="room-list">
-			<div class="infobox infobox-dark" ng-repeat="room in rooms" ng-class="{'infobox-blue3': selected==$index,'infobox-blue': selected!=$index}" ng-click="showDetail($index)">
+			<div class="inline card width-20 align-center" ng-repeat="room in rooms" ng-class="{'selected': selected==$index}" ng-click="showDetail($index)">
+				<img class="width-100" ng-src="{{room.display}}"/>
+				<div class="inline bigger-140 word-warp">{{room.name}}</div>
+			</div>
+			<!-- <div class="infobox infobox-dark" ng-repeat="room in rooms" ng-class="{'infobox-blue3': selected==$index,'infobox-blue': selected!=$index}" ng-click="showDetail($index)">
 				<div class="infobox-data">
 					<img class="fit-height pull-left" ng-src="{{room.display}}"/>
 					<div class="infobox-room pull-left bigger-110">{{room.name}}</div>
 				</div>
-			</div>
+			</div> -->
 		</div>
 	</div>
 

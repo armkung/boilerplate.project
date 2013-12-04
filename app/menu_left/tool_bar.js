@@ -9,8 +9,8 @@ app.directive('toolBar', ["$rootScope", "DrawFactory",
 			},
 			link: function(scope, iElement, iAttrs) {
 				var tools = DrawFactory.tools;
-				scope.toolLeft = [tools.MODE, tools.DRAG_OBJECT, tools.DRAG_GROUP];
-				scope.toolRight = [tools.DRAW, tools.LINE, tools.TEXT, tools.CLEAR, tools.DELETE];
+				scope.toolLeft = [tools.MODE, tools.DRAG_OBJECT, tools.DRAG_GROUP, tools.CLEAR];
+				scope.toolRight = [tools.DRAW, tools.LINE, tools.TEXT, tools.DELETE];
 
 				scope.changeToolLeft = function(index) {
 					scope.tool = scope.toolLeft[index];

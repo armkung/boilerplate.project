@@ -1,13 +1,14 @@
 @chat_box_color: grey;
 @draw_color: white;
 @loading_bar_color: red;
-@selected: blue;
+@selected_fg: white;
+@selected_bg: #478fca;
 @toolbar_color: #438eb9;
 @attr_color: #2e6589;
-@navbar_height: 30px;
+@navbar_height: 36px;
 @margin_left_answer: 100px;
-@toolbar_height: 25;
-@display_size: 140;
+@toolbar_height: 30px;
+@display_size: 140px;
 @item_left: 20px;
 .pagination{
 	z-index: 99;
@@ -80,7 +81,8 @@ body{
 	padding-top: @navbar_height;      			
 }
 .selected{
-	background-color: @selected;
+	color: @selected_fg !important;
+	background-color: @selected_bg !important;
 }
 .navbar{
 	z-index: 0;
@@ -181,8 +183,24 @@ body{
 	margin-left: 30px;
 }
 .infobox-room{
-	width: 123px;
+	/*width: 123px;
 	word-wrap: break-word;
-	margin-left: 10px;
+	margin-left: 10px;*/
 }
-
+.word-warp{
+	word-wrap: break-word;
+}
+.card {
+	padding: 3.5rem !important;
+	box-shadow: 0 1px 2px #aaa;
+	background: white;
+	margin: 0 1rem 1rem;
+	border-radius: 3px;
+}
+.v-line{
+	border-right: 1px solid #e3e3e3;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	margin-left: 5px;
+	margin-right: 5px;
+}

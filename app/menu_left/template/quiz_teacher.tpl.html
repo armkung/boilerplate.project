@@ -1,7 +1,7 @@
 <div class="fit-height">
 	<ul class="pagination position-absolute">
 		<li ng-class="{active: current==$index}" ng-repeat="q in quiz" ng-click="changeIndex($index)">
-			<a>{{$index}}</a>
+			<a>{{$index+1}}</a>
 		</li>
 	</ul>
 	<highchart class="fit-height" config="chartConfig" ></highchart>

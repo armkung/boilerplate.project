@@ -1,17 +1,27 @@
 <div ng-hide="isHide">	
 	<!-- <div class="widget-body"> -->
-		<!-- <div class="widget-main"> -->
+	<!-- <div class="widget-main"> -->
 
-			<div class="width-40 pull-left">
-				<button ng-repeat="tool in toolLeft" ng-click="changeToolLeft($index)">{{tool}}</button>
-			</div>
+	<div class="width-40 pull-left">
+		<div data-toggle="buttons" class="btn-group">
+			<label class="btn btn-sm btn-primary" ng-repeat="tool in toolLeft" ng-click="changeToolLeft($index)">
+				<input type="radio">
+				{{tool}}
+			</label>
+		</div>
+	</div>
 
-			<selector class="width-20 pull-left attr"></selector>		
+	<selector class="width-20 pull-left attr"></selector>		
 
-			<div class="width-40 pull-left">
-				<button ng-repeat="tool in toolRight" ng-click="changeToolRight($index)">{{tool}}</button>
-			</div>
+	<div class="width-40 pull-left">
+		<div data-toggle="buttons" class="btn-group">
+			<label class="btn btn-sm btn-primary" ng-repeat="tool in toolRight" ng-click="changeToolRight($index)">
+				<input type="radio">
+				{{tool}}
+			</label>
+		</div>
+	</div>
 
-		<!-- </div> -->
+	<!-- </div> -->
 	<!-- </div> -->
 </div>
