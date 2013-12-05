@@ -9,8 +9,7 @@ app.directive("drawPad", ["$rootScope", "DrawManager", "DrawFactory", "Input", "
 			link: function(scope, iElement, iAttr) {
 				var type = DataManager.types.POS;
 				var id = iAttr.id;
-				DrawManager.init(id);
-
+				DrawManager.init(id);				
 				function sendData(obj) {
 					if (scope.send) {
 						obj.name = DrawManager.getName();

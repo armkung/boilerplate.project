@@ -133,12 +133,15 @@ app.service("DrawManager", ["Canvas", "$rootScope",
 			path.set({
 				left: x,
 				top: y,
+				originX: 'center',
+				originY: 'center',
 				fill: null,
 				stroke: data.stroke,
 				strokeWidth: data.strokeWidth,
 				strokeLineCap: data.strokeLineCap,
 				strokeLineJoin: data.strokeLineJoin
 			});
+
 			self.disableMove(path);
 
 			if (current instanceof fabric.Group) {
@@ -169,6 +172,10 @@ app.service("DrawManager", ["Canvas", "$rootScope",
 				if (xPos && yPos) {
 					current.remove(line);
 					line = new fabric.Line([xPos, yPos, x, y], lineOption);
+					line.set({
+						originX: 'center',
+						originY: 'center'
+					})
 					if (current instanceof fabric.Group) {
 						current.addWithUpdate(line);
 					} else {
@@ -176,7 +183,7 @@ app.service("DrawManager", ["Canvas", "$rootScope",
 					}
 					setId(line);
 					self.disableMove(line);
-					canvas.calcOffset();
+					// canvas.calcOffset();
 					canvas.renderAll();
 				}
 				if (isUp) {

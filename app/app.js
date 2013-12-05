@@ -58,15 +58,15 @@ app.config(["$stateProvider", "$urlRouterProvider",
 	}
 ]).run(["$rootScope", "$modal", "LoginManager", "cfpLoadingBar",
 	function($rootScope, $modal, LoginManager, cfpLoadingBar) {
-		$rootScope.$on("$stateChangeSuccess", function($currentRoute, $previousRoute) {
-			if (LoginManager.hasLogin()) {
-				$modal.open({
-					templateUrl: 'main/template/login.tpl.html',
-					controller: 'LoginCtrl'
-				});
-			}
-			cfpLoadingBar.complete();
-		});
+		// $rootScope.$on("$stateChangeSuccess", function($currentRoute, $previousRoute) {
+		// 	if (LoginManager.hasLogin()) {
+		// 		$modal.open({
+		// 			templateUrl: 'main/template/login.tpl.html',
+		// 			controller: 'LoginCtrl'
+		// 		});
+		// 	}
+		// 	cfpLoadingBar.complete();
+		// });
 	}
 ]);
 
