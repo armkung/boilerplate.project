@@ -20,18 +20,24 @@ app.directive('scrollBar', function() {
 	};
 });
 
-app.directive('isVisible', function() {
-	return {
-		restrict: 'AC',
-		scope: {
-			isVisible: '='
-		},
-		link: function(scope, iElement, iAttrs) {
-			var display = iElement.css('display');
-			scope.isVisible = display != 'none';
-		}
-	};
-});
+app.directive('isVisible', ["$rootScope",
+	function($rootScope) {
+		return {
+			restrict: 'AC',
+			scope: {
+				isVisible: '='
+			},
+			link: function(scope, iElement, iAttrs) {
+				var display = iElement.css('display');
+				scope.isVisible = display != 'none';
+				$rootScope.$on('resize', function() {
+					var display = iElement.css('display');
+					scope.isVisible = display != 'none';
+				})
+			}
+		};
+	}
+]);
 
 app.directive('fitSize', function() {
 	return {
@@ -43,28 +49,49 @@ app.directive('fitSize', function() {
 	};
 });
 
-app.directive('reSize', function($rootScope, $window) {
-	return {
-		restrict: 'AC',
-		link: function(scope, iElement, iAttrs) {
-			var bodySize = $('body').height();
-			var mainSize = $('#main').height();
-			console.log(mainSize)
-			var init = $window.innerHeight;
-			$rootScope.windowHeight = $window.innerHeight;
-			angular.element($window).bind('resize', function() {
-				$rootScope.windowHeight = $window.innerHeight;
-				$rootScope.$apply('windowHeight');
-			});
-			$rootScope.$watch('windowHeight', function(newVal, oldVal) {
-				if ($rootScope.windowHeight >= init) {
-					$('#main').removeClass("position-absolute width-100");
-				} else {
-					$('#main').addClass("position-absolute width-100");
-					$('#main').height(mainSize);
-					$('body').height(bodySize);
-				}
-			});
-		}
-	};
-});
+app.directive('reSize', ["$rootScope", "$window", "Canvas",
+	function($rootScope, $window, Canvas) {
+		return {
+			restrict: 'AC',
+			link: function(scope, iElement, iAttrs) {
+				var mainSize = iElement.height();
+				var init = {
+					width: $window.innerWidth,
+					height: $window.innerHeight
+				};
+				$rootScope.windowSize = {
+					width: $window.innerWidth,
+					height: $window.innerHeight
+				};
+				angular.element($window).bind('resize', function() {
+					$rootScope.windowSize = {
+						width: $window.innerWidth,
+						height: $window.innerHeight
+					};
+					$rootScope.$apply('windowHeight');
+				});
+				$rootScope.$watch('windowSize', function(oldV, newV) {
+					if (oldV != newV) {
+						if ($rootScope.windowSize.width > init.width ||
+							$rootScope.windowSize.height > init.height) {
+							init = {
+								width: $window.innerWidth,
+								height: $window.innerHeight
+							};
+							mainSize = iElement.height();
+
+							iElement.removeClass("position-absolute width-100");
+							iElement.height('auto');
+
+							Canvas.setSize($('.pad').width(), $('.pad').height());
+							$rootScope.$broadcast('resize');
+						} else {
+							iElement.addClass("position-absolute width-100");
+							iElement.height(mainSize);
+						}
+					}
+				});
+			}
+		};
+	}
+]);

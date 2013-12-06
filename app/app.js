@@ -197,6 +197,16 @@ app.service("Canvas", ["$q",
 			self.height = canvas.getHeight();
 			deferred.resolve(canvas);
 		};
+		this.setSize = function(w, h) {
+			if (canvas) {
+				canvas.setDimensions({
+					width: w,
+					height: h
+				})
+				self.width = w;
+				self.height = h;
+			}
+		}
 		this.getCanvas = function() {
 			// if (canvas) {
 			// 	deferred.resolve(canvas);
@@ -234,26 +244,3 @@ app.service("Input", ["Canvas",
 		};
 	}
 ]);
-
-app.run(function($rootScope, $window) {
-	var bodySize = $('body').height();
-	var mainSize = $('#main').height();
-	var init = $window.innerHeight;
-	$rootScope.windowHeight = $window.innerHeight;
-	angular.element($window).bind('resize', function() {
-		$rootScope.windowHeight = $window.innerHeight;
-		$rootScope.$apply('windowHeight');
-	});
-	$rootScope.$watch('windowHeight', function(newVal, oldVal) {
-		if ($rootScope.windowHeight >= init) {
-			// bodySize = $('body').height();
-			// mainSize = $('#main').height();
-			$('#main').removeClass("position-absolute width-100");
-		} else {
-			$('#main').addClass("position-absolute width-100");
-			$('#main').height(mainSize);
-			$('body').height(bodySize);
-			// init = $rootScope.windowHeight;
-		}
-	})
-})

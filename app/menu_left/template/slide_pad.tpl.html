@@ -1,9 +1,9 @@
 <div ng-swipe-up="checkToolSwipe(false)" ng-swipe-down="checkToolSwipe(true)" ng-swipe-left="checkMenuSwipe(false)" ng-swipe-right="checkMenuSwipe(true)">
 
-	<div is-visible="isDesktop" class="visible-md visible-lg"></div>
+	<div is-visible="isDesktop" class="visible-lg"></div>
 
 	<div class="row">
-		<div class="pad col-md-9 col-lg-9">
+		<div class="pad col-lg-9">
 			<div class="control-area" ng-show="isShow" ng-click="prevIndex(false)"></div>
 			<div class="control-area" ng-show="isShow" ng-click="nextIndex(false)"></div>
 			<div class="mirror">
@@ -17,7 +17,7 @@
 			<tool-bar class="toolbar" tool="tool" is-hide="{{hideTool&&!isDesktop}}"></tool-bar>
 		</div>
 
-		<div ng-if="isDesktop" class="well col-md-3 col-lg-3 fit-height">
+		<div ng-if="isDesktop" class="well col-lg-3 fit-height">
 			<chat></chat>
 		</div>
 		<div ng-if="!isDesktop" ng-hide="hideMenu" class="well nav-right">

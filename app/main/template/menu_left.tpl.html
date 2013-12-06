@@ -1,20 +1,20 @@
 <!-- <div class="navbar-container"> -->
 <div class="navbar-header pull-left">
 	<ul class="nav ace-nav">
-		<li class="nav-tab light-orange">
-			<a class="home_page" ui-sref="main.home">Home</a>
+		<li class="nav-tab">
+			<a class="home_page pink" ui-sref="main.home"></a>
 		</li>
-		<li class="nav-tab light-purple">
-			<a class="drive_page" ui-sref="main.drive">Drive</a>
+		<li class="nav-tab">
+			<a class="drive_page green" ui-sref="main.drive"></a>
 		</li>
-		<li class="nav-tab purple">
-			<a class="draw_page" ui-sref="main.draw">Draw</a>
+		<li class="nav-tab">
+			<a class="draw_page blue" ui-sref="main.draw"></a>
 		</li>
-		<li class="nav-tab dark-opaque">
-			<a class="slide_page" ui-sref="main.slide">Slide</a>
+		<li class="nav-tab">
+			<a class="slide_page yellow" ui-sref="main.slide"></a>
 		</li>
-		<li class="nav-tab grey">
-			<a class="quiz_page" ui-sref="main.quiz">Quiz</a>
+		<li class="nav-tab">
+			<a class="quiz_page red" ui-sref="main.quiz"></a>
 		</li>
 	</ul>
 <!-- 		<ul class="nav ace-nav">
@@ -30,7 +30,10 @@
 		<span class="v-line align-middle"></span>
 		<span class="align-middle">{{userName}}</span>
 		<span class="v-line align-middle"></span>
-		<div class="btn btn-danger icon-off inline" ng-click="logout()"> logout</div>
+		<div id="logout" class="btn btn-danger inline nav-tab" ng-click="logout()">
+			<i class="icon-off no-margin bigger-140"></i>
+			<span class="bigger-110">logout</span>
+		</div>
 		<iframe id="logout" ng-src="{{url}}" style="display:none;"></iframe>
 	</div>
 <!-- </div> -->
