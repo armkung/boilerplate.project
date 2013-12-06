@@ -205,26 +205,55 @@ app.service("Canvas", ["$q",
 		};
 	}
 ]);
-app.service("Input", function() {
-	var self = this;
-	var txt;
-	this.init = function(callback) {
-		txt = $("#textbox");
-		txt.bind('keydown', function(e) {
-			if (e.keyCode == 13) {
-				callback();
-			}
-		});
-	};
-	this.hide = function() {
-		txt.val("");
-		txt.hide();
-	};
-	this.show = function(x, y) {
-		txt.css({
-			left: x,
-			top: y
-		});
-		txt.show();
-	};
-});
+app.service("Input", ["Canvas",
+	function(Canvas) {
+		var self = this;
+		var txt;
+		this.init = function(callback) {
+			txt = $("#textbox");
+			txt.bind('keydown', function(e) {
+				if (e.keyCode == 13) {
+					callback();
+				}
+			});
+			txt.focus(function() {
+				// $('.pad').parent().height(Canvas.height);
+				// console.log($('.pad').height());
+			});
+		};
+		this.hide = function() {
+			txt.val("");
+			txt.hide();
+		};
+		this.show = function(x, y) {
+			txt.css({
+				left: x,
+				top: y
+			});
+			txt.show();
+		};
+	}
+]);
+
+app.run(function($rootScope, $window) {
+	var bodySize = $('body').height();
+	var mainSize = $('#main').height();
+	var init = $window.innerHeight;
+	$rootScope.windowHeight = $window.innerHeight;
+	angular.element($window).bind('resize', function() {
+		$rootScope.windowHeight = $window.innerHeight;
+		$rootScope.$apply('windowHeight');
+	});
+	$rootScope.$watch('windowHeight', function(newVal, oldVal) {
+		if ($rootScope.windowHeight >= init) {
+			// bodySize = $('body').height();
+			// mainSize = $('#main').height();
+			$('#main').removeClass("position-absolute width-100");
+		} else {
+			$('#main').addClass("position-absolute width-100");
+			$('#main').height(mainSize);
+			$('body').height(bodySize);
+			// init = $rootScope.windowHeight;
+		}
+	})
+})

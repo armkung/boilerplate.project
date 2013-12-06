@@ -42,3 +42,29 @@ app.directive('fitSize', function() {
 		}
 	};
 });
+
+app.directive('reSize', function($rootScope, $window) {
+	return {
+		restrict: 'AC',
+		link: function(scope, iElement, iAttrs) {
+			var bodySize = $('body').height();
+			var mainSize = $('#main').height();
+			console.log(mainSize)
+			var init = $window.innerHeight;
+			$rootScope.windowHeight = $window.innerHeight;
+			angular.element($window).bind('resize', function() {
+				$rootScope.windowHeight = $window.innerHeight;
+				$rootScope.$apply('windowHeight');
+			});
+			$rootScope.$watch('windowHeight', function(newVal, oldVal) {
+				if ($rootScope.windowHeight >= init) {
+					$('#main').removeClass("position-absolute width-100");
+				} else {
+					$('#main').addClass("position-absolute width-100");
+					$('#main').height(mainSize);
+					$('body').height(bodySize);
+				}
+			});
+		}
+	};
+});
