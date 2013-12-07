@@ -4,8 +4,8 @@
 			<img ng-src="{{url+item}}" ng-repeat="item in items" ng-click="select($index)">
 		</div>
 		<div class="modal-footer">
-			<button ng-click="ok()">Ok</button>
-			<button ng-click="cancel()">Cancel</button>
+			<button class="btn btn-success icon-ok bigger-130" ng-click="ok()"> Ok</button>
+			<button class="btn btn-warning icon-remove bigger-130" ng-click="close()"> Cancel</button>
 		</div>	
 	</div>
 </div>'
