@@ -1,4 +1,4 @@
-<div ng-swipe-up="checkToolSwipe(false)" ng-swipe-down="checkToolSwipe(true)" ng-swipe-left="checkMenuSwipe(false)" ng-swipe-right="checkMenuSwipe(true)">
+<div ng-swipe-up="checkToolSwipe(false)" ng-swipe-down="checkToolSwipe(true)" ng-swipe-left="checkMenuSwipe(true)" ng-swipe-right="checkMenuSwipe(false)">
 	<div style="display:none;">
 		<canvas id="data"/>
 	</div>
@@ -14,9 +14,17 @@
 		<div ng-if="isDesktop" class="well col-lg-3 fit-height">
 			<group></group>
 		</div>
-		<div ng-if="!isDesktop" ng-hide="hideMenu" class="well nav-right">
-			<group></group>
+		<div ng-if="!isDesktop" class="width-35">
+			<div class="nav-right">
+				<div class="btn btn-app btn-xs btn-warning ace-settings-btn" ng-click="showMenu = !showMenu">
+					<i class="icon-tag bigger-150"></i>
+				</div>
+				<div class="ace-settings-box fit-height" ng-class="{open: showMenu}">
+					<group></group>
+				</div>
+			</div>
 		</div>
 	</div>
-	
+</div>
+
 </div>

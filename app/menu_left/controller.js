@@ -165,15 +165,15 @@ app.controller('HandWriteCtrl', ["$scope", "$rootScope", "DrawFactory", "Canvas"
 	function($scope, $rootScope, DrawFactory, Canvas) {
 		$scope.isSend = true;
 		$scope.hideTool = false;
-		$scope.hideMenu = true;
+		$scope.showMenu = false;
 		$scope.checkToolSwipe = function(hideTool) {
 			if ($scope.tool == DrawFactory.tools.MODE) {
 				$scope.hideTool = hideTool;
 			}
 		};
-		$scope.checkMenuSwipe = function(hideMenu) {
+		$scope.checkMenuSwipe = function(showMenu) {
 			if ($scope.tool == DrawFactory.tools.MODE) {
-				$scope.hideMenu = hideMenu;
+				$scope.showMenu = showMenu;
 			}
 		};
 	}
@@ -200,15 +200,15 @@ app.controller('SlideCtrl', ["$scope", "$rootScope", "LoginManager", "DrawFactor
 				}
 			};
 			$scope.hideTool = false;
-			$scope.hideMenu = true;
+			$scope.showMenu = false;
 			$scope.checkToolSwipe = function(hideTool) {
 				if ($scope.tool == DrawFactory.tools.MODE) {
 					$scope.hideTool = hideTool;
 				}
 			};
-			$scope.checkMenuSwipe = function(hideMenu) {
+			$scope.checkMenuSwipe = function(showMenu) {
 				if ($scope.tool == DrawFactory.tools.MODE) {
-					$scope.hideMenu = hideMenu;
+					$scope.showMenu = showMenu;
 				}
 			};
 			$rootScope.$on('tool', function(e, tool) {
