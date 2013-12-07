@@ -55,6 +55,13 @@ app.service("DrawFactory", ["Canvas", "DrawManager",
 				}
 			};
 		};
+		this.setClear = function(clear) {
+			listener.clear = {
+				call: function() {
+					clear();
+				}
+			};
+		};
 		this.setText = function(text) {
 			var isText = false;
 			listener.text = {
@@ -242,6 +249,7 @@ app.service("DrawFactory", ["Canvas", "DrawManager",
 					break;
 				case self.tools.CLEAR:
 					DrawManager.clear();
+					setBind(listener.clear);
 					break;
 				case self.tools.DELETE:
 					DrawManager.canGroupDrag(false);

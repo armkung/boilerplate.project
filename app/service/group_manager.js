@@ -1,35 +1,47 @@
-app.service('GroupManager', ["$rootScope", "Canvas",
-	function($rootScope, Canvas) {
+app.service('GroupManager', ["Canvas", "DrawManager",
+	function(Canvas, DrawManager) {
 		var self = this;
 		var canvas;
-		var objs;
+		// var objs;
 		var groups;
 
-		this.getGroups = function(users) {
-			groups = [];
+		this.getGroups = function(users, owner) {
+			groups = {};
 			Canvas.getCanvas().then(function(cs) {
 				canvas = cs;
-				objs = canvas.getObjects();
-				var tmp = users.slice(0);
-				angular.forEach(objs, function(obj, key) {
+				// objs = canvas.getObjects();
+
+				// var tmp = users.slice(1);
+				canvas.forEachObject(function(obj) {
 					if (obj instanceof fabric.Group) {
-						var user = tmp.shift();
-						if (!(user in groups)) {
-							groups.push({
-								user: user,
-								id: key,
+						var user = obj.get("id");
+						if (user != owner) {
+							// if (users.indexOf(user) != -1) {
+							groups[user] = {
+								id: user,
 								isHide: false,
 								image: getImage(obj)
-							});
-							// self.hide(groups.length - 1);
+							};
+							// } else {
+							// 	var id = DrawManager.getFromId(user);
+							// 	var item = canvas.item(id);
+							// 	if (item) {
+							// 		item.remove();
+							// 	}
+							// }
 						}
 					}
 				});
-				angular.forEach(groups, function(group, user) {
-					if (!(user in users)) {
-						canvas.item(group.id).remove();
-					}
-				});
+				// angular.forEach(groups, function(group, user) {
+				// if (!(user in users)) {
+				// 	var id = DrawManager.getFromId(user.id);
+
+				// 	var item = canvas.item(id);
+				// 	if (item) {
+				// 		item.remove();
+				// 	}
+				// }
+				// });
 				canvas.renderAll();
 			});
 
@@ -54,21 +66,29 @@ app.service('GroupManager', ["$rootScope", "Canvas",
 				self.hide(key);
 			});
 		};
-		this.show = function(index) {
-			var id = groups[index].id;
-			groups[index].isHide = false;
-			canvas.item(id).set({
-				"visible": true
-			});
-			canvas.renderAll();
+		this.show = function(id) {
+			groups[id].isHide = false;
+			var index = DrawManager.getFromId(id);
+
+			if (angular.isDefined(index)) {
+				var item = canvas.item(index);
+				item.set({
+					"visible": true
+				});
+				canvas.renderAll();
+			}
 		};
-		this.hide = function(index) {
-			var id = groups[index].id;
-			groups[index].isHide = true;
-			canvas.item(id).set({
-				"visible": false
-			});
-			canvas.renderAll();
+		this.hide = function(id) {
+			groups[id].isHide = true;
+			var index = DrawManager.getFromId(id);
+
+			if (angular.isDefined(index)) {
+				var item = canvas.item(index);
+				item.set({
+					"visible": false
+				});
+				canvas.renderAll();
+			}
 		};
 
 	}

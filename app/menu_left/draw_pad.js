@@ -18,12 +18,24 @@ app.directive("drawPad", ["$rootScope", "DrawManager", "DrawFactory", "Input", "
 					}
 				}
 
-				function setCurrent(user) {
-					var id, name;
+				function setId(user) {
+					var id;
 					if (user) {
-						name = user.name;
+						var name = user.name;
 						if (name != Room.user) {
-							id = user.id;
+							id = user.name;
+						}
+					}
+					DrawManager.newGroup(id);
+				}
+
+				function setCurrent(user) {
+					var id;
+					if (user) {
+						var name = user.name;
+						if (name != Room.user) {
+							id = user.name;
+
 							if (Room.users.indexOf(id) == -1) {
 								Room.users.push(name);
 							}
@@ -34,8 +46,7 @@ app.directive("drawPad", ["$rootScope", "DrawManager", "DrawFactory", "Input", "
 
 				function draw(data) {
 					var pos = data.pos;
-					var id = data.user ? data.user.id : undefined;
-					DrawManager.newGroup(id);
+					setId(data.user);
 					setCurrent(data.user);
 
 					DrawManager.setStrokeColor(pos.color);
@@ -45,8 +56,7 @@ app.directive("drawPad", ["$rootScope", "DrawManager", "DrawFactory", "Input", "
 
 				function line(data) {
 					var pos = data.pos;
-					var id = data.user ? data.user.id : undefined;
-					DrawManager.newGroup(id);
+					setId(data.user);
 					setCurrent(data.user);
 
 					DrawManager.setStrokeColor(pos.color);
@@ -57,8 +67,7 @@ app.directive("drawPad", ["$rootScope", "DrawManager", "DrawFactory", "Input", "
 
 				function text(data) {
 					var pos = data.pos;
-					var id = data.user ? data.user.id : undefined;
-					DrawManager.newGroup(id);
+					setId(data.user);
 					setCurrent(data.user);
 
 					DrawManager.setFillColor(pos.color);
@@ -76,6 +85,18 @@ app.directive("drawPad", ["$rootScope", "DrawManager", "DrawFactory", "Input", "
 					setCurrent(data.user);
 
 					DrawManager.remove(data.n);
+				}
+
+				function clear(data) {
+					if (data.user) {
+						var name = data.user.name;
+						DrawManager.remove([name]);
+						DrawManager.removeGroup(name);
+						var index = Room.users.indexOf(name);
+						if (index != -1) {
+							Room.users.splice(name, 1);
+						}
+					}
 				}
 
 				var strokeColor, fillColor, strokeSize, fontSize;
@@ -104,6 +125,9 @@ app.directive("drawPad", ["$rootScope", "DrawManager", "DrawFactory", "Input", "
 								case DrawFactory.tools.DELETE:
 									remove(data);
 									break;
+								case DrawFactory.tools.CLEAR:
+									clear(data);
+									break;
 							}
 							if (data.pos) {
 								DrawManager.setStrokeColor(strokeColor);
@@ -114,9 +138,11 @@ app.directive("drawPad", ["$rootScope", "DrawManager", "DrawFactory", "Input", "
 							if (scope.tool == DrawFactory.tools.DRAG_GROUP) {
 								DrawManager.canGroupDrag(true);
 							}
+							if (data && data.user.name != Room.user) {
+								$rootScope.$broadcast('group');
+							}
 						}
 					}
-					console.log(data)
 					if (angular.isArray(data)) {
 						angular.forEach(data, function(value, key) {
 							addData(value);
@@ -153,6 +179,12 @@ app.directive("drawPad", ["$rootScope", "DrawManager", "DrawFactory", "Input", "
 				// }, function(data) {
 				// 	DrawFactory.setAnimate(data, draw);
 				// });
+				DrawFactory.setClear(function(data) {
+					var obj = {};
+					obj.type = DrawFactory.tools.CLEAR;
+					clear(obj);
+					sendData(obj);
+				});
 				DrawFactory.setDelete(function(data) {
 					var obj = {};
 					obj.type = DrawFactory.tools.DELETE;

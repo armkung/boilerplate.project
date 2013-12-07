@@ -3,7 +3,7 @@ var app = angular.module('socket', ['templates-app', 'templates-common',
 	'colorpicker.module', 'highcharts-ng'
 ]);
 
-app.constant('host_node', 'http://localhost:8080');
+app.constant('host_node', 'http://science.kmutt.ac.th:8080');
 app.constant('host_drupal', 'http://science.kmutt.ac.th/drupal');
 
 app.config(["cfpLoadingBarProvider",
@@ -132,9 +132,19 @@ app.factory("DataManager", ["Canvas", "Socket",
 				switch (type) {
 					case "pos":
 						Socket.on("send:" + type, function(data) {
-							if (data && data.pos) {
-								data.pos.x *= Canvas.width;
-								data.pos.y *= Canvas.height;
+							function scalePos(data) {
+								if (data && data.pos) {
+									data.pos.x *= Canvas.width;
+									data.pos.y *= Canvas.height;
+								}
+							}
+
+							if (angular.isArray(data)) {
+								angular.forEach(data, function(value, key) {
+									scalePos(value);
+								});
+							} else {
+								scalePos(data);
 							}
 							callback(data);
 						});

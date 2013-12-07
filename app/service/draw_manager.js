@@ -118,13 +118,14 @@ app.service("DrawManager", ["Canvas", "$rootScope",
 		};
 		this.remove = function(indexs) {
 			angular.forEach(indexs, function(index, key) {
+				console.log(index)
 				canvas.forEachObject(function(obj) {
-					if (!(obj instanceof fabric.Group)) {
+					// if (!(obj instanceof fabric.Group)) {
 						if (obj.get("id") == index) {
 							current.remove(obj);
 							return;
 						}
-					}
+					// }
 				});
 			});
 			canvas.renderAll();
@@ -273,14 +274,25 @@ app.service("DrawManager", ["Canvas", "$rootScope",
 				if (!(id in groups)) {
 					groups[id] = new fabric.Group();
 					groups[id].set({
-						originX: 'center',
-						originY: 'center'
+						"id": id,
+						"originX": 'center',
+						"originY": 'center'
 					});
 					self.disableMove(groups[id]);
 					canvas.add(groups[id]);
 				}
 			}
 		};
+		this.getFromId = function(id) {
+			var n;
+			canvas.forEachObject(function(obj) {
+				if (obj.get("id") == id) {
+					n = canvas.getObjects().indexOf(obj);
+					return;
+				}
+			});
+			return n;
+		}
 		this.getIndex = function(obj) {
 			var index = [];
 
@@ -391,7 +403,7 @@ app.service("DrawManager", ["Canvas", "$rootScope",
 
 			});
 		};
-		this.clear = function() {
+		this.clear = function(id) {
 			// canvas.clear();
 			// Canvas.removeId(id)		
 			// self.init(id);
@@ -402,8 +414,10 @@ app.service("DrawManager", ["Canvas", "$rootScope",
 				}
 			});
 			canvas.renderAll();
-			n = 0;
+			n = 0;			
 		};
-
+		this.removeGroup = function(id){
+			delete groups[id];
+		}
 	}
 ]);
