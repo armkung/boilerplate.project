@@ -10,9 +10,9 @@ app.directive('slidePad', ["$q", "$sce", "$state", "cfpLoadingBar", "DrawManager
 				var id = "mirror";
 				var type = DataManager.types.SLIDE;
 				cfpLoadingBar.start();
-				
+
 				var iframe = $('#slide');
-				iframe.height(iframe.height() + 28);
+				iframe.height(iframe.height() + 12);
 				iframe.bind('load', function() {
 					cfpLoadingBar.complete();
 				});

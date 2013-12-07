@@ -16,7 +16,7 @@ var Logger = function() {
 			data[name] = {
 				room: rm,
 				users: {},
-				msgs: [],
+				msg: [],
 				pos: []
 			};
 		}
@@ -40,7 +40,7 @@ var Logger = function() {
 	}
 	this.logMsg = function(msg) {
 		if (data[room]) {
-			data[room].msgs.push(msg);
+			data[room].msg.push(msg);
 		}
 	}
 
@@ -251,12 +251,24 @@ io.sockets.on('connection', function(socket) {
 		}
 	});
 
+	socket.on('init:msg', function() {
+		socket.get('roomName', function(err, room) {
+			if (room != null) {
+				var data = logger.logData[room];
+				if (data) {
+					var msg = data.msg;
+					socket.emit('send:msg', msg);
+				}
+				// console.log(getId() + " Init slide");
+			}
+		});
+	});
 	socket.on('send:msg', function(data) {
 		socket.get('roomName', function(err, room) {
 			if (room != null) {
 				io.sockets. in (room).emit('send:msg', data.msg);
 				logger.logMsg(data.msg);
-
+s
 				// console.log("Send msg : " + data.msg);
 			}
 		});

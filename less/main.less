@@ -10,10 +10,11 @@
 @toolbar_height: 38px;
 @display_size: 110px;
 @item_left: 20px;
-@float_btn_top: 40px; 
+@float_btn_top: 56px; 
+@room_width: 175px;
 @font: 'Droid Sans';
 .ace-settings-box{
-	width: 35vw;
+	width: 40vw;
 }
 .ace-settings-btn{
 	top: @float_btn_top;
@@ -26,6 +27,9 @@ hr{
 	z-index: 99;
 	top: 30px;
 }
+.room{
+	width: room_width;
+}
 .picker{
 	width: 30px;
 	height: 30px;
@@ -33,6 +37,10 @@ hr{
 }
 .pick{
 	border: 2px solid white;
+}
+.chat-box img{
+	margin: 10;
+	width: 80%;
 }
 #color{
 	border-radius: 4px;
@@ -52,9 +60,6 @@ hr{
 .item{
 	margin-left: @item_left;
 }
-.chat-box img{
-	padding: 10; 
-}
 .nav-right{
 	position: fixed;
 	z-index: 9999;
@@ -68,9 +73,9 @@ hr{
 }
 /*.icon-tool{
 	height: @toolbar_height-11;
-}*/
-.attr{
-	position: relative;
+	}*/
+	.attr{
+		position: relative;
 	/*float: left;
 	width: 30%;*/
 	background-color: @attr_color;

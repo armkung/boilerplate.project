@@ -198,14 +198,14 @@ app.service("Canvas", ["$q",
 			deferred.resolve(canvas);
 		};
 		this.setSize = function(w, h) {
-			if (canvas) {
-				canvas.setDimensions({
-					width: w,
-					height: h
-				})
-				self.width = w;
-				self.height = h;
-			}
+			// if (canvas) {
+			// 	canvas.setDimensions({
+			// 		width: w,
+			// 		height: h
+			// 	})
+			// 	self.width = w;
+			// 	self.height = h;
+			// }
 		}
 		this.getCanvas = function() {
 			// if (canvas) {

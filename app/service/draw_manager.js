@@ -145,7 +145,7 @@ app.service("DrawManager", ["Canvas", "$rootScope",
 			self.disableMove(path);
 
 			if (current instanceof fabric.Group) {
-				current.addWithUpdate(path);
+				current.add(path);
 			} else {
 				canvas.remove(data);
 				canvas.add(path);
@@ -262,7 +262,10 @@ app.service("DrawManager", ["Canvas", "$rootScope",
 		this.newGroup = function(id) {
 			if (id) {
 				if (!(id in groups)) {
-					groups[id] = new fabric.Group();
+					groups[id] = new fabric.Group({
+						originX: 'center',
+						originY: 'center'
+					});
 					self.disableMove(groups[id]);
 					canvas.add(groups[id]);
 				}

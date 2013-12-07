@@ -5,13 +5,13 @@
 	<div is-visible="isDesktop" class="visible-lg"></div>
 	<div class="row">
 
-		<div class="col-lg-9 pad">
+		<div class="col-lg-10 pad">
 			<canvas id="draw" draw-pad text="{{text}}" send="true" fit-size></canvas>
 			<input type="text" id="textbox" ng-model="text">
 			<tool-bar class="toolbar" tool="tool" is-hide="{{hideTool&&!isDesktop}}"></tool-bar>
 		</div>
 
-		<div ng-if="isDesktop" class="well col-lg-3 fit-height">
+		<div ng-if="isDesktop" class="well col-lg-2 fit-height">
 			<group></group>
 		</div>
 		<div ng-if="!isDesktop" class="width-35">
