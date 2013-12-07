@@ -207,11 +207,13 @@ io.sockets.on('connection', function(socket) {
 				var data = logger.logData[room];
 				if (data) {
 					var pos = data.pos;
+					var list = [];
 					for (var i = 0; i < pos.length; i++) {
 						if (pos[i].user.id != getId()) {
-							socket.emit('send:pos', pos[i]);
+							list.push(pos[i]);
 						}
-					};
+					}
+					socket.emit('send:pos', list);
 				}
 
 				// console.log(getId() + " Init pos");
@@ -268,7 +270,6 @@ io.sockets.on('connection', function(socket) {
 			if (room != null) {
 				io.sockets. in (room).emit('send:msg', data.msg);
 				logger.logMsg(data.msg);
-s
 				// console.log("Send msg : " + data.msg);
 			}
 		});

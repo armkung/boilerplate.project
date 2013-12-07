@@ -46,6 +46,12 @@ app.service("DrawManager", ["Canvas", "$rootScope",
 		this.getName = function() {
 			return id;
 		};
+		this.getScale = function() {
+			return {
+				x: Canvas.width,
+				y: Canvas.height
+			};
+		}
 		this.init = function(name) {
 			Canvas.init(name);
 			Canvas.getCanvas().then(function(cs) {
@@ -123,13 +129,16 @@ app.service("DrawManager", ["Canvas", "$rootScope",
 			});
 			canvas.renderAll();
 		};
-		this.draw = function(data, x, y) {
+		this.draw = function(data, x, y, scale) {
 			var paths = [];
 			angular.forEach(data.path, function(value, key) {
 				paths.push(value.join(" "));
 			});
 			paths = paths.join(" ");
 			var path = new fabric.Path(paths);
+			var scaleX = self.getScale().x / scale.x;
+			var scaleY = self.getScale().y / scale.y;
+			var scale = Math.min(scaleX, scaleY);
 			path.set({
 				left: x,
 				top: y,
@@ -141,11 +150,11 @@ app.service("DrawManager", ["Canvas", "$rootScope",
 				strokeLineCap: data.strokeLineCap,
 				strokeLineJoin: data.strokeLineJoin
 			});
-
+			path.scale(scale);
 			self.disableMove(path);
 
 			if (current instanceof fabric.Group) {
-				current.add(path);
+				current.addWithUpdate(path);
 			} else {
 				canvas.remove(data);
 				canvas.add(path);
@@ -175,7 +184,7 @@ app.service("DrawManager", ["Canvas", "$rootScope",
 					line.set({
 						originX: 'center',
 						originY: 'center'
-					})
+					});
 					if (current instanceof fabric.Group) {
 						current.addWithUpdate(line);
 					} else {
@@ -201,7 +210,7 @@ app.service("DrawManager", ["Canvas", "$rootScope",
 				"top": y
 			});
 			if (current instanceof fabric.Group) {
-				current.addWithUpdate(text);
+				current.add(text);
 			} else {
 				current.add(text);
 			}
@@ -262,7 +271,8 @@ app.service("DrawManager", ["Canvas", "$rootScope",
 		this.newGroup = function(id) {
 			if (id) {
 				if (!(id in groups)) {
-					groups[id] = new fabric.Group({
+					groups[id] = new fabric.Group();
+					groups[id].set({
 						originX: 'center',
 						originY: 'center'
 					});
@@ -340,7 +350,7 @@ app.service("DrawManager", ["Canvas", "$rootScope",
 			// 			"left": dx,
 			// 			"top": dy
 			// 		});
-			// 		// current.addWithUpdate(obj);
+			// 		// current.add(obj);
 			// 		// canvas.calcOffset();
 			// 		// canvas.renderAll();
 			// 	})

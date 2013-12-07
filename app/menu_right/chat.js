@@ -16,9 +16,16 @@ app.directive('chat', ["DataManager",
 				}
 
 				DataManager.getData(type, function(data) {
-					scope.msgs.push(data);
+					if (angular.isArray(data)) {
+						angular.forEach(data, function(msg, key) {
+							scope.msgs.push(msg);
+						});
+					} else {
+						scope.msgs.push(data);
+					}
 				});
 
+				DataManager.initData(type);
 				scope.select = function(index) {
 					var emotion = scope.url + scope.emotions[index];
 					DataManager.setData(type, {
