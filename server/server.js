@@ -134,6 +134,10 @@ io.sockets.on('connection', function(socket) {
 		var name = data.room.name;
 		var room = name == "" ? "" : "/" + name;
 		if (room in io.sockets.manager.rooms) {
+			if(data.exit){
+				socket.leave(data.exit);
+			}
+
 			socket.set('roomName', name);
 
 			if (name == "" || name == "/") {

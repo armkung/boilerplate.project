@@ -270,7 +270,7 @@ app.controller('HomeTeacherCtrl', ["$scope", "$modal", "$rootScope", "Room", "So
 				}
 			});
 			$scope.create = function() {
-				if ($scope.room.name != "") {
+				if ($scope.room.name != "" && $scope.room.display != "") {
 					Room.room = $scope.room.name;
 					Room.user = $scope.user.username;
 					Socket.emit("create:room", {
@@ -293,24 +293,8 @@ app.controller('HomeTeacherCtrl', ["$scope", "$modal", "$rootScope", "Room", "So
 			};
 			$scope.selectDisplay = function() {
 				var modal = $modal.open({
-					templateUrl: 'menu_left/template/display.tpl.html',
-					controller: ["$scope", "$modalInstance",
-						function($scope, $modalInstance) {
-							$scope.url = "assets/emoticon/";
-							$scope.items = ["1.gif", "2.gif", "3.gif"];
-							$scope.selected = $scope.items[0];
-							$scope.select = function(index) {
-								$scope.selected = $scope.items[index];
-								console.log($scope.selected);
-							};
-							$scope.ok = function() {
-								$modalInstance.close($scope.url + $scope.selected);
-							};
-							$scope.cancel = function() {
-								$modalInstance.dismiss('cancel');
-							};
-						}
-					]
+					templateUrl: 'modal/template/display.tpl.html',
+					controller: 'DisplayCtrl'
 				});
 				modal.result.then(function(url) {
 					console.log()
@@ -319,7 +303,7 @@ app.controller('HomeTeacherCtrl', ["$scope", "$modal", "$rootScope", "Room", "So
 			};
 
 			$scope.room.name = "public";
-			$scope.room.display = "";
+			$scope.room.display = "assets/emoticon/1.gif";
 			$scope.create();
 		});
 	}
@@ -352,14 +336,15 @@ app.controller('HomeStudentCtrl', ["$scope", "$rootScope", "$modal", "Room", "So
 			};
 			$scope.connect = function() {
 				if ($scope.room.name != "") {
-					Room.room = $scope.room.name;
-					Room.user = $scope.user.username;
 					Socket.emit("connect:room", {
+						exit: Room.room,
 						room: $scope.room,
 						user: $scope.user
 					}, function(id) {
 
 					});
+					Room.room = $scope.room.name;
+					Room.user = $scope.user.username;
 				} else {
 					alert("Input Room name");
 				}
@@ -370,7 +355,7 @@ app.controller('HomeStudentCtrl', ["$scope", "$rootScope", "$modal", "Room", "So
 			};
 			$scope.showDetail = function(index) {
 				var modal = $modal.open({
-					templateUrl: 'menu_left/template/detail.tpl.html',
+					templateUrl: 'modal/template/detail.tpl.html',
 					resolve: {
 						room: function() {
 							return $scope.rooms[index];
@@ -379,17 +364,7 @@ app.controller('HomeStudentCtrl', ["$scope", "$rootScope", "$modal", "Room", "So
 							return index;
 						}
 					},
-					controller: ["$scope", "$modalInstance", "room", "index",
-						function($scope, $modalInstance, room, index) {
-							$scope.room = room;
-							$scope.ok = function() {
-								$modalInstance.close(index);
-							};
-							$scope.cancel = function() {
-								$modalInstance.dismiss('cancel');
-							};
-						}
-					]
+					controller: 'DetailCtrl'
 				});
 				modal.result.then(function(index) {
 					$scope.selected = index;
@@ -400,7 +375,7 @@ app.controller('HomeStudentCtrl', ["$scope", "$rootScope", "$modal", "Room", "So
 			$scope.list();
 
 			$scope.room.name = "public";
-			$scope.room.display = "";
+			$scope.room.display = "assets/emoticon/1.gif";
 			$scope.connect();
 		});
 	}

@@ -16,9 +16,10 @@
 
 	<div class="widget-body fit-height">
 		<div class="room-list">
-			<div class="inline card width-20 align-center" ng-repeat="room in rooms" ng-class="{'selected': selected==$index}" ng-click="showDetail($index)">
+			<div class="inline card width-15 align-center" ng-repeat="room in rooms" ng-class="{'selected': selected==$index}" ng-click="showDetail($index)">
 				<img class="width-100" ng-src="{{room.display}}"/>
-				<div class="inline bigger-140 word-warp">{{room.name}}</div>
+				<hr>
+				<div class="inline bigger-140 word-warp width-100">{{room.name}}</div>
 			</div>
 			<!-- <div class="infobox infobox-dark" ng-repeat="room in rooms" ng-class="{'infobox-blue3': selected==$index,'infobox-blue': selected!=$index}" ng-click="showDetail($index)">
 				<div class="infobox-data">

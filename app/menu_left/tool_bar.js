@@ -89,44 +89,8 @@ app.directive('selector', ["$rootScope", "$modal", "DrawFactory",
 								return $rootScope.selector;
 							}
 						},
-						templateUrl: 'menu_left/template/attribute.tpl.html',
-						controller: ["$scope", "$modalInstance", "selector",
-							function($scope, $modalInstance, selector) {
-								function changeAlpha(opacity) {
-									var hex = selector.color.replace('#', '');
-									r = parseInt(hex.substring(0, 2), 16);
-									g = parseInt(hex.substring(2, 4), 16);
-									b = parseInt(hex.substring(4, 6), 16);
-
-									result = 'rgba(' + r + ',' + g + ',' + b + ',' + opacity / 100 + ')';
-									return result;
-								}
-								$scope.selector = selector;
-
-								var attrs = DrawFactory.attrs;
-								$scope.$watch('selector.size', function() {
-									$rootScope.$broadcast('attr', {
-										attr: attrs.SIZE,
-										data: selector.size
-									});
-								})
-								$scope.$watch('selector.alpha', function() {
-									$rootScope.$broadcast('attr', {
-										attr: attrs.COLOR,
-										data: changeAlpha(selector.alpha)
-									});
-								})
-								$scope.$watch('selector.color', function() {
-									$rootScope.$broadcast('attr', {
-										attr: attrs.COLOR,
-										data: changeAlpha(selector.alpha)
-									});
-								});
-								$scope.close = function() {
-									$modalInstance.close(selector);
-								};
-							}
-						]
+						templateUrl: 'modal/template/attribute.tpl.html',
+						controller: 'AttrCtrl'
 					});
 					modal.result.then(function(selector) {
 						$rootScope.selector = selector;

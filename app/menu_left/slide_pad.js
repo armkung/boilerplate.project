@@ -10,7 +10,12 @@ app.directive('slidePad', ["$q", "$sce", "$state", "cfpLoadingBar", "DrawManager
 				var id = "mirror";
 				var type = DataManager.types.SLIDE;
 				cfpLoadingBar.start();
-
+				
+				var iframe = $('#slide');
+				iframe.height(iframe.height() + 28);
+				iframe.bind('load', function() {
+					cfpLoadingBar.complete();
+				});
 
 				scope.slide = SlideManager;
 				// var deferred;
@@ -43,9 +48,6 @@ app.directive('slidePad', ["$q", "$sce", "$state", "cfpLoadingBar", "DrawManager
 					});
 				});
 
-				iElement.find('iframe').bind('load', function() {
-					cfpLoadingBar.complete();
-				});
 
 				scope.$watch('slide.index', function(newV, oldV) {
 					if (angular.isDefined(SlideManager.slide) && angular.isDefined(SlideManager.index)) {
