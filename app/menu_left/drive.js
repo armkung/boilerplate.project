@@ -21,7 +21,7 @@ app.directive('driveQuiz', ["$rootScope", "cfpLoadingBar", "QuizManager", "Login
 					scope.id = id;
 
 					QuizManager.load().then(function(quizs) {
-						console.log(quizs);
+						
 					});
 				};
 			}
@@ -37,7 +37,7 @@ app.directive('driveSlide', ["$rootScope", "$q", "cfpLoadingBar", "GoogleService
 				cfpLoadingBar.start();
 				GoogleService.load().then(function() {
 					GoogleService.listFile().then(function(data) {
-						console.log(data);
+						
 						scope.datas = data;
 
 						cfpLoadingBar.complete();
@@ -63,13 +63,13 @@ app.directive('driveSlide', ["$rootScope", "$q", "cfpLoadingBar", "GoogleService
 
 				scope.share = function() {
 					GoogleService.shareFile(id).then(function(data) {
-						console.log(data);
+						
 					});
 				};
 
 				scope.toDate = function(date) {
 					return new Date(date).toUTCString();
-				}
+				};
 
 			}
 		};

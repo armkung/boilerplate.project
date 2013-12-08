@@ -29,9 +29,9 @@ app.directive('toolBar', ["$rootScope", "DrawFactory",
 				function sendTool() {
 					$rootScope.$broadcast('tool', scope.tool);
 				}
-				// scope.changeAttr = function(index) {
-				// 	$rootScope.$broadcast('attr', scope.attrs[index]);
-				// };
+				
+				
+				
 
 				scope.changeToolLeft(0);
 			}
@@ -46,7 +46,7 @@ app.directive('selector', ["$rootScope", "$modal", "DrawFactory",
 			template: '<div class="width-100 fit-height" ng-click="dialog()"><div id="attr">' +
 				'<div id="color" class="pull-left"></div>' +
 				'<div class="pull-left white margin-10">' +
-			// '<i id ="size" class="icon-circle align-middle"></i>' +
+			
 			'<div id ="size" class="icon-circle align-middle"></div>' +
 				'<span class="bigger-140 align-middle">{{selector.size}}<span>' +
 				'</div></div></div>',
@@ -68,14 +68,14 @@ app.directive('selector', ["$rootScope", "$modal", "DrawFactory",
 				eColor.height(size - border);
 				scope.$watch('selector.color', function() {
 					eColor.css('background-color', scope.selector.color);
-				})
+				});
 
 				var eSize = $('#size');
 				eSize.parent().css('margin-top', "6px");
 				scope.$watch('selector.size', function() {
 					var scale = (scope.selector.size / 50.0) * 100;
 					eSize.css('font-size', (100 + scale) + "%");
-				})
+				});
 
 				var eAttr = $('#attr');
 				eAttr.css('margin-left', "30%");
@@ -95,7 +95,7 @@ app.directive('selector', ["$rootScope", "$modal", "DrawFactory",
 					modal.result.then(function(selector) {
 						$rootScope.selector = selector;
 					});
-				}
+				};
 
 			}
 		};
@@ -120,7 +120,7 @@ app.directive('slider', function() {
 				}
 			});
 		}
-	}
+	};
 });
 app.directive('picker', ["$rootScope",
 	function($rootScope) {
@@ -143,8 +143,8 @@ app.directive('picker', ["$rootScope",
 					$rootScope.colorSelected = index;
 					scope.selected = $rootScope.colorSelected;
 					scope.color = scope.colors[index];
-				}
+				};
 			}
-		}
+		};
 	}
 ]);

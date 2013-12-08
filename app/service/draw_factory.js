@@ -9,7 +9,7 @@ app.service("DrawFactory", ["Canvas", "DrawManager",
 			TEXT: "text",
 			DRAW: "write",
 			LINE: "line",
-			// ANIMATE: "Animate",
+			
 			DELETE: "delete"
 		};
 		this.attrs = {
@@ -17,10 +17,10 @@ app.service("DrawFactory", ["Canvas", "DrawManager",
 			SIZE: "Size"
 		};
 		var listener = {};
-		// var canvas = Canvas.getCanvas();
-		// Canvas.getCanvas().then(function(cs) {
-		// 	canvas = cs;
-		// });
+		
+		
+		
+		
 
 		this.setAnimate = function(data, draw) {
 			var delay = 10;
@@ -47,9 +47,9 @@ app.service("DrawFactory", ["Canvas", "DrawManager",
 		};
 		this.setDelete = function(remove) {
 			listener.remove = {
-				// call: function() {
-				// 	remove();
-				// }
+				
+				
+				
 				onSelect: function(e) {
 					remove(e.target);
 				}
@@ -164,48 +164,48 @@ app.service("DrawFactory", ["Canvas", "DrawManager",
 				},
 				onMove: function(e) {
 					isMove = true;
-					// var obj = e.target;
-					// if (obj) {
-					// 	var data = {};
-					// 	x2 = obj.get("left");
-					// 	y2 = obj.get("top");
-					// 	data.pos = {
-					// 		x: x2 - x1,
-					// 		y: y2 - y1
-					// 	};
-					// 	drag(obj, data);
-					// 	x1 = x2;
-					// 	y1 = y2;
-					// }
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
 				},
 				onScale: function(e) {
 					isScale = true;
-					// var obj = e.target;
-					// var data = {};
-					// x2 = obj.get("left");
-					// y2 = obj.get("top");
-					// data.pos = {
-					// 	x: x2 - x1,
-					// 	y: y2 - y1
-					// };
-					// data.scale = {
-					// 	x: obj.get("scaleX"),
-					// 	y: obj.get("scaleY")
-					// };
-					// data.flip = {
-					// 	x: obj.get("flipX"),
-					// 	y: obj.get("flipY")
-					// };
-					// drag(obj, data);
-					// x1 = x2;
-					// y1 = y2;
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
 				},
 				onRotate: function(e) {
 					isRotate = true;
-					// var obj = e.target;
-					// var data = {};
-					// data.angle = obj.get("angle");
-					// drag(obj, data);
+					
+					
+					
+					
 				}
 
 			};
@@ -215,8 +215,8 @@ app.service("DrawFactory", ["Canvas", "DrawManager",
 			unsetBind();
 			switch (tool) {
 				case self.tools.DRAW:
-					// DrawManager.canDrag(false);
-					// DrawManager.canGroupDrag(false);
+					
+					
 					DrawManager.setDraw();
 					setBind(listener.draw);
 					break;
@@ -245,7 +245,7 @@ app.service("DrawFactory", ["Canvas", "DrawManager",
 					DrawManager.canDrag(true);
 
 					setBind(listener.dragObject);
-					// });
+					
 					break;
 				case self.tools.CLEAR:
 					DrawManager.clear();

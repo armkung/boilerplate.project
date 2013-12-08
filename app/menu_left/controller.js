@@ -5,7 +5,7 @@ app.controller('QuizStudentCtrl', ["$scope", "$rootScope", "QuizManager", "DataM
 			$rootScope.isEnd = false;
 		}
 		DataManager.getData(type, function(data) {
-			// $scope.chartConfig.title.text = $scope.quiz[data.question].question;
+			
 			if (data && (data.node != QuizManager.node || !$rootScope.isEnd)) {
 				if (data.node != QuizManager.node) {
 					$rootScope.index = 0;
@@ -13,7 +13,7 @@ app.controller('QuizStudentCtrl', ["$scope", "$rootScope", "QuizManager", "DataM
 				}
 				QuizManager.node = data.node;
 				QuizManager.load().then(function(quiz) {
-					// var quiz = QuizManager.quiz;
+					
 					var index = $rootScope.index,
 						select = 0,
 						n = quiz.length;
@@ -23,7 +23,7 @@ app.controller('QuizStudentCtrl', ["$scope", "$rootScope", "QuizManager", "DataM
 							var obj = {};
 							obj.question = index - 1;
 							obj.answer = select;
-							// console.log(select);
+							
 							DataManager.setData(type, obj);
 							$rootScope.index++;
 						}
@@ -55,7 +55,7 @@ app.controller('QuizTeacherCtrl', ["$scope", "QuizManager", "DataManager",
 				node: QuizManager.node
 			});
 			QuizManager.load().then(function(data) {
-				// var data = QuizManager.quiz;
+				
 				$scope.current = 0;
 				$scope.quiz = [];
 				angular.forEach(data, function(quiz, key) {
@@ -74,7 +74,7 @@ app.controller('QuizTeacherCtrl', ["$scope", "QuizManager", "DataManager",
 				});
 				$scope.chartConfig = QuizManager.chartConfig;
 				DataManager.getData(type, function(data) {
-					// $scope.chartConfig.title.text = $scope.quiz[data.question].question;
+					
 					var series = $scope.quiz[data.question].answer.data;
 					series[data.answer]++;
 					if (data.question == $scope.current) {
@@ -105,7 +105,7 @@ app.controller('DriveCtrl', ["$scope", "$modal", "cfpLoadingBar", "Room", "Login
 				return cs;
 			}
 
-			// var name = Room.room;
+			
 			$scope.showDialog = function() {
 				var modal = $modal.open({
 					template: '<div class="modal-dialog"><div class="modal-content"><div class="modal-body">' +
@@ -128,16 +128,16 @@ app.controller('DriveCtrl', ["$scope", "$modal", "cfpLoadingBar", "Room", "Login
 					]
 				});
 				return modal.result;
-				// modal.result.then(function(name) {
-				// 	$scope.name = name;
-				// });
+				
+				
+				
 			};
 			$scope.saveDraw = function() {
 				$scope.showDialog().then(function(name) {
 					cfpLoadingBar.start();
 
 					var type = "image/png";
-					// name = name + "-Draw";
+					
 
 					var cs = loadCanvas(Canvas.types.DRAW);
 					var data = cs.toDataURL({
@@ -158,7 +158,7 @@ app.controller('DriveCtrl', ["$scope", "$modal", "cfpLoadingBar", "Room", "Login
 				Canvas.getCanvas().then(function() {
 					$scope.showDialog().then(function(name) {
 						cfpLoadingBar.start();
-						// name = name + "-Slide";
+						
 						var id = SlideManager.slide;
 						if (id) {
 							PDFService.getPdf(id).then(function(pdf) {
@@ -270,7 +270,7 @@ app.controller('HomeTeacherCtrl', ["$scope", "$modal", "$rootScope", "Room", "So
 				}
 			});
 			$scope.create = function() {
-				if ($scope.room.name != "" && $scope.room.display != "") {
+				if ($scope.room.name !== "" && $scope.room.display !== "") {
 					Room.room = $scope.room.name;
 					Room.user = $scope.user.username;
 					Socket.emit("create:room", {
@@ -288,7 +288,7 @@ app.controller('HomeTeacherCtrl', ["$scope", "$modal", "$rootScope", "Room", "So
 			};
 			$scope.close = function() {
 				Socket.emit("close:room", {}, function(emails) {
-					console.log(emails);
+					
 				});
 			};
 			$scope.selectDisplay = function() {
@@ -297,7 +297,7 @@ app.controller('HomeTeacherCtrl', ["$scope", "$modal", "$rootScope", "Room", "So
 					controller: 'DisplayCtrl'
 				});
 				modal.result.then(function(url) {
-					console.log()
+					
 					$scope.room.display = url;
 				});
 			};
@@ -313,7 +313,7 @@ app.controller('HomeStudentCtrl', ["$scope", "$rootScope", "$modal", "Room", "So
 	function($scope, $rootScope, $modal, Room, Socket, LoginManager) {
 		LoginManager.getUser().then(function(user) {
 
-			// $scope.user = String.fromCharCode(Math.random() * 26 + 97);
+			
 			$scope.user = user;
 
 			Socket.on("leave:room", function(user) {
@@ -325,17 +325,17 @@ app.controller('HomeStudentCtrl', ["$scope", "$rootScope", "$modal", "Room", "So
 			$rootScope.$watch('selected', function() {
 				$rootScope.roomSelected = $scope.selected;
 			});
-			// $scope.select = function(index) {
-			// 	$rootScope.roomSelected = index;
-			// 	$scope.room = $scope.rooms[index];
-			// };
+			
+			
+			
+			
 			$scope.list = function() {
 				Socket.emit("list:room", {}, function(rooms) {
 					$scope.rooms = rooms;
 				});
 			};
 			$scope.connect = function() {
-				if ($scope.room.name != "") {
+				if ($scope.room.name !== "") {
 					Socket.emit("connect:room", {
 						exit: Room.room,
 						room: $scope.room,

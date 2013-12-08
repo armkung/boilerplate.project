@@ -1,8 +1,8 @@
 var io = require('socket.io').listen(8080);
 var fs = require('fs');
-// var md = require('./module/module.js');
-// md.test()
-// var builder = require('xmlbuilder');
+
+
+
 
 io.set('log level', 1);
 
@@ -70,8 +70,8 @@ var Logger = function() {
 	}
 
 	this.save = function(room) {
-		// var xml = builder.create("data");	
-		// console.log(data[room].pos)
+		
+		
 		if (data[room]) {
 			var json = JSON.stringify(data[room]);
 			var name = room == "" ? "default" : room;
@@ -102,7 +102,7 @@ io.sockets.on('connection', function(socket) {
 		logger.logUser(getId(), user);
 		socket.set('userName', user.username);
 
-		// console.log("User : '" + user.username + "' join Room : '" + room + "'")
+		
 	}
 
 	function logOutUser(room) {
@@ -150,7 +150,7 @@ io.sockets.on('connection', function(socket) {
 	socket.on('create:room', function(data) {
 		var name = data.room.name;
 		socket.set('roomName', name, function() {
-			// logger = new Logger();
+			
 
 			logger.init(name, data.room);
 			console.log("Create Room : '" + name + "'");
@@ -174,7 +174,7 @@ io.sockets.on('connection', function(socket) {
 		socket.get('roomName', function(err, room) {
 			if (room != null) {
 				socket.get('userName', function(err, user) {
-					// console.log("User : " + user + " disconnect");
+					
 					socket.leave(room)
 					socket.broadcast.to(room).emit('leave:room', getId());
 				});
@@ -192,7 +192,7 @@ io.sockets.on('connection', function(socket) {
 							logOutUser(room);
 						}
 
-						// console.log("User : " + user + " disconnect");
+						
 						socket.leave(room)
 						socket.broadcast.to(room).emit('leave:room', getId());
 					}
@@ -212,21 +212,21 @@ io.sockets.on('connection', function(socket) {
 						if (pos[i].user.id != getId()) {
 							list.push(pos[i]);
 						}
-					}
+					};
 					socket.emit('send:pos', list);
 				}
 
-				// console.log(getId() + " Init pos");
+				
 			}
 		});
 	});
 	socket.on('send:pos', function(data) {
 		socket.get('roomName', function(err, room) {
 			if (room != null) {
-				// if (data.pos) {
-				// 	console.log("Room : '" + room + "' broadcast pos at ")
-				// 	console.log("x : " + data.pos.x + ", y : " + data.pos.y)
-				// }
+				
+				
+				
+				
 				socket.get('userName', function(err, user) {
 					data.user = {
 						id: getId(),
@@ -242,14 +242,14 @@ io.sockets.on('connection', function(socket) {
 
 	});
 	socket.on('load:pos', function(data, callback) {
-		// var pos = require(__dirname + '/log/' + data.room + '.json').pos;
+		
 		try {
 			var json = logger.load(data.room);
 			var pos = JSON.parse(json).pos;
 
 			callback(pos);
 		} catch (e) {
-			// console.log(e.message);
+			
 		}
 	});
 
@@ -261,7 +261,7 @@ io.sockets.on('connection', function(socket) {
 					var msg = data.msg;
 					socket.emit('send:msg', msg);
 				}
-				// console.log(getId() + " Init slide");
+				
 			}
 		});
 	});
@@ -270,7 +270,7 @@ io.sockets.on('connection', function(socket) {
 			if (room != null) {
 				io.sockets. in (room).emit('send:msg', data.msg);
 				logger.logMsg(data.msg);
-				// console.log("Send msg : " + data.msg);
+				
 			}
 		});
 	});
@@ -283,7 +283,7 @@ io.sockets.on('connection', function(socket) {
 					var slide = data.slide;
 					socket.emit('send:slide', slide);
 				}
-				// console.log(getId() + " Init slide");
+				
 			}
 		});
 	});
@@ -291,7 +291,7 @@ io.sockets.on('connection', function(socket) {
 		socket.get('roomName', function(err, room) {
 			if (room != null) {
 				socket.broadcast.to(room).emit('send:slide', data);
-				// console.log("Send slide : " + data.slide + data.index);
+				
 
 				logger.logSlide(data);
 			}
@@ -306,7 +306,7 @@ io.sockets.on('connection', function(socket) {
 					var quiz = data.quiz;
 					socket.emit('send:quiz', quiz);
 				}
-				// console.log(getId() + " Init slide");
+				
 			}
 		});
 	});
@@ -314,7 +314,7 @@ io.sockets.on('connection', function(socket) {
 		socket.get('roomName', function(err, room) {
 			if (room != null) {
 				socket.broadcast.to(room).emit('send:quiz', data);
-				// console.log("Send quiz");
+				
 
 				logger.logQuiz(data);
 			}

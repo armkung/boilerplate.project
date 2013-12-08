@@ -2,7 +2,7 @@ app.controller('LoginCtrl', ["$scope", "$state", "GoogleService", "LoginManager"
 	function($scope, $state, GoogleService, LoginManager) {
 		GoogleService.load().then(function() {
 			GoogleService.getUser().then(function(data) {
-				// console.log(data);
+				
 
 				LoginManager.login(data).then(function() {
 					$scope.$dismiss();
@@ -21,7 +21,7 @@ app.controller('MenuLeftCtrl', ["$scope", "$sce", "$timeout", "$window", "Room",
 		$scope.room = Room;
 		$scope.$watch('room.room', function() {
 			$scope.roomName = Room.room;
-		})
+		});
 		$scope.logout = function() {
 			$scope.url = $sce.trustAsResourceUrl("https://accounts.google.com/logout");
 			$timeout(function() {
@@ -30,18 +30,6 @@ app.controller('MenuLeftCtrl', ["$scope", "$sce", "$timeout", "$window", "Room",
 		};
 	}
 ]);
-app.controller('MainCtrl', function($scope, $state, $rootScope, DrawFactory) {
-	// var isSwipe = true;
-	// $scope.isShow = false;
-	// $scope.checkSwipe = function(isShow) {
-	// 	if (isSwipe) {
-	// 		$scope.isShow = isShow;
-	// 	}
-	// };
-	// $rootScope.$on('tool', function(e, tool) {
-	// 	isSwipe = tool == DrawFactory.tools.MODE;
-	// });
-});
 app.controller('AccessCtrl', ["$state", "LoginManager",
 	function($state, LoginManager) {
 		var route = $state.current.name;
@@ -53,12 +41,12 @@ app.controller('AccessCtrl', ["$state", "LoginManager",
 ]);
 app.controller('MenuRightCtrl', ["$scope", "$rootScope", "$state",
 	function($scope, $rootScope, $state) {
-		// var menu = ["Chat", "Group"];
+		
 		var types = {
 			GROUP: "group",
 			CHAT: "chat"
 		};
-		// checkRoute();
+		
 		$rootScope.$on("$stateChangeSuccess", function($currentRoute, $previousRoute) {
 			checkRoute();
 		});
@@ -68,8 +56,8 @@ app.controller('MenuRightCtrl', ["$scope", "$rootScope", "$state",
 
 		function checkRoute() {
 			var route = $state.current.url;
-			console.log(route)
-			// $scope.isHide = route == "/home/teacher" || route == "/home/student";
+			
+			
 			switch (route) {
 				case "/draw":
 					$scope.current = types.GROUP;

@@ -4,7 +4,8 @@ app.service('PDFService', ["$q", "$timeout", "GoogleService",
 
 		var SCALE = 0.8;
 		var TYPE = "jpeg";
-
+		
+		/*jshint -W055 */
 		var doc = new jsPDF();
 		var scale;
 		var i = 1;
@@ -14,9 +15,9 @@ app.service('PDFService', ["$q", "$timeout", "GoogleService",
 			var deferred = $q.defer();
 			PDFJS.disableWorker = true;
 			PDFJS.getDocument(url).then(function(pdf) {
-				// pdf.getPage(1).then(function(page) {			
+				
 				deferred.resolve(pdf);
-				// });
+				
 			});
 			return deferred.promise;
 		};
@@ -71,7 +72,7 @@ app.service('PDFService', ["$q", "$timeout", "GoogleService",
 					page.render(renderContext).then(function() {
 						var stroke = 2;
 						fabric.Image.fromURL(slideCanvas.toDataURL(), function(img) {
-							console.log(drawCanvas);
+							
 							drawCanvas.add(img);
 							img.set({
 								stroke: 'black',
@@ -88,7 +89,7 @@ app.service('PDFService', ["$q", "$timeout", "GoogleService",
 								width: img.getWidth() + stroke,
 								height: img.getHeight() + stroke
 							});
-							console.log(data);
+							
 
 							self.addImage(data, i, w, h);
 
@@ -96,7 +97,7 @@ app.service('PDFService', ["$q", "$timeout", "GoogleService",
 							if (i == n) {
 								deferred.resolve(self.save());
 								return;
-								// return self.save();
+								
 							} else {
 								self.addPage(i);
 								i++;
@@ -125,9 +126,9 @@ app.service('PDFService', ["$q", "$timeout", "GoogleService",
 			}
 		};
 		this.save = function() {
-			// doc.output('datauri');
+			
 			return doc.output('datauristring');
-			// doc.save(name + '.pdf');
+			
 		};
 	}
 ]);

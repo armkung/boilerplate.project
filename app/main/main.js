@@ -11,11 +11,11 @@ app.directive('scrollBar', function() {
 		restrict: 'AC',
 		link: function(scope, iElement, iAttrs) {
 			iElement.perfectScrollbar({
-				// useBothWheelAxes: true
+				
 			});
 
-			// iElement.scrollTop(100);
-			// iElement.perfectScrollbar('update');
+			
+			
 		}
 	};
 });
@@ -33,7 +33,7 @@ app.directive('isVisible', ["$rootScope",
 				$rootScope.$on('resize', function() {
 					var display = iElement.css('display');
 					scope.isVisible = display != 'none';
-				})
+				});
 			}
 		};
 	}

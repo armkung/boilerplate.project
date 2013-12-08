@@ -18,12 +18,12 @@ app.service('LoginManager', ["$q", "$http", "host_drupal",
 		};
 		this.login = function(user) {
 			self.user = user;
-			// if (user.username == "Arm Kung") {
-			// 	user.accessLevel = self.level.STUDENT;
-			// } else {
-			// 	user.accessLevel = self.level.TEACHER;
-			// }
-			// deferred.resolve(user);
+			
+			
+			
+			
+			
+			
 			$http.jsonp(host_drupal + "/greedmonkey/login/" + user.email + "/" + user.username + "?callback=JSON_CALLBACK").then(function(data) {
 				var roles = data.data;
 				user.accessLevel = roles[1];
@@ -34,15 +34,15 @@ app.service('LoginManager', ["$q", "$http", "host_drupal",
 		this.getAccess = function() {
 			return self.user.accessLevel;
 		};
-		// this.isTeacher = function(callback) {
-		// 	if (user && user.accessLevel == self.level.TEACHER) {
-		// 		callback();
-		// 	}
-		// };
-		// this.isStudent = function(callback) {
-		// 	if (user && user.accessLevel == self.level.STUDENT) {
-		// 		callback();
-		// 	}
-		// };
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 	}
 ]);

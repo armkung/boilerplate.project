@@ -5,7 +5,7 @@ app.controller('DisplayCtrl', ["$scope", "$modalInstance",
 		$scope.selected = $scope.items[0];
 		$scope.select = function(index) {
 			$scope.selected = $scope.items[index];
-			console.log($scope.selected);
+			
 		};
 		$scope.ok = function() {
 			$modalInstance.close($scope.url + $scope.selected);
@@ -35,13 +35,13 @@ app.controller('AttrCtrl', ["$scope", "$rootScope", "$modalInstance", "selector"
 				attr: attrs.SIZE,
 				data: selector.size
 			});
-		})
+		});
 		$scope.$watch('selector.alpha', function() {
 			$rootScope.$broadcast('attr', {
 				attr: attrs.COLOR,
 				data: changeAlpha(selector.alpha)
 			});
-		})
+		});
 		$scope.$watch('selector.color', function() {
 			$rootScope.$broadcast('attr', {
 				attr: attrs.COLOR,

@@ -18,11 +18,11 @@ app.directive('slidePad', ["$q", "$sce", "$state", "cfpLoadingBar", "DrawManager
 				});
 
 				scope.slide = SlideManager;
-				// var deferred;
-				// if (angular.isUndefined(SlideManager.slide) && angular.isUndefined(SlideManager.max)) {
-				// 	deferred = $q.defer();
-				// 	SlideManager.setMax(deferred);
-				// }
+				
+				
+				
+				
+				
 				DataManager.getData(type, function(data) {
 					if (data) {
 						SlideManager.setSlide(data.slide, data.index);

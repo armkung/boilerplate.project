@@ -2,12 +2,12 @@ app.service('SlideManager', ["$http", "$q", "$rootScope",
 	function($http, $q, $rootScope) {
 		var self = this;
 
-		// var host = "http://www.greedmonkey.com/kreang/index.php/test/print_file/";
+		
 		var host_name = "https://docs.google.com/presentation/d/";
 		var index_name = "#slide=";
 
-		// var slide = "1-oQjVefFucKtYkHP1dgLQdt3G6OsTTnjXvAw1EyZ8Lc";
-		// var slide, index;
+		
+		
 		var deferred;
 		this.index = 0;
 		this.setMax = function(df) {
@@ -29,14 +29,14 @@ app.service('SlideManager', ["$http", "$q", "$rootScope",
 			return url + index;
 		};
 		this.next = function() {
-			// if (!max) {
-			// 	deferred.promise.then(function(data) {
-			// 		max = data;
-			// 		self.index = changeIndex(1);
-			// 	})
-			// } else {
+			
+			
+			
+			
+			
+			
 			self.index = changeIndex(1);
-			// }
+			
 		};
 		this.prev = function() {
 			self.index = changeIndex(-1);

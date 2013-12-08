@@ -6,10 +6,10 @@ app.directive('group', ["GroupManager", "Room", "$rootScope",
 			link: function(scope) {
 				scope.room = Room;
 				$rootScope.$on('group', function() {
-				// scope.groups = DrawManager.getGroup();
-				// scope.$watch('groups', function() {
+				
+				
 					scope.groups = GroupManager.getGroups(Room.users, Room.user);
-				// })
+				
 				});
 
 				scope.toggle = function(id) {

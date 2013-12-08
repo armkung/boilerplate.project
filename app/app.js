@@ -18,7 +18,6 @@ app.config(["$stateProvider", "$urlRouterProvider",
 		$stateProvider.state('main', {
 			url: "/main",
 			templateUrl: 'main/template/main.tpl.html',
-			controller: 'MainCtrl'
 		}).state('main.draw', {
 			url: '/draw',
 			templateUrl: 'menu_left/template/draw_pad.tpl.html',
@@ -126,9 +125,9 @@ app.factory("DataManager", ["Canvas", "Socket",
 				Socket.emit("send:" + type, data);
 			},
 			getData: function(type, callback) {
-				// angular.forEach(self.types, function(type, key){
+
 				Socket.remove("send:" + type);
-				// });
+
 				switch (type) {
 					case "pos":
 						Socket.on("send:" + type, function(data) {
@@ -158,18 +157,9 @@ app.factory("DataManager", ["Canvas", "Socket",
 
 			},
 			loadData: function(type, data, callback) {
-				// Socket.remove("load:" + type);
-				// Socket.emit("load:" + type, data, function(data) {
-				// 	var obj = [];
-				// 	angular.forEach(data, function(data, key) {
-				// 		data.x *= Canvas.width;
-				// 		data.y *= Canvas.height;
-				// 		obj.push({
-				// 			pos: data
-				// 		});
-				// 	});
-				// 	callback(obj);
-				// });
+
+
+
 			},
 			removeData: function() {
 
@@ -208,19 +198,11 @@ app.service("Canvas", ["$q",
 			deferred.resolve(canvas);
 		};
 		this.setSize = function(w, h) {
-			// if (canvas) {
-			// 	canvas.setDimensions({
-			// 		width: w,
-			// 		height: h
-			// 	})
-			// 	self.width = w;
-			// 	self.height = h;
-			// }
-		}
+
+
+
+		};
 		this.getCanvas = function() {
-			// if (canvas) {
-			// 	deferred.resolve(canvas);
-			// }
 			return deferred.promise;
 		};
 	}
@@ -235,10 +217,6 @@ app.service("Input", ["Canvas",
 				if (e.keyCode == 13) {
 					callback();
 				}
-			});
-			txt.focus(function() {
-				// $('.pad').parent().height(Canvas.height);
-				// console.log($('.pad').height());
 			});
 		};
 		this.hide = function() {

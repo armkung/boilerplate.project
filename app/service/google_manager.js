@@ -118,12 +118,12 @@ app.service('GoogleService', ["$q",
 		this.insertFile = function(fileData) {
 			var deferred = $q.defer();
 
-			const boundary = '-------314159265358979323846';
-			const delimiter = "\r\n--" + boundary + "\r\n";
-			const close_delim = "\r\n--" + boundary + "--";
+			var boundary = '-------314159265358979323846';
+			var delimiter = "\r\n--" + boundary + "\r\n";
+			var close_delim = "\r\n--" + boundary + "--";
 
 			var base64Data = fileData.data;
-			// base64Data.replace("/^data:image\/(png|jpg|jpeg);base64,/", "");
+			
 
 			var metadata = {
 				'title': fileData.fileName,

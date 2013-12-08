@@ -25,10 +25,10 @@ app.service("DrawManager", ["Canvas", "$rootScope",
 		var line, text;
 		var id, groups;
 		var canvas, current;
-		// var n;
+		
 
 		function setId(obj) {
-			// var n = canvas.getObjects().indexOf(obj);
+			
 			var n = 0;
 			angular.forEach(current.getObjects(), function(child, key) {
 				if (!(child instanceof fabric.Group)) {
@@ -51,7 +51,7 @@ app.service("DrawManager", ["Canvas", "$rootScope",
 				x: Canvas.width,
 				y: Canvas.height
 			};
-		}
+		};
 		this.init = function(name) {
 			Canvas.init(name);
 			Canvas.getCanvas().then(function(cs) {
@@ -87,7 +87,7 @@ app.service("DrawManager", ["Canvas", "$rootScope",
 			}
 		};
 		this.getObject = function(cs, name) {
-			// cs.clear();
+			
 			if (name in obj) {
 				var children = obj[name];
 				angular.forEach(children, function(child, key) {
@@ -118,14 +118,14 @@ app.service("DrawManager", ["Canvas", "$rootScope",
 		};
 		this.remove = function(indexs) {
 			angular.forEach(indexs, function(index, key) {
-				console.log(index)
+				
 				canvas.forEachObject(function(obj) {
-					// if (!(obj instanceof fabric.Group)) {
+					
 						if (obj.get("id") == index) {
 							current.remove(obj);
 							return;
 						}
-					// }
+					
 				});
 			});
 			canvas.renderAll();
@@ -139,7 +139,7 @@ app.service("DrawManager", ["Canvas", "$rootScope",
 			var path = new fabric.Path(paths);
 			var scaleX = self.getScale().x / scale.x;
 			var scaleY = self.getScale().y / scale.y;
-			var scale = Math.min(scaleX, scaleY);
+			var ratio = Math.min(scaleX, scaleY);
 			path.set({
 				left: x,
 				top: y,
@@ -151,7 +151,7 @@ app.service("DrawManager", ["Canvas", "$rootScope",
 				strokeLineCap: data.strokeLineCap,
 				strokeLineJoin: data.strokeLineJoin
 			});
-			path.scale(scale);
+			path.scale(ratio);
 			self.disableMove(path);
 
 			if (current instanceof fabric.Group) {
@@ -193,7 +193,7 @@ app.service("DrawManager", ["Canvas", "$rootScope",
 					}
 					setId(line);
 					self.disableMove(line);
-					// canvas.calcOffset();
+					
 					canvas.renderAll();
 				}
 				if (isUp) {
@@ -292,7 +292,7 @@ app.service("DrawManager", ["Canvas", "$rootScope",
 				}
 			});
 			return n;
-		}
+		};
 		this.getIndex = function(obj) {
 			var index = [];
 
@@ -306,13 +306,13 @@ app.service("DrawManager", ["Canvas", "$rootScope",
 			return index;
 		};
 		this.getCurrentGroup = function(id) {
-			// id = id ? id : '';
-			// return layer.get('#' + id)[0].getChildren();
+			
+			
 		};
 		this.setCurrentPosition = function(indexs, data) {
-			// var objMin, min = {};
-			// var objs = [];
-			// console.log(indexs)
+			
+			
+			
 			if (current instanceof fabric.Group) {
 				angular.forEach(indexs, function(index, key) {
 					angular.forEach(current.getObjects(), function(obj, key) {
@@ -324,8 +324,8 @@ app.service("DrawManager", ["Canvas", "$rootScope",
 								});
 							}
 							if (data.scale || data.flip) {
-								// var center = obj.getCenterPoint();
-								// obj.translateToOriginPoint(center, scale.point.x, scale.point.y);
+								
+								
 								obj.set({
 									"scaleX": data.scale.x,
 									"scaleY": data.scale.y,
@@ -342,42 +342,11 @@ app.service("DrawManager", ["Canvas", "$rootScope",
 						}
 					});
 				});
-				// adjustPosition();
+				
 				canvas.calcOffset();
 				canvas.renderAll();
 			}
-			// function adjustPosition() {
-			// 	var x = objMin.get("left");
-			// 	var y = objMin.get("top");
-			// 	current.set({
-			// 		"left": x,
-			// 		"top": y
-			// 	});
-			// 	angular.forEach(current.getObjects(), function(obj, key) {
-			// 		var dx = obj.get("left") - x;
-			// 		var dy = obj.get("top") - y;
-			// 		console.log(x+" "+y)
-			// 		console.log(obj.get("left")+" "+obj.get("top"))
-			// 		obj.set({
-			// 			"left": dx,
-			// 			"top": dy
-			// 		});
-			// 		// current.add(obj);
-			// 		// canvas.calcOffset();
-			// 		// canvas.renderAll();
-			// 	})
-			// }
-
-			// function findMinPosition(obj) {
-			// 	var x = obj.get("left");
-			// 	var y = obj.get("top");
-			// 	if ((!min.x && !min.y) || (min.x > x && min.y > y)) {
-			// 		min.x = x;
-			// 		min.y = y;
-			// 		objMin = obj.clone();
-			// 	}
-
-			// }
+			
 		};
 		this.canDrag = function(canDrag) {
 			canvas.forEachObject(function(obj) {
@@ -404,10 +373,6 @@ app.service("DrawManager", ["Canvas", "$rootScope",
 			});
 		};
 		this.clear = function(id) {
-			// canvas.clear();
-			// Canvas.removeId(id)		
-			// self.init(id);
-
 			canvas.forEachObject(function(obj) {
 				if (!(obj instanceof fabric.Group)) {
 					canvas.remove(obj);
@@ -418,6 +383,6 @@ app.service("DrawManager", ["Canvas", "$rootScope",
 		};
 		this.removeGroup = function(id){
 			delete groups[id];
-		}
+		};
 	}
 ]);

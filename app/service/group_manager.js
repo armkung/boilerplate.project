@@ -2,46 +2,35 @@ app.service('GroupManager', ["Canvas", "DrawManager",
 	function(Canvas, DrawManager) {
 		var self = this;
 		var canvas;
-		// var objs;
+
 		var groups;
 
 		this.getGroups = function(users, owner) {
 			groups = {};
 			Canvas.getCanvas().then(function(cs) {
 				canvas = cs;
-				// objs = canvas.getObjects();
 
-				// var tmp = users.slice(1);
+
+
 				canvas.forEachObject(function(obj) {
 					if (obj instanceof fabric.Group) {
 						var user = obj.get("id");
 						if (user != owner) {
-							// if (users.indexOf(user) != -1) {
+
 							groups[user] = {
 								id: user,
 								isHide: false,
 								image: getImage(obj)
 							};
-							// } else {
-							// 	var id = DrawManager.getFromId(user);
-							// 	var item = canvas.item(id);
-							// 	if (item) {
-							// 		item.remove();
-							// 	}
-							// }
+
+
+
 						}
 					}
 				});
-				// angular.forEach(groups, function(group, user) {
-				// if (!(user in users)) {
-				// 	var id = DrawManager.getFromId(user.id);
 
-				// 	var item = canvas.item(id);
-				// 	if (item) {
-				// 		item.remove();
-				// 	}
-				// }
-				// });
+
+
 				canvas.renderAll();
 			});
 

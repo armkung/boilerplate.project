@@ -154,7 +154,7 @@ app.directive("drawPad", ["$rootScope", "DrawManager", "DrawFactory", "Input", "
 				DataManager.initData(type);
 
 				function drawText() {
-					if (scope.text != "") {
+					if (scope.text !== "") {
 						var obj = {};
 						obj.pos = {
 							text: scope.text,
@@ -168,17 +168,17 @@ app.directive("drawPad", ["$rootScope", "DrawManager", "DrawFactory", "Input", "
 						sendData(obj);
 
 						Input.hide();
-						scope.text = ""
+						scope.text = "";
 					}
 				}
 				Input.init(drawText);
 				Input.hide();
 
-				// DataManager.loadData(type, {
-				// 	room: Room.room
-				// }, function(data) {
-				// 	DrawFactory.setAnimate(data, draw);
-				// });
+				
+				
+				
+				
+				
 				DrawFactory.setClear(function(data) {
 					var obj = {};
 					obj.type = DrawFactory.tools.CLEAR;
@@ -238,18 +238,18 @@ app.directive("drawPad", ["$rootScope", "DrawManager", "DrawFactory", "Input", "
 
 				$rootScope.$on('tool', function(e, tool) {
 					scope.tool = tool;
-					// if (scope.tool != null) {
+					
 					Input.hide();
 					DrawFactory.setTool(tool);
-					// 	scope.tool = null;
-					// }
+					
+					
 				});
 				$rootScope.$on('attr', function(e, obj) {
-					// var callback = {};
-					// callback.strokeColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
-					// callback.fillColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
-					// callback.strokeSize = Math.floor(Math.random() * 10) + 4;
-					// callback.fontSize = Math.floor(Math.random() * 20) + 28;
+					
+					
+					
+					
+					
 					DrawFactory.setAttr(obj.attr, obj.data);
 				});
 				$rootScope.$on("$stateChangeSuccess", function($currentRoute, $previousRoute) {
