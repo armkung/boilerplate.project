@@ -76,14 +76,15 @@ app.service('GoogleService', ["$q",
 			});
 			return deferred.promise;
 		};
-		this.shareFile = function(id) {
+		this.shareFile = function(id, email) {
 			var deferred = $q.defer();
 			var body = {
-				'value': 'anand.kung@mail.kmutt.ac.th',
+				'value': email,
 				'type': 'group',
 				'role': 'reader'
 			};
 			var request = gapi.client.drive.permissions.insert({
+				'sendNotificationEmails': false,
 				'fileId': id,
 				'resource': body
 			});

@@ -25,6 +25,9 @@ app.directive('slidePad', ["$q", "$sce", "$state", "cfpLoadingBar", "DrawManager
 				// }
 				DataManager.getData(type, function(data) {
 					if (data) {
+						// if (data.slide != SlideManager.slide && angular.isDefined(SlideManager.slide)) {
+						// 	data.slide = SlideManager.slide;
+						// }
 						SlideManager.setSlide(data.slide, data.index);
 						changeSlide();
 						if (data.max) {
@@ -37,7 +40,11 @@ app.directive('slidePad', ["$q", "$sce", "$state", "cfpLoadingBar", "DrawManager
 						}
 					}
 				});
-				DataManager.initData(type);
+				if (angular.isDefined(SlideManager.slide)) {
+					changeSlide();
+				} else {
+					DataManager.initData(type);
+				}
 
 				SlideManager.getMax().then(function(max) {
 					SlideManager.max = max;
@@ -47,14 +54,13 @@ app.directive('slidePad', ["$q", "$sce", "$state", "cfpLoadingBar", "DrawManager
 						max: SlideManager.max
 					});
 				});
-
-
 				scope.$watch('slide.index', function(newV, oldV) {
 					if (angular.isDefined(SlideManager.slide) && angular.isDefined(SlideManager.index)) {
 						if (scope.send) {
 							DataManager.setData(type, {
 								slide: SlideManager.slide,
-								index: SlideManager.index
+								index: SlideManager.index,
+								max: 0
 							});
 						}
 						DataManager.initData(DataManager.types.POS);

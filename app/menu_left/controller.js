@@ -207,8 +207,8 @@ app.controller('HandWriteCtrl', ["$scope", "$rootScope", "DrawFactory", "Canvas"
 	}
 ]);
 
-app.controller('SlideCtrl', ["$scope", "$rootScope", "LoginManager", "DrawFactory", "SlideManager",
-	function($scope, $rootScope, LoginManager, DrawFactory, SlideManager) {
+app.controller('SlideCtrl', ["$scope", "$rootScope", "LoginManager", "GoogleService", "DrawFactory", "SlideManager",
+	function($scope, $rootScope, LoginManager, GoogleService, DrawFactory, SlideManager) {
 		LoginManager.getUser().then(function(user) {
 			$scope.isSend = LoginManager.getAccess() == LoginManager.level.TEACHER;
 			$scope.isStart = true;
@@ -227,6 +227,14 @@ app.controller('SlideCtrl', ["$scope", "$rootScope", "LoginManager", "DrawFactor
 					$scope.isEnd = SlideManager.isEnd();
 				}
 			};
+			$scope.slide = SlideManager;
+			$scope.$watch('slide.slide', function(oldV, newV) {
+				var id = SlideManager.slide;
+				if (angular.isDefined(id)) {
+					GoogleService.shareFile(id, user.email).then(function(data) {});
+				}
+			})
+
 			$scope.hideTool = false;
 			$scope.showMenu = false;
 			$scope.checkToolSwipe = function(hideTool) {

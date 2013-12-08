@@ -37,7 +37,6 @@ app.directive('driveSlide', ["$rootScope", "$q", "cfpLoadingBar", "GoogleService
 				cfpLoadingBar.start();
 				GoogleService.load().then(function() {
 					GoogleService.listFile().then(function(data) {
-						console.log(data);
 						scope.datas = data;
 
 						cfpLoadingBar.complete();
@@ -47,11 +46,11 @@ app.directive('driveSlide', ["$rootScope", "$q", "cfpLoadingBar", "GoogleService
 					scope.selected = $rootScope.slideSelected;
 				});
 				scope.select = function(index) {
-					$rootScope.slideSelected = index;
 
 					var id = scope.datas[index].id;
 					SlideManager.setSlide(id);
 					scope.id = id;
+					$rootScope.slideSelected = id;
 
 					var deferred = $q.defer();
 					SlideManager.setMax(deferred);
@@ -59,13 +58,7 @@ app.directive('driveSlide', ["$rootScope", "$q", "cfpLoadingBar", "GoogleService
 						scope.pdf = pdf;
 						deferred.resolve(pdf.pdfInfo.numPages);
 					});
-				};
-
-				scope.share = function() {
-					GoogleService.shareFile(id).then(function(data) {
-						console.log(data);
-					});
-				};
+				};				
 
 				scope.toDate = function(date) {
 					return new Date(date).toUTCString();
