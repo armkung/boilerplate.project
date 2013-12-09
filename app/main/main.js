@@ -11,11 +11,12 @@ app.directive('scrollBar', function() {
 		restrict: 'AC',
 		link: function(scope, iElement, iAttrs) {
 			iElement.perfectScrollbar({
-				// useBothWheelAxes: true
+				suppressScrollX: true
 			});
-
-			// iElement.scrollTop(100);
-			// iElement.perfectScrollbar('update');
+			scope.$watchCollection(iAttrs.watch, function() {
+				iElement.scrollTop(iElement.height());
+				iElement.perfectScrollbar('update');
+			});
 		}
 	};
 });

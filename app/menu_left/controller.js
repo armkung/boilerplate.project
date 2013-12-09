@@ -291,7 +291,7 @@ app.controller('HomeTeacherCtrl', ["$scope", "$modal", "$rootScope", "Room", "So
 			};
 
 			$scope.room.name = "public";
-			$scope.room.display = "assets/emoticon/1.gif";
+			$scope.room.display = "assets/display/1.gif";
 			$scope.create();
 		});
 	}
@@ -363,7 +363,7 @@ app.controller('HomeStudentCtrl', ["$scope", "$rootScope", "$modal", "Room", "So
 			$scope.list();
 
 			$scope.room.name = "public";
-			$scope.room.display = "assets/emoticon/1.gif";
+			$scope.room.display = "assets/display/1.gif";
 			$scope.connect();
 		});
 	}
