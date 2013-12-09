@@ -10,12 +10,21 @@ app.directive('scrollBar', function() {
 	return {
 		restrict: 'AC',
 		link: function(scope, iElement, iAttrs) {
+			iAttrs.y = iAttrs.y || 'true';
 			iElement.perfectScrollbar({
-				suppressScrollX: true
+				suppressScrollX: iAttrs.x !== 'true',
+				suppressScrollY: iAttrs.y !== 'true'
 			});
+
 			scope.$watchCollection(iAttrs.watch, function() {
-				iElement.scrollTop(iElement.height());
-				iElement.perfectScrollbar('update');
+				setTimeout(function() {
+					var containerHeight = iElement.children().first().prop('scrollHeight')
+					var bottom = containerHeight - iElement.height();
+					if (bottom > 0) {
+						iElement.scrollTop(bottom);
+						iElement.perfectScrollbar('update');
+					}
+				}, 20);
 			});
 		}
 	};

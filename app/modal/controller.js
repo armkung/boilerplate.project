@@ -19,14 +19,12 @@ app.controller('DisplayCtrl', ["$scope", "$modalInstance", "$http", "$rootScope"
 		$http.get($scope.url + 'index.json').then(function(data) {
 			$scope.items = data.data.index;
 
-			$scope.$watch('selected', function() {
-				$rootScope.displaySelected = $scope.selected;
-			});
 			$scope.select = function(index) {
-				$scope.item = $scope.items[index];
 				$scope.selected = index;
+				$scope.item = $scope.items[index];
 			};
 			$scope.ok = function() {
+				$rootScope.displaySelected = $scope.selected;
 				$modalInstance.close($scope.url + $scope.item);
 			};
 			$scope.close = function() {
@@ -35,6 +33,8 @@ app.controller('DisplayCtrl', ["$scope", "$modalInstance", "$http", "$rootScope"
 
 			if (angular.isUndefined($rootScope.displaySelected)) {
 				$scope.select(0);
+			}else{
+				$scope.select($rootScope.displaySelected);
 			}
 		});
 	}

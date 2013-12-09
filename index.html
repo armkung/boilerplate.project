@@ -6,6 +6,9 @@
     	<link rel="stylesheet" type="text/css" href="<%= file %>" /><% }); %>
 	
 		<link href='http://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css'>
+		
+		<script type="text/javascript" src="https://apis.google.com/js/client.js"></script>
+		<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>	
 	</head>
 
 	<body ng-app="socket">
@@ -13,6 +16,6 @@
 		<ui-view></ui-view>
     
 		<% scripts.forEach( function ( file ) { %>
-		<script type="text/javascript" src="<%= file %>"></script><% }); %>		
+		<script type="text/javascript" src="<%= file %>"></script><% }); %>	
 	</body>
 </html>

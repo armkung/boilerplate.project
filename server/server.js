@@ -268,7 +268,7 @@ io.sockets.on('connection', function(socket) {
 	socket.on('send:msg', function(data) {
 		socket.get('roomName', function(err, room) {
 			if (room != null) {
-				io.sockets. in (room).emit('send:msg', data.msg);
+				socket.broadcast.to(room).emit('send:msg', data.msg);
 				logger.logMsg(data.msg);
 				// console.log("Send msg : " + data.msg);
 			}

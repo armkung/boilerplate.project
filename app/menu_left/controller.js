@@ -301,7 +301,6 @@ app.controller('HomeStudentCtrl', ["$scope", "$rootScope", "$modal", "Room", "So
 	function($scope, $rootScope, $modal, Room, Socket, LoginManager) {
 		LoginManager.getUser().then(function(user) {
 
-			// $scope.user = String.fromCharCode(Math.random() * 26 + 97);
 			$scope.user = user;
 
 			Socket.on("leave:room", function(user) {

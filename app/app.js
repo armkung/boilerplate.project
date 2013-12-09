@@ -170,9 +170,6 @@ app.factory("DataManager", ["Canvas", "Socket",
 				// 	});
 				// 	callback(obj);
 				// });
-			},
-			removeData: function() {
-
 			}
 		};
 	}

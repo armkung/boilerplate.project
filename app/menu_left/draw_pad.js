@@ -174,11 +174,6 @@ app.directive("drawPad", ["$rootScope", "DrawManager", "DrawFactory", "Input", "
 				Input.init(drawText);
 				Input.hide();
 
-				// DataManager.loadData(type, {
-				// 	room: Room.room
-				// }, function(data) {
-				// 	DrawFactory.setAnimate(data, draw);
-				// });
 				DrawFactory.setClear(function(data) {
 					var obj = {};
 					obj.type = DrawFactory.tools.CLEAR;
@@ -245,11 +240,6 @@ app.directive("drawPad", ["$rootScope", "DrawManager", "DrawFactory", "Input", "
 					// }
 				});
 				$rootScope.$on('attr', function(e, obj) {
-					// var callback = {};
-					// callback.strokeColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
-					// callback.fillColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
-					// callback.strokeSize = Math.floor(Math.random() * 10) + 4;
-					// callback.fontSize = Math.floor(Math.random() * 20) + 28;
 					DrawFactory.setAttr(obj.attr, obj.data);
 				});
 				$rootScope.$on("$stateChangeSuccess", function($currentRoute, $previousRoute) {

@@ -9,7 +9,6 @@ app.service("DrawFactory", ["Canvas", "DrawManager",
 			TEXT: "text",
 			DRAW: "write",
 			LINE: "line",
-			// ANIMATE: "Animate",
 			DELETE: "delete"
 		};
 		this.attrs = {
@@ -17,39 +16,8 @@ app.service("DrawFactory", ["Canvas", "DrawManager",
 			SIZE: "Size"
 		};
 		var listener = {};
-		// var canvas = Canvas.getCanvas();
-		// Canvas.getCanvas().then(function(cs) {
-		// 	canvas = cs;
-		// });
-
-		this.setAnimate = function(data, draw) {
-			var delay = 10;
-			var isDraw = false;
-			listener.animate = {
-				call: function() {
-					if (!isDraw) {
-						isDraw = true;
-						var i = 0;
-						(function animate() {
-							if (i < data.length) {
-								var pos = data[i];
-								draw(pos);
-								$timeout(animate, delay);
-								i++;
-							} else {
-								isDraw = false;
-							}
-						})();
-
-					}
-				}
-			};
-		};
 		this.setDelete = function(remove) {
 			listener.remove = {
-				// call: function() {
-				// 	remove();
-				// }
 				onSelect: function(e) {
 					remove(e.target);
 				}
