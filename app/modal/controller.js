@@ -1,18 +1,42 @@
-app.controller('DisplayCtrl', ["$scope", "$modalInstance",
-	function($scope, $modalInstance) {
-		$scope.url = "assets/emoticon/";
-		$scope.items = ["1.gif", "2.gif", "3.gif"];
-		$scope.selected = $scope.items[0];
-		$scope.select = function(index) {
-			$scope.selected = $scope.items[index];
-			console.log($scope.selected);
+app.controller('SaveCtrl', ["$scope", "$modalInstance", "Room",
+	function($scope, $modalInstance, Room) {
+		$scope.input = {
+			name: Room.room
 		};
 		$scope.ok = function() {
-			$modalInstance.close($scope.url + $scope.selected);
+			$modalInstance.close($scope.input.name);
 		};
-		$scope.close = function() {
+		$scope.cancel = function() {
 			$modalInstance.dismiss('cancel');
 		};
+
+	}
+]);
+
+app.controller('DisplayCtrl', ["$scope", "$modalInstance", "$http", "$rootScope",
+	function($scope, $modalInstance, $http, $rootScope) {
+		$scope.url = "assets/display/";
+		$http.get($scope.url + 'index.json').then(function(data) {
+			$scope.items = data.data.index;
+
+			$scope.$watch('selected', function() {
+				$rootScope.displaySelected = $scope.selected;
+			});
+			$scope.select = function(index) {
+				$scope.item = $scope.items[index];
+				$scope.selected = index;
+			};
+			$scope.ok = function() {
+				$modalInstance.close($scope.url + $scope.item);
+			};
+			$scope.close = function() {
+				$modalInstance.dismiss('cancel');
+			};
+
+			if (angular.isUndefined($rootScope.displaySelected)) {
+				$scope.select(0);
+			}
+		});
 	}
 ]);
 

@@ -1,5 +1,5 @@
-app.directive('chat', ["DataManager",
-	function(DataManager) {
+app.directive('chat', ["DataManager", "$http",
+	function(DataManager, $http) {
 		return {
 			restrict: 'E',
 			templateUrl: 'menu_right/template/chat.tpl.html',
@@ -11,27 +11,30 @@ app.directive('chat', ["DataManager",
 				scope.msgs = [];
 				scope.emotions = [];
 
-				for (var i = 1; i <= n; i++) {
-					scope.emotions.push(i + ".gif");
-				}
+				$http.get(scope.url + 'index.json').then(function(data) {
+					angular.forEach(data.data.index, function(name, key) {
+						scope.emotions.push(name);
 
-				DataManager.getData(type, function(data) {
-					if (angular.isArray(data)) {
-						angular.forEach(data, function(msg, key) {
-							scope.msgs.push(msg);
+						DataManager.getData(type, function(data) {
+							if (angular.isArray(data)) {
+								angular.forEach(data, function(msg, key) {
+									scope.msgs.push(msg);
+								});
+							} else {
+								scope.msgs.push(data);
+							}
 						});
-					} else {
-						scope.msgs.push(data);
-					}
-				});
 
-				DataManager.initData(type);
-				scope.select = function(index) {
-					var emotion = scope.url + scope.emotions[index];
-					DataManager.setData(type, {
-						msg: emotion
+						DataManager.initData(type);
+						scope.select = function(index) {
+							var emotion = scope.url + scope.emotions[index];
+							DataManager.setData(type, {
+								msg: emotion
+							});
+						};
 					});
-				};
+				});
+				
 			}
 		};
 	}

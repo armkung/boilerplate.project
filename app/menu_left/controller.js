@@ -105,32 +105,12 @@ app.controller('DriveCtrl', ["$scope", "$modal", "cfpLoadingBar", "Room", "Login
 				return cs;
 			}
 
-			// var name = Room.room;
 			$scope.showDialog = function() {
 				var modal = $modal.open({
-					template: '<div class="modal-dialog"><div class="modal-content"><div class="modal-body">' +
-						'<span class="bigger-150">File Name: </span><input type="text" ng-model="name">' +
-						'</div><div class="modal-footer">' +
-						'<button class="inline btn btn-success icon-ok" ng-click="ok()">Save</button>' +
-						'<button class="inline btn btn-warning icon-remove" ng-click="cancel()">Cancel</button>' +
-						'</div></div></div>',
-					controller: ["$scope", "$modalInstance", "Room",
-						function($scope, $modalInstance, Room) {
-
-							$scope.name = Room.room;
-							$scope.ok = function() {
-								$modalInstance.close($scope.name);
-							};
-							$scope.cancel = function() {
-								$modalInstance.dismiss('cancel');
-							};
-						}
-					]
+					templateUrl: 'modal/template/save.tpl.html',
+					controller: 'SaveCtrl'
 				});
 				return modal.result;
-				// modal.result.then(function(name) {
-				// 	$scope.name = name;
-				// });
 			};
 			$scope.saveDraw = function() {
 				$scope.showDialog().then(function(name) {

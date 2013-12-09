@@ -1,7 +1,15 @@
 <div class="modal-dialog">
 	<div class="modal-content">
 		<div class="modal-body">
-			<img ng-src="{{url+item}}" ng-repeat="item in items" ng-click="select($index)">
+			<div class="display-list width-100">
+
+				<div class="list fit-height" scroll-bar>
+					<div class="card inline width-20" ng-class="{'selected': selected==$index}" ng-repeat="item in items" ng-click="select($index)">
+						<img class="width-100" ng-src="{{url+item}}">
+					</div>
+				</div>
+				
+			</div>
 		</div>
 		<div class="modal-footer">
 			<button class="btn btn-success icon-ok bigger-130" ng-click="ok()"> Ok</button>
