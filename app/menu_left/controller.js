@@ -120,10 +120,12 @@ app.controller('DriveCtrl', ["$scope", "$modal", "cfpLoadingBar", "Room", "Login
 					// name = name + "-Draw";
 
 					var cs = loadCanvas(Canvas.types.DRAW);
+					cs.setBackgroundColor('white');
+
 					var data = cs.toDataURL({
 						format: type.split("/")
 					});
-
+					
 					var obj = {};
 					obj.type = type;
 					obj.data = data.split(",")[1];
@@ -290,9 +292,6 @@ app.controller('HomeTeacherCtrl', ["$scope", "$modal", "$rootScope", "Room", "So
 				});
 			};
 
-			$scope.room.name = "public";
-			$scope.room.display = "assets/display/1.gif";
-			$scope.create();
 		});
 	}
 ]);
@@ -360,10 +359,7 @@ app.controller('HomeStudentCtrl', ["$scope", "$rootScope", "$modal", "Room", "So
 				});
 			};
 			$scope.list();
-
-			$scope.room.name = "public";
-			$scope.room.display = "assets/display/1.gif";
-			$scope.connect();
 		});
+
 	}
 ]);

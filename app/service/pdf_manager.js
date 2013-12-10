@@ -71,7 +71,6 @@ app.service('PDFService', ["$q", "$timeout", "GoogleService",
 					page.render(renderContext).then(function() {
 						var stroke = 2;
 						fabric.Image.fromURL(slideCanvas.toDataURL(), function(img) {
-							console.log(drawCanvas);
 							drawCanvas.add(img);
 							img.set({
 								stroke: 'black',

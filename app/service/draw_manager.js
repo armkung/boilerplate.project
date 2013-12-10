@@ -112,19 +112,20 @@ app.service("DrawManager", ["Canvas", "$rootScope",
 		this.enableMove = function(obj) {
 			canvas.selection = true;
 			obj.set('selectable', true);
-			obj.set('hasBorders', true);
-			obj.set('hasControls', true);
 			obj.set('hasRotatingPoint', true);
+			obj.set('hasBorders', true);
+			if (!(obj instanceof fabric.Group)) {
+				obj.set('hasControls', true);
+			}
 		};
 		this.remove = function(indexs) {
 			angular.forEach(indexs, function(index, key) {
-				console.log(index)
-				canvas.forEachObject(function(obj) {
+				current.forEachObject(function(obj) {
 					// if (!(obj instanceof fabric.Group)) {
-						if (obj.get("id") == index) {
-							current.remove(obj);
-							return;
-						}
+					if (obj.get("id") == index) {
+						current.remove(obj);
+						return;
+					}
 					// }
 				});
 			});
@@ -414,9 +415,9 @@ app.service("DrawManager", ["Canvas", "$rootScope",
 				}
 			});
 			canvas.renderAll();
-			n = 0;			
+			n = 0;
 		};
-		this.removeGroup = function(id){
+		this.removeGroup = function(id) {
 			delete groups[id];
 		}
 	}

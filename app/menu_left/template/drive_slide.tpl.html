@@ -1,18 +1,14 @@
-	<!-- <div class="widget-body"> -->
 
-		<div style="display:none;">
-			<canvas id="data"/>
-		</div>		
-		<div class="list fit-height" scroll-bar>
-			<!-- <div class="tab-pane active"> -->
-			<ul class="item-list">
-				<li class="item-grey clearfix" ng-class="{selected: selected==data.id}" ng-repeat="data in datas" ng-click="select($index)">
-					<img ng-src="{{data.iconLink}}">
-					<span>{{data.title}}</span>
-					<span class="pull-right">{{toDate(data.createdDate)}}</span>
-				</li>
-			</ul>
-			<!-- </div> -->
-		</div>
+<div style="display:none;">
+	<canvas id="data"/>
+</div>		
+<div class="list fit-height" scroll-bar>
+	<ul class="item-list">
+		<li class="item-grey clearfix" ng-class="{selected: selected==data.id}" ng-repeat="data in datas" ng-click="select($index)">
+			<img ng-src="{{data.iconLink}}">
+			<span>{{data.title}}</span>
+			<span class="pull-right">{{toDate(data.createdDate)}}</span>
+		</li>
+	</ul>
+</div>
 
-	<!-- </div> -->

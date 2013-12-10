@@ -64,6 +64,13 @@ app.directive('reSize', ["$rootScope", "$window", "Canvas",
 		return {
 			restrict: 'AC',
 			link: function(scope, iElement, iAttrs) {
+				if (navigator.userAgent.match(/iPad;.*CPU.*OS 7_\d/i)) {
+					if ($window.innerHeight != $window.outerHeight) {
+						var k = $window.outerHeight - $window.innerHeight;
+						iElement.height(iElement.height() - k);
+					}
+				}
+
 				var mainSize = iElement.height();
 				var init = {
 					width: $window.innerWidth,

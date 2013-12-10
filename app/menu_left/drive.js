@@ -37,8 +37,9 @@ app.directive('driveSlide', ["$rootScope", "$q", "cfpLoadingBar", "GoogleService
 				cfpLoadingBar.start();
 				GoogleService.load().then(function() {
 					GoogleService.listFile().then(function(data) {
-						scope.datas = data;
-
+						if (angular.isArray(data)) {
+							scope.datas = data;
+						}
 						cfpLoadingBar.complete();
 					});
 				});
@@ -58,7 +59,7 @@ app.directive('driveSlide', ["$rootScope", "$q", "cfpLoadingBar", "GoogleService
 						scope.pdf = pdf;
 						deferred.resolve(pdf.pdfInfo.numPages);
 					});
-				};				
+				};
 
 				scope.toDate = function(date) {
 					return new Date(date).toUTCString();

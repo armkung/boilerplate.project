@@ -88,6 +88,8 @@ app.directive("drawPad", ["$rootScope", "DrawManager", "DrawFactory", "Input", "
 				}
 
 				function clear(data) {
+					setCurrent();
+
 					if (data.user) {
 						var name = data.user.name;
 						DrawManager.remove([name]);
