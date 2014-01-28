@@ -125,7 +125,7 @@ app.controller('DriveCtrl', ["$scope", "$modal", "cfpLoadingBar", "Room", "Login
 					var data = cs.toDataURL({
 						format: type.split("/")
 					});
-					
+
 					var obj = {};
 					obj.type = type;
 					obj.data = data.split(",")[1];
@@ -189,17 +189,23 @@ app.controller('HandWriteCtrl', ["$scope", "$rootScope", "DrawFactory", "Canvas"
 	}
 ]);
 
-app.controller('SlideCtrl', ["$scope", "$rootScope", "LoginManager", "GoogleService", "DrawFactory", "SlideManager",
-	function($scope, $rootScope, LoginManager, GoogleService, DrawFactory, SlideManager) {
+app.controller('SlideCtrl', ["$scope", "$rootScope", "LoginManager", "GoogleService", "DrawFactory", "SlideManager", "VoiceManager",
+	function($scope, $rootScope, LoginManager, GoogleService, DrawFactory, SlideManager, VoiceManager) {
 		LoginManager.getUser().then(function(user) {
 			$scope.isSend = LoginManager.getAccess() == LoginManager.level.TEACHER;
 			$scope.isStart = true;
 			$scope.isEnd = false;
+
+			// VoiceManager.init();
+			VoiceManager.start();
 			$scope.nextIndex = function(isSwipe) {
 				if ($scope.tool == DrawFactory.tools.MODE || isSwipe) {
 					SlideManager.next();
 					$scope.isStart = SlideManager.isStart();
 					$scope.isEnd = SlideManager.isEnd();
+					VoiceManager.stop();
+					VoiceManager.start();
+					// VoiceManager.playback();
 				}
 			};
 			$scope.prevIndex = function(isSwipe) {

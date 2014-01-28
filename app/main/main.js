@@ -90,12 +90,12 @@ app.directive('reSize', ["$rootScope", "$window", "Canvas",
 				$rootScope.$watch('windowSize', function(oldV, newV) {
 					if (oldV != newV) {
 						if ($rootScope.windowSize.width > init.width ||
-							$rootScope.windowSize.height > init.height) {
+							$rootScope.windowSize.height > init.width + 36) {
 							init = {
 								width: $window.innerWidth,
 								height: $window.innerHeight
 							};
-							mainSize = iElement.height();
+							// mainSize = iElement.height();
 
 							iElement.removeClass("position-absolute width-100");
 							iElement.height('auto');
@@ -103,6 +103,7 @@ app.directive('reSize', ["$rootScope", "$window", "Canvas",
 							Canvas.setSize($('.pad').width(), $('.pad').height());
 							$rootScope.$broadcast('resize');
 						} else {
+
 							iElement.addClass("position-absolute width-100");
 							iElement.height(mainSize);
 						}

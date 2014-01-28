@@ -1,5 +1,62 @@
-var io = require('socket.io').listen(8080);
+var formidable = require('formidable');
+var http = require('http');
+var util = require('util');
 var fs = require('fs');
+
+var server = http.createServer().listen(8080);
+
+server.on('request', function(request, response) {
+	var form = new formidable.IncomingForm()
+	form.encoding = 'utf8';
+	form.uploadDir = __dirname + '/audio';
+	form.keepExtensions = true;
+	form.parse(request);
+
+	response.writeHead(200, {
+		'Content-Type': 'text/plain',
+		'Access-Control-Allow-Origin': '*',
+		'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE'
+	});
+
+	form.on('error', function(err) {
+		response.writeHead(200, {
+			'content-type': 'text/plain'
+		});
+		response.end('error:\n\n' + util.inspect(err));
+	});
+
+
+	form.on('file', function(field, file) {
+		console.log(file)
+		fs.rename(file.path, form.uploadDir + '/' + file.name, function(err) {
+			if (err) {
+				console.log("error");
+			} else {
+				console.log("success");
+			}
+		});
+		// fs.readFile(file.path, function(err, data) {
+		// 	fs.writeFile(__dirname + '/audio' +
+		// 		file.name,
+		// 		data,
+		// 		'binary',
+		// 		function(err) {
+		// 			if (err) {
+		// 				console.log("error");
+		// 			} else {
+		// 				console.log("success");
+		// 			}
+		// 		});
+		// });
+	});
+
+	form.on('end', function() {
+		response.end('');
+	});
+
+});
+
+var io = require('socket.io').listen(server);
 // var md = require('./module/module.js');
 // md.test()
 // var builder = require('xmlbuilder');
@@ -134,7 +191,7 @@ io.sockets.on('connection', function(socket) {
 		var name = data.room.name;
 		var room = name == "" ? "" : "/" + name;
 		if (room in io.sockets.manager.rooms) {
-			if(data.exit){
+			if (data.exit) {
 				socket.leave(data.exit);
 			}
 

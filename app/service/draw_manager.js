@@ -274,11 +274,6 @@ app.service("DrawManager", ["Canvas", "$rootScope",
 			if (id) {
 				if (!(id in groups)) {
 					groups[id] = new fabric.Group();
-					groups[id].set({
-						"id": id,
-						"originX": 'center',
-						"originY": 'center'
-					});
 					self.disableMove(groups[id]);
 					canvas.add(groups[id]);
 				}
