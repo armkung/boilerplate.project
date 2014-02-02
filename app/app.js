@@ -53,6 +53,10 @@ app.config(["$stateProvider", "$urlRouterProvider",
 			url: '/quiz/student',
 			templateUrl: 'menu_left/template/quiz_student.tpl.html',
 			controller: 'QuizStudentCtrl'
+		}).state('main.player', {
+			url: '/player',
+			templateUrl: 'menu_left/template/slide_player.tpl.html',
+			// controller: 'PlayerCtrl'
 		});
 
 	}

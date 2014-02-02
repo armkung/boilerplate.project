@@ -121,7 +121,28 @@ var Logger = function() {
 					data: []
 				}
 			} else {
-				data[room].quiz.data.push(quiz);
+				// data[room].quiz.data.push(quiz);
+
+				data[room].quiz.data[quiz.question] = data[room].quiz.data[quiz.question] || {
+					question: quiz.question,
+					answer: []
+				};
+				var question = data[room].quiz.data[quiz.question];
+				question.answer[quiz.answer] = question.answer[quiz.answer] || [];
+				var answer = question.answer[quiz.answer];
+				answer.push(quiz.user);
+				// console.log(answer)
+				console.log(data[room].quiz.data)
+
+
+
+				// if (!question) {
+				// 	data[room].quiz.data[quiz.question] = {
+				// 		answer: []
+				// 	};
+				// } else {
+				// 	data[room].quiz.data[quiz.question].answer[quiz.answer].push(quiz.user)
+				// }
 			}
 		}
 	}
@@ -132,10 +153,16 @@ var Logger = function() {
 		if (data[room]) {
 			var json = JSON.stringify(data[room]);
 			var name = room == "" ? "default" : room;
-			fs.writeFile(__dirname + '/log/' + name + '.json', json, function(err) {
-				if (err) return console.log(err);
-				console.log('Save "' + room + '" Data...');
-				delete data[room];
+			var dir = __dirname + '/log/' + data[room].room.owner + "/";
+			fs.mkdir(dir, function(err) {
+				// if (err) {
+				// 	console.log('error' + err);
+				// }
+				fs.writeFile(dir + name + '.json', json, function(err) {
+					if (err) return console.log(err);
+					console.log('Save "' + room + '" Data...');
+					delete data[room];
+				});
 			});
 		}
 	}
@@ -315,7 +342,8 @@ io.sockets.on('connection', function(socket) {
 			if (room != null) {
 				var data = logger.logData[room];
 				if (data) {
-					var msg = data.msg;
+					var msg = data.msg
+					console.log("load " + msg);
 					socket.emit('send:msg', msg);
 				}
 				// console.log(getId() + " Init slide");
@@ -326,7 +354,13 @@ io.sockets.on('connection', function(socket) {
 		socket.get('roomName', function(err, room) {
 			if (room != null) {
 				socket.broadcast.to(room).emit('send:msg', data.msg);
-				logger.logMsg(data.msg);
+				socket.get('userName', function(err, user) {
+					console.log(user + " save " + data.msg);
+					logger.logMsg({
+						'emotion': data.msg,
+						'user': user
+					});
+				});
 				// console.log("Send msg : " + data.msg);
 			}
 		});
@@ -372,8 +406,10 @@ io.sockets.on('connection', function(socket) {
 			if (room != null) {
 				socket.broadcast.to(room).emit('send:quiz', data);
 				// console.log("Send quiz");
-
-				logger.logQuiz(data);
+				socket.get('userName', function(err, user) {
+					data.user = user;
+					logger.logQuiz(data);
+				});
 			}
 		});
 	});

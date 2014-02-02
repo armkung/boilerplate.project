@@ -1,5 +1,5 @@
-app.directive('chat', ["DataManager", "$http",
-	function(DataManager, $http) {
+app.directive('chat', ["DataManager", "$http", "LoginManager",
+	function(DataManager, $http, LoginManager) {
 		return {
 			restrict: 'E',
 			templateUrl: 'menu_right/template/chat.tpl.html',
@@ -17,10 +17,12 @@ app.directive('chat', ["DataManager", "$http",
 					DataManager.getData(type, function(data) {
 						if (angular.isArray(data)) {
 							angular.forEach(data, function(msg, key) {
-								scope.msgs.push(msg);
+								scope.msgs.push(msg.emotion);								
 							});
+							console.log(scope.msgs)
 						} else {
 							scope.msgs.push(data);
+							console.log(data)
 						}
 					});
 
@@ -28,10 +30,12 @@ app.directive('chat', ["DataManager", "$http",
 					scope.select = function(index) {
 						var emotion = scope.url + scope.emotions[index];
 						scope.msgs.push(emotion);
-
-						DataManager.setData(type, {
-							msg: emotion
-						});
+						// LoginManager.getUser().then(function(user) {
+							DataManager.setData(type, {
+								msg: emotion
+								// user: user.username
+							});
+						// });
 					};
 				});
 
