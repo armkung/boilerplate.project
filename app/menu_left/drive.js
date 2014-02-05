@@ -1,3 +1,14 @@
+app.directive('drivePlayer', ["$rootScope", "cfpLoadingBar", "QuizManager", "LoginManager",
+	function($rootScope, cfpLoadingBar, QuizManager, LoginManager) {
+		return {
+			restrict: 'E',
+			templateUrl: 'menu_left/template/drive_player.tpl.html',
+			link: function(scope) {
+
+			}
+		};
+	}
+]);
 app.directive('driveQuiz', ["$rootScope", "cfpLoadingBar", "QuizManager", "LoginManager",
 	function($rootScope, cfpLoadingBar, QuizManager, LoginManager) {
 		return {

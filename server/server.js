@@ -413,4 +413,19 @@ io.sockets.on('connection', function(socket) {
 			}
 		});
 	});
+
+	socket.on('list:slideshow', function(data) {
+		socket.get('roomName', function(err, room) {
+			if (room != null) {
+
+			}
+		});
+	});
+	socket.on('load:slideshow', function(data) {
+		socket.get('roomName', function(err, room) {
+			if (room != null) {
+
+			}
+		});
+	});
 });

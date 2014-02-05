@@ -8,6 +8,9 @@
 				<button class="btn btn-app btn-xs no-radius btn-light" ng-click="tab = 'quiz'" ng-show="hasQuiz">
 					Quiz
 				</button>
+				<button class="btn btn-app btn-xs no-radius btn-light" ng-click="tab = 'player'">
+					Video
+				</button>
 			</div>
 			<div class="widget-toolbar">
 				<button class="btn btn-xs btn-yellow bigger" ng-click="saveSlide()">
@@ -24,6 +27,7 @@
 		<div class="widget-body" ng-switch on="tab">
 			<drive-slide ng-switch-when="slide"></drive-slide>
 			<drive-quiz ng-switch-when="quiz"></drive-quiz>
+			<drive-player ng-switch-when="player"></drive-player>
 		</div>
 	</div> 
 </div>
