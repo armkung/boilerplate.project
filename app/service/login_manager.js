@@ -31,18 +31,18 @@ app.service('LoginManager', ["$q", "$http", "host_drupal",
 			});
 			return deferred.promise;
 		};
+
 		this.getAccess = function() {
 			return self.user.accessLevel;
 		};
-		// this.isTeacher = function(callback) {
-		// 	if (user && user.accessLevel == self.level.TEACHER) {
-		// 		callback();
-		// 	}
-		// };
-		// this.isStudent = function(callback) {
-		// 	if (user && user.accessLevel == self.level.STUDENT) {
-		// 		callback();
-		// 	}
-		// };
+
+		this.isTeacher = function() {
+			return self.user && self.user.accessLevel == self.level.TEACHER;
+
+		};
+
+		this.isStudent = function(callback) {
+			return self.user && self.user.accessLevel == self.level.STUDENT;
+		};
 	}
 ]);

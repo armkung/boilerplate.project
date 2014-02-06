@@ -196,8 +196,7 @@ app.controller('SlideCtrl', ["$scope", "$rootScope", "LoginManager", "GoogleServ
 			$scope.isStart = true;
 			$scope.isEnd = false;
 
-			// VoiceManager.init();
-			VoiceManager.start();
+			
 			$scope.nextIndex = function(isSwipe) {
 				if ($scope.tool == DrawFactory.tools.MODE || isSwipe) {
 					SlideManager.next();
@@ -209,7 +208,7 @@ app.controller('SlideCtrl', ["$scope", "$rootScope", "LoginManager", "GoogleServ
 				}
 			};
 			$scope.prevIndex = function(isSwipe) {
-				if ($scope.tool == DrawFactory.tools.MODE || isSwipe) {
+				if (!VoiceManager.isRecord() && ($scope.tool == DrawFactory.tools.MODE || isSwipe)) {
 					SlideManager.prev();
 					$scope.isStart = SlideManager.isStart();
 					$scope.isEnd = SlideManager.isEnd();

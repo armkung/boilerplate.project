@@ -13,10 +13,11 @@ app.controller('LoginCtrl', ["$scope", "$state", "GoogleService", "LoginManager"
 	}
 ]);
 
-app.controller('MenuLeftCtrl', ["$scope", "$sce", "$timeout", "$window", "Room", "LoginManager",
-	function($scope, $sce, $timeout, $window, Room, LoginManager) {
+app.controller('MenuLeftCtrl', ["$scope", "$sce", "$timeout", "$window", "Room", "LoginManager", "VoiceManager",
+	function($scope, $sce, $timeout, $window, Room, LoginManager, VoiceManager) {
 		LoginManager.getUser().then(function(user) {
 			$scope.userName = user.username;
+			$scope.isTeacher = LoginManager.isTeacher();
 		});
 		$scope.room = Room;
 		$scope.$watch('room.room', function() {
@@ -27,6 +28,10 @@ app.controller('MenuLeftCtrl', ["$scope", "$sce", "$timeout", "$window", "Room",
 			$timeout(function() {
 				$window.location.reload();
 			}, 1000);
+		};
+		$scope.record = function() {
+			VoiceManager.init();
+			VoiceManager.start();
 		};
 	}
 ]);

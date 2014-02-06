@@ -1,10 +1,29 @@
-app.directive('drivePlayer', ["$rootScope", "cfpLoadingBar", "QuizManager", "LoginManager",
-	function($rootScope, cfpLoadingBar, QuizManager, LoginManager) {
+app.directive('drivePlayer', ["$rootScope", "cfpLoadingBar", "DataManager", "PlayerManager",
+	function($rootScope, cfpLoadingBar, DataManager, PlayerManager) {
 		return {
 			restrict: 'E',
 			templateUrl: 'menu_left/template/drive_player.tpl.html',
 			link: function(scope) {
+				var type = "slideshow";
+				scope.datas = []
+				DataManager.loadData(type, null, function(data) {
+					angular.forEach(data.list, function(name, key) {
+						scope.datas.push({
+							title: name
+						});
+					});
+					console.log(scope.datas);
+				})
+				$rootScope.$watch('playerSelected', function() {
+					scope.selected = $rootScope.playerSelected;
+				});
+				scope.select = function(index) {
+					$rootScope.playerSelected = index;
 
+					DataManager.loadData(type, scope.datas[index].title, function(data) {
+						PlayerManager.setData(data.n, data.path, scope.datas[index].title);
+					})
+				};
 			}
 		};
 	}

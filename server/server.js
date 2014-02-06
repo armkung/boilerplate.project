@@ -1,3 +1,4 @@
+var config = require('./module/config.js');
 var formidable = require('formidable');
 var http = require('http');
 var util = require('util');
@@ -8,7 +9,7 @@ var server = http.createServer().listen(8080);
 server.on('request', function(request, response) {
 	var form = new formidable.IncomingForm()
 	form.encoding = 'utf8';
-	form.uploadDir = __dirname + '/audio';
+	form.uploadDir = config.audio_path;
 	form.keepExtensions = true;
 	form.parse(request);
 
@@ -27,8 +28,7 @@ server.on('request', function(request, response) {
 
 
 	form.on('file', function(field, file) {
-		console.log(file)
-		fs.rename(file.path, form.uploadDir + '/' + file.name, function(err) {
+		fs.rename(file.path, form.uploadDir + file.name, function(err) {
 			if (err) {
 				console.log("error");
 			} else {
@@ -153,7 +153,7 @@ var Logger = function() {
 		if (data[room]) {
 			var json = JSON.stringify(data[room]);
 			var name = room == "" ? "default" : room;
-			var dir = __dirname + '/log/' + data[room].room.owner + "/";
+			var dir = config.log_path + data[room].room.owner + "/";
 			fs.mkdir(dir, function(err) {
 				// if (err) {
 				// 	console.log('error' + err);
@@ -169,7 +169,7 @@ var Logger = function() {
 
 	this.load = function(room) {
 		var name = room == "" ? "default" : room;
-		return fs.readFileSync(__dirname + '/log/' + name + '.json', 'utf8');
+		return fs.readFileSync(config.log_path + name + '.json', 'utf8');
 	}
 
 }
@@ -421,11 +421,36 @@ io.sockets.on('connection', function(socket) {
 			}
 		});
 	});
-	socket.on('load:slideshow', function(data) {
-		socket.get('roomName', function(err, room) {
-			if (room != null) {
+	socket.on('load:slideshow', function(data, callback) {
+		if (data != null) {
+			fs.readdir(config.audio_path + data, function(err, files) {
+				if (err) throw err;
+				var result = {
+					path: config.audio,
+					n: files.length / 2
+				};
+				callback(result);
+			});
+		} else {
+			fs.readdir(config.audio_path, function(err, files) {
+				if (err) throw err;
+				var result = {
+					list: []
+				};
+				var total = files.length;
+				// var i = 1;
+				files.forEach(function(file, i) {
+					fs.lstat(config.audio_path + file, function(err, stats) {
+						if (stats.isDirectory()) {
+							result.list.push(file);
+						}
+						if (i >= total - 1) {
+							callback(result);
+						}
+					});
 
-			}
-		});
+				});
+			});
+		}
 	});
 });

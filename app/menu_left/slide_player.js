@@ -1,5 +1,5 @@
-app.directive('slidePlayer', ["host_audio",
-	function(host_audio) {
+app.directive('slidePlayer', ["PlayerManager",
+	function(PlayerManager) {
 		return {
 			restrict: 'E',
 			template: '<div class="fotorama"' +
@@ -10,46 +10,53 @@ app.directive('slidePlayer', ["host_audio",
 				'data-nav="thumbs">' +
 				'</div>',
 			link: function(scope, iElement, iAttrs) {
-				var IMAGE_TYPE = "png";
-				var AUDIO_TYPE = ["wav"];
 
-				var names = ['test', 'test'];
-				var url = "http://localhost/wbl/server/audio/";
-				// var url = host_audio;
+
 				var player = $('.fotorama');
 				var fotorama = player.fotorama().data('fotorama');
-				var audio, list = [];
-
 				var control = $('#control')[0];
-				angular.forEach(names, function(name, key) {
-					var path = url + name;
-					fotorama.push({
-						img: path + "." + IMAGE_TYPE,
-						thumb: path + "." + IMAGE_TYPE
-					});
 
-					list.push(new buzz.sound(path, {
-						document: control,
-						formats: AUDIO_TYPE
-					}));
+				var list = [];
+				var datas = PlayerManager.getData(control);
+				angular.forEach(datas, function(data, key) {
+					fotorama.push(data.slide);
+					list.push(data.audio);
+				});
+
+				// function setPlayer(index, isPlay) {
+				// 	audio = list[index];
+				// 	if (audio) {
+				// 		audio.unbind("ended");
+				// 		audio.stop();
+				// 		audio.load();
+				// 	}
+				// 	audio.bindOnce("ended", function() {
+				// 		if (index < list.length - 1) {
+				// 			fotorama.show('>');
+				// 		}
+				// 	})
+				// 	if (isPlay) {
+				// 		audio.play();
+				// 	}
+				// }
+
+				// setPlayer(0, false);
+				PlayerManager.setAudio(function(audio) {
+					fotorama.show('>');
 				});
 				player.on('fotorama:ready fotorama:showend', function(e, fotorama, extra) {
 					var index = fotorama.activeFrame.i - 1;
-					console.log('index', index);
+					if (PlayerManager.index != index || PlayerManager.index == 0) {
+						console.log('index', index);
+						// setPlayer(index, true);
+						list[PlayerManager.index].stop();
+						list[PlayerManager.index].load();
 
-					audio = list[index];
-					if (audio) {
-						audio.unbind("ended");
-						audio.stop();
-						audio.load();
+						PlayerManager.index = index;
+						list[index].play();
 					}
-
-					audio.play().bindOnce("ended", function() {
-						if (index < list.length - 1) {
-							fotorama.show('>');
-						}
-					})
 				});
+
 			}
 		};
 	}

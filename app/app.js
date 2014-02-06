@@ -3,8 +3,8 @@ var app = angular.module('socket', ['templates-app', 'templates-common',
 	'colorpicker.module', 'highcharts-ng'
 ]);
 
-app.constant('host_audio', 'http://science.kmutt.ac.th/wbl/server/audio');
-app.constant('host_node', 'http://science.kmutt.ac.th:8080');
+app.constant('host_server', 'http://localhost/wbl/server');
+app.constant('host_node', 'http://localhost:8080');
 app.constant('host_drupal', 'http://science.kmutt.ac.th/drupal');
 
 app.config(["cfpLoadingBarProvider",
@@ -163,6 +163,10 @@ app.factory("DataManager", ["Canvas", "Socket",
 
 			},
 			loadData: function(type, data, callback) {
+				Socket.remove("load:" + type);
+				Socket.emit("load:" + type, data, function(data) {
+					callback(data);
+				});
 				// Socket.remove("load:" + type);
 				// Socket.emit("load:" + type, data, function(data) {
 				// 	var obj = [];
