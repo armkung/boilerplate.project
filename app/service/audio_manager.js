@@ -7,6 +7,7 @@ app.service("VoiceManager", ["$q", "$rootScope", "host_node",
 		var deferred = $q.defer();
 		var unbind;
 		var isRecord = false;
+		this.n = 0;
 		this.init = function() {
 			navigator.getMedia = (navigator.getUserMedia ||
 				navigator.webkitGetUserMedia ||
@@ -42,6 +43,7 @@ app.service("VoiceManager", ["$q", "$rootScope", "host_node",
 		}
 		this.start = function() {
 			if (recorder) {
+				self.n++;
 				recorder.clear();
 				recorder.record()
 				isRecord = true;

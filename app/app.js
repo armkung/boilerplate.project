@@ -19,7 +19,7 @@ app.config(["$stateProvider", "$urlRouterProvider",
 		$stateProvider.state('main', {
 			url: "/main",
 			templateUrl: 'main/template/main.tpl.html',
-			controller: 'MainCtrl'
+			// controller: 'MainCtrl'
 		}).state('main.draw', {
 			url: '/draw',
 			templateUrl: 'menu_left/template/draw_pad.tpl.html',

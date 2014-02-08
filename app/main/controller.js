@@ -13,8 +13,8 @@ app.controller('LoginCtrl', ["$scope", "$state", "GoogleService", "LoginManager"
 	}
 ]);
 
-app.controller('MenuLeftCtrl', ["$scope", "$sce", "$timeout", "$window", "Room", "LoginManager", "VoiceManager",
-	function($scope, $sce, $timeout, $window, Room, LoginManager, VoiceManager) {
+app.controller('MenuLeftCtrl', ["$scope", "$sce", "$timeout", "$window", "Room", "LoginManager", "VoiceManager", "SlideManager", "PDFService", "Canvas", "DrawManager",
+	function($scope, $sce, $timeout, $window, Room, LoginManager, VoiceManager, SlideManager, PDFService, Canvas, DrawManager) {
 		LoginManager.getUser().then(function(user) {
 			$scope.userName = user.username;
 			$scope.isTeacher = LoginManager.isTeacher();
@@ -29,23 +29,59 @@ app.controller('MenuLeftCtrl', ["$scope", "$sce", "$timeout", "$window", "Room",
 				$window.location.reload();
 			}, 1000);
 		};
+		$scope.isRecord = false;
 		$scope.record = function() {
-			VoiceManager.init();
-			VoiceManager.start();
+			$scope.isRecord = !$scope.isRecord;
+			if ($scope.isRecord) {
+				VoiceManager.init();
+				VoiceManager.start();
+			} else {
+				$scope.$broadcast('save_slide', {
+					type: 'image',
+					callback: function(data) {
+						console.log(data);
+					}
+				});
+			}
 		};
 	}
 ]);
-app.controller('MainCtrl', function($scope, $state, $rootScope, DrawFactory) {
-	// var isSwipe = true;
-	// $scope.isShow = false;
-	// $scope.checkSwipe = function(isShow) {
-	// 	if (isSwipe) {
-	// 		$scope.isShow = isShow;
-	// 	}
-	// };
-	// $rootScope.$on('tool', function(e, tool) {
-	// 	isSwipe = tool == DrawFactory.tools.MODE;
-	// });
+app.controller('MainCtrl', function($scope, Canvas, DrawManager, SlideManager, PDFService) {
+	function loadCanvas(name) {
+		var id = "data";
+		var cs = Canvas.newCanvas(id, Canvas.width, Canvas.height);
+		DrawManager.getObject(cs, name);
+		return cs;
+	}
+	$scope.$on('save_slide', function(e, obj) {
+		var id = SlideManager.slide;
+		if (id) {
+			PDFService.getPdf(id).then(function(pdf) {
+
+				var n = obj.n || pdf.pdfInfo.numPages;
+				var mirrors = [];
+				for (var i = 1; i <= n; i++) {
+					var cs = loadCanvas(Canvas.types.MIRROR + "-" + i);
+					mirrors.push(cs);
+				}
+
+				PDFService.init(mirrors);
+				if (obj.type == 'image') {
+					PDFService.renderImage(pdf, n, function(data) {
+						if (obj.callback) {
+							obj.callback(data);
+						}
+					});
+				} else {
+					PDFService.renderPdf(pdf, n).then(function(data) {
+						if (obj.callback) {
+							obj.callback(data);
+						}
+					});
+				}
+			});
+		}
+	});
 });
 app.controller('AccessCtrl', ["$state", "LoginManager",
 	function($state, LoginManager) {

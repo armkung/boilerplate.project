@@ -50,7 +50,41 @@ app.service('PDFService', ["$q", "$timeout", "GoogleService",
 			var tmp = page.getViewport(1);
 			return w < h ? w / tmp.width : h / tmp.height;
 		}
-		this.render = function(pdf, n) {
+		this.renderImage = function(pdf, n, callback) {
+			var deferred = $q.defer();
+			var render = function() {
+				pdf.getPage(i).then(function(page) {
+					var drawCanvas = mirrors[i - 1];
+					if (!scale) {
+						scale = setScale(page);
+					}
+					var view = page.getViewport(scale);
+
+					slideCanvas.width = view.width;
+					slideCanvas.height = view.height;
+
+					renderContext.viewport = view;
+
+					var w = view.width,
+						h = view.height;
+
+					page.render(renderContext).then(function() {
+						callback(slideCanvas.toDataURL());
+						if (i == n) {
+							// deferred.resolve();
+							i = 1;
+							return;
+						} else {
+							i++;
+							render();
+						}
+					});
+				});
+			};
+			render();
+			// return deferred.promise;
+		};
+		this.renderPdf = function(pdf, n) {
 			var deferred = $q.defer();
 			var render = function() {
 				pdf.getPage(i).then(function(page) {
@@ -93,6 +127,7 @@ app.service('PDFService', ["$q", "$timeout", "GoogleService",
 
 							drawCanvas.remove(img);
 							if (i == n) {
+								i = 1;
 								deferred.resolve(self.save());
 								return;
 								// return self.save();
