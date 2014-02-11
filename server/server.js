@@ -28,13 +28,25 @@ server.on('request', function(request, response) {
 
 
 	form.on('file', function(field, file) {
-		fs.rename(file.path, form.uploadDir + file.name, function(err) {
-			if (err) {
-				console.log("error");
-			} else {
-				console.log("success");
-			}
+		var path = form.uploadDir + field;
+		console.log(path);
+		fs.mkdir(path, function(e) {
+			fs.rename(file.path, path + '/' + file.name, function(err) {
+				if (err) {
+					console.log("error");
+				} else {
+					console.log("success");
+				}
+			});
 		});
+		// fs.rename(file.path, form.uploadDir + file.name, function(err) {
+		// 	if (err) {
+		// 		console.log("error");
+		// 	} else {
+		// 		console.log("success");
+		// 	}
+		// });
+
 		// fs.readFile(file.path, function(err, data) {
 		// 	fs.writeFile(__dirname + '/audio' +
 		// 		file.name,

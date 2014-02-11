@@ -42,7 +42,7 @@ app.directive('slidePlayer', ["PlayerManager",
 
 				// setPlayer(0, false);
 				PlayerManager.setAudio(function(audio) {
-					fotorama.show('>');
+					fotorama.show(1);
 				});
 				player.on('fotorama:ready fotorama:showend', function(e, fotorama, extra) {
 					var index = fotorama.activeFrame.i - 1;
@@ -54,6 +54,9 @@ app.directive('slidePlayer', ["PlayerManager",
 
 						PlayerManager.index = index;
 						list[index].play();
+						PlayerManager.setAudio(function(audio) {
+							fotorama.show(index + 1);
+						});
 					}
 				});
 

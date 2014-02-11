@@ -69,15 +69,23 @@ app.service('PDFService', ["$q", "$timeout", "GoogleService",
 						h = view.height;
 
 					page.render(renderContext).then(function() {
-						callback(slideCanvas.toDataURL());
-						if (i == n) {
-							// deferred.resolve();
-							i = 1;
-							return;
-						} else {
-							i++;
-							render();
-						}
+						fabric.Image.fromURL(slideCanvas.toDataURL(), function(img) {
+							drawCanvas.add(img);
+							img.center();
+							img.setCoords();
+							drawCanvas.sendToBack(img);
+							drawCanvas.renderAll();
+
+							callback(drawCanvas.toDataURL(), i);
+							if (i == n) {
+								// deferred.resolve();
+								i = 1;
+								return;
+							} else {
+								i++;
+								render();
+							}
+						});
 					});
 				});
 			};

@@ -13,8 +13,8 @@ app.controller('LoginCtrl', ["$scope", "$state", "GoogleService", "LoginManager"
 	}
 ]);
 
-app.controller('MenuLeftCtrl', ["$scope", "$sce", "$timeout", "$window", "Room", "LoginManager", "VoiceManager", "SlideManager", "PDFService", "Canvas", "DrawManager",
-	function($scope, $sce, $timeout, $window, Room, LoginManager, VoiceManager, SlideManager, PDFService, Canvas, DrawManager) {
+app.controller('MenuLeftCtrl', ["$scope", "$sce", "$timeout", "$window", "Room", "LoginManager", "VoiceManager", "SlideManager", "host_node",
+	function($scope, $sce, $timeout, $window, Room, LoginManager, VoiceManager, SlideManager, host_node) {
 		LoginManager.getUser().then(function(user) {
 			$scope.userName = user.username;
 			$scope.isTeacher = LoginManager.isTeacher();
@@ -36,10 +36,40 @@ app.controller('MenuLeftCtrl', ["$scope", "$sce", "$timeout", "$window", "Room",
 				VoiceManager.init();
 				VoiceManager.start();
 			} else {
+				function dataURItoBlob(dataURI) {
+					var byteString = atob(dataURI.split(',')[1]);
+					var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+					var ab = new ArrayBuffer(byteString.length);
+					var ia = new Uint8Array(ab);
+					for (var i = 0; i < byteString.length; i++) {
+						ia[i] = byteString.charCodeAt(i);
+					}
+					return new Blob([ab], {
+						type: mimeString
+					});
+				}
+				VoiceManager.stop(SlideManager.index);
 				$scope.$broadcast('save_slide', {
 					type: 'image',
-					callback: function(data) {
-						console.log(data);
+					n: SlideManager.index,
+					callback: function(data, index) {
+						var blob = dataURItoBlob(data);
+						console.log(blob);
+						var form = new FormData();
+						form.append(Room.room, blob, index + ".png");
+						$.ajax({
+							url: host_node,
+							type: "POST",
+							data: form,
+							processData: false,
+							contentType: false,
+							success: function(response) {
+								console.log(response);
+							},
+							error: function(jqXHR, textStatus, errorMessage) {
+								console.log(errorMessage);
+							}
+						});
 					}
 				});
 			}
@@ -67,9 +97,9 @@ app.controller('MainCtrl', function($scope, Canvas, DrawManager, SlideManager, P
 
 				PDFService.init(mirrors);
 				if (obj.type == 'image') {
-					PDFService.renderImage(pdf, n, function(data) {
+					PDFService.renderImage(pdf, n, function(data, index) {
 						if (obj.callback) {
-							obj.callback(data);
+							obj.callback(data, index);
 						}
 					});
 				} else {

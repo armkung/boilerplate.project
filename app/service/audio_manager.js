@@ -1,13 +1,12 @@
-app.service("VoiceManager", ["$q", "$rootScope", "host_node",
+app.service("VoiceManager", ["$q", "$rootScope", "Room", "host_node",
 
-	function($q, $rootScope, host_node) {
+	function($q, $rootScope, Room, host_node) {
 		var self = this;
 		var recorder;
 		var audioContext;
 		var deferred = $q.defer();
 		var unbind;
 		var isRecord = false;
-		this.n = 0;
 		this.init = function() {
 			navigator.getMedia = (navigator.getUserMedia ||
 				navigator.webkitGetUserMedia ||
@@ -21,10 +20,10 @@ app.service("VoiceManager", ["$q", "$rootScope", "host_node",
 					var mediaStreamSource = audioContext.createMediaStreamSource(stream);
 					// mediaStreamSource.connect(audioContext.destination);
 
-					var zeroGain = audioContext.createGain();
-					zeroGain.gain.value = 0;
-					mediaStreamSource.connect(zeroGain);
-					zeroGain.connect(audioContext.destination);
+					// var zeroGain = audioContext.createGain();
+					// zeroGain.gain.value = 0;
+					// mediaStreamSource.connect(zeroGain);
+					// zeroGain.connect(audioContext.destination);
 
 					recorder = new Recorder(mediaStreamSource, {
 						workerPath: "vendor/Recorderjs/recorderWorker.js"
@@ -38,12 +37,11 @@ app.service("VoiceManager", ["$q", "$rootScope", "host_node",
 					console.log(err);
 				});
 		}
-		this.isRecord = function(){
+		this.isRecord = function() {
 			return isRecord;
 		}
 		this.start = function() {
 			if (recorder) {
-				self.n++;
 				recorder.clear();
 				recorder.record()
 				isRecord = true;
@@ -75,9 +73,8 @@ app.service("VoiceManager", ["$q", "$rootScope", "host_node",
 					// console.log($("#recorded-audio"));
 					// console.log(url);
 
-
 					var form = new FormData();
-					form.append("audio", wav, index + ".wav");
+					form.append(Room.room, wav, index + ".wav");
 					$.ajax({
 						url: host_node,
 						type: "POST",
