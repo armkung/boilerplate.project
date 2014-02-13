@@ -38,7 +38,6 @@ app.service('LoginManager', ["$q", "$http", "host_drupal",
 
 		this.isTeacher = function() {
 			return self.user && self.user.accessLevel == self.level.TEACHER;
-
 		};
 
 		this.isStudent = function(callback) {

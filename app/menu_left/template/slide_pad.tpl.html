@@ -9,7 +9,7 @@
 			<div class="control-area" ng-show="isShow" ng-click="prevIndex(false)"></div>
 			<div class="control-area" ng-show="isShow" ng-click="nextIndex(false)"></div>
 			<div class="mirror">
-				<canvas id="mirror-1" draw-pad text="{{text}}" send="isSend">
+				<canvas id="{{id}}" draw-pad text="{{text}}" send="isSend">
 				</canvas>
 				<input type="text" id="textbox" ng-model="text">
 			</div>

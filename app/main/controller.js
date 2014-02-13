@@ -13,8 +13,8 @@ app.controller('LoginCtrl', ["$scope", "$state", "GoogleService", "LoginManager"
 	}
 ]);
 
-app.controller('MenuLeftCtrl', ["$scope", "$sce", "$timeout", "$window", "Room", "LoginManager", "VoiceManager", "SlideManager", "host_node",
-	function($scope, $sce, $timeout, $window, Room, LoginManager, VoiceManager, SlideManager, host_node) {
+app.controller('MenuLeftCtrl', ["$scope", "$sce", "$timeout", "$window", "Room", "LoginManager", "VoiceManager", "SlideManager", "host_node", "cfpLoadingBar",
+	function($scope, $sce, $timeout, $window, Room, LoginManager, VoiceManager, SlideManager, host_node, cfpLoadingBar) {
 		LoginManager.getUser().then(function(user) {
 			$scope.userName = user.username;
 			$scope.isTeacher = LoginManager.isTeacher();
@@ -29,10 +29,13 @@ app.controller('MenuLeftCtrl', ["$scope", "$sce", "$timeout", "$window", "Room",
 				$window.location.reload();
 			}, 1000);
 		};
-		$scope.isRecord = false;
+		$scope.$watch(function() {
+			return VoiceManager.isRecord();
+		}, function(newV) {
+			$scope.isRecord = newV;
+		})
 		$scope.record = function() {
-			$scope.isRecord = !$scope.isRecord;
-			if ($scope.isRecord) {
+			if (!$scope.isRecord) {
 				VoiceManager.init();
 				VoiceManager.start();
 			} else {
@@ -49,12 +52,13 @@ app.controller('MenuLeftCtrl', ["$scope", "$sce", "$timeout", "$window", "Room",
 					});
 				}
 				VoiceManager.stop(SlideManager.index);
+				SlideManager.index++;
+				cfpLoadingBar.start();
 				$scope.$broadcast('save_slide', {
 					type: 'image',
 					n: SlideManager.index,
 					callback: function(data, index) {
 						var blob = dataURItoBlob(data);
-						console.log(blob);
 						var form = new FormData();
 						form.append(Room.room, blob, index + ".png");
 						$.ajax({
@@ -64,10 +68,12 @@ app.controller('MenuLeftCtrl', ["$scope", "$sce", "$timeout", "$window", "Room",
 							processData: false,
 							contentType: false,
 							success: function(response) {
-								console.log(response);
+								// console.log(response);
+								cfpLoadingBar.complete();
 							},
 							error: function(jqXHR, textStatus, errorMessage) {
 								console.log(errorMessage);
+								cfpLoadingBar.complete();
 							}
 						});
 					}
@@ -76,43 +82,45 @@ app.controller('MenuLeftCtrl', ["$scope", "$sce", "$timeout", "$window", "Room",
 		};
 	}
 ]);
-app.controller('MainCtrl', function($scope, Canvas, DrawManager, SlideManager, PDFService) {
-	function loadCanvas(name) {
-		var id = "data";
-		var cs = Canvas.newCanvas(id, Canvas.width, Canvas.height);
-		DrawManager.getObject(cs, name);
-		return cs;
-	}
-	$scope.$on('save_slide', function(e, obj) {
-		var id = SlideManager.slide;
-		if (id) {
-			PDFService.getPdf(id).then(function(pdf) {
-
-				var n = obj.n || pdf.pdfInfo.numPages;
-				var mirrors = [];
-				for (var i = 1; i <= n; i++) {
-					var cs = loadCanvas(Canvas.types.MIRROR + "-" + i);
-					mirrors.push(cs);
-				}
-
-				PDFService.init(mirrors);
-				if (obj.type == 'image') {
-					PDFService.renderImage(pdf, n, function(data, index) {
-						if (obj.callback) {
-							obj.callback(data, index);
-						}
-					});
-				} else {
-					PDFService.renderPdf(pdf, n).then(function(data) {
-						if (obj.callback) {
-							obj.callback(data);
-						}
-					});
-				}
-			});
+app.controller('MainCtrl', ["$scope", "Canvas", "DrawManager", "SlideManager", "PDFService",
+	function($scope, Canvas, DrawManager, SlideManager, PDFService) {
+		function loadCanvas(name) {
+			var id = "data";
+			var cs = Canvas.newCanvas(id, Canvas.width, Canvas.height);
+			DrawManager.getObject(cs, name);
+			return cs;
 		}
-	});
-});
+		$scope.$on('save_slide', function(e, obj) {
+			var id = SlideManager.slide;
+			if (id) {
+				PDFService.getPdf(id).then(function(pdf) {
+
+					var n = obj.n || pdf.pdfInfo.numPages;
+					var mirrors = [];
+					for (var i = 1; i <= n; i++) {
+						var cs = loadCanvas(Canvas.types.MIRROR + "-" + i);
+						mirrors.push(cs);
+					}
+
+					PDFService.init(mirrors);
+					if (obj.type == 'image') {
+						PDFService.renderImage(pdf, n, function(data, index) {
+							if (obj.callback) {
+								obj.callback(data, index);
+							}
+						});
+					} else {
+						PDFService.renderPdf(pdf, n).then(function(data) {
+							if (obj.callback) {
+								obj.callback(data);
+							}
+						});
+					}
+				});
+			}
+		});
+	}
+]);
 app.controller('AccessCtrl', ["$state", "LoginManager",
 	function($state, LoginManager) {
 		var route = $state.current.name;

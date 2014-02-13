@@ -8,34 +8,36 @@ app.service("VoiceManager", ["$q", "$rootScope", "Room", "host_node",
 		var unbind;
 		var isRecord = false;
 		this.init = function() {
-			navigator.getMedia = (navigator.getUserMedia ||
-				navigator.webkitGetUserMedia ||
-				navigator.mozGetUserMedia ||
-				navigator.msGetUserMedia);
-			navigator.getMedia({
-					"audio": true,
-					"video": false
-				}, function(stream) {
-					audioContext = new webkitAudioContext();
-					var mediaStreamSource = audioContext.createMediaStreamSource(stream);
-					// mediaStreamSource.connect(audioContext.destination);
+			if (angular.isUndefined(recorder)) {
+				navigator.getMedia = (navigator.getUserMedia ||
+					navigator.webkitGetUserMedia ||
+					navigator.mozGetUserMedia ||
+					navigator.msGetUserMedia);
+				navigator.getMedia({
+						"audio": true,
+						"video": false
+					}, function(stream) {
+						audioContext = new webkitAudioContext();
+						var mediaStreamSource = audioContext.createMediaStreamSource(stream);
+						// mediaStreamSource.connect(audioContext.destination);
 
-					// var zeroGain = audioContext.createGain();
-					// zeroGain.gain.value = 0;
-					// mediaStreamSource.connect(zeroGain);
-					// zeroGain.connect(audioContext.destination);
+						// var zeroGain = audioContext.createGain();
+						// zeroGain.gain.value = 0;
+						// mediaStreamSource.connect(zeroGain);
+						// zeroGain.connect(audioContext.destination);
 
-					recorder = new Recorder(mediaStreamSource, {
-						workerPath: "vendor/Recorderjs/recorderWorker.js"
+						recorder = new Recorder(mediaStreamSource, {
+							workerPath: "vendor/Recorderjs/recorderWorker.js"
+						});
+						$rootScope.$broadcast('voice', recorder);
+
+						isRecord = true;
+					},
+					function(err) {
+						isRecord = false;
+						console.log(err);
 					});
-					$rootScope.$broadcast('voice', recorder);
-
-					isRecord = true;
-				},
-				function(err) {
-					isRecord = false;
-					console.log(err);
-				});
+			}
 		}
 		this.isRecord = function() {
 			return isRecord;
@@ -53,7 +55,7 @@ app.service("VoiceManager", ["$q", "$rootScope", "Room", "host_node",
 					recorder = rc;
 					recorder.clear();
 					recorder.record()
-					isRecord = true;
+					// isRecord = true;
 				});
 
 			}
@@ -74,6 +76,9 @@ app.service("VoiceManager", ["$q", "$rootScope", "Room", "host_node",
 					// console.log(url);
 
 					var form = new FormData();
+					if (index == 1) {
+						form.append("init", Room.room);
+					}
 					form.append(Room.room, wav, index + ".wav");
 					$.ajax({
 						url: host_node,

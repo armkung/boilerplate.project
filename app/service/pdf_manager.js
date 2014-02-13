@@ -76,7 +76,12 @@ app.service('PDFService', ["$q", "$timeout", "GoogleService",
 							drawCanvas.sendToBack(img);
 							drawCanvas.renderAll();
 
-							callback(drawCanvas.toDataURL(), i);
+							callback(drawCanvas.toDataURL({
+								top: img.getTop(),
+								left: img.getLeft(),
+								width: img.getWidth(),
+								height: img.getHeight()
+							}), i);
 							if (i == n) {
 								// deferred.resolve();
 								i = 1;

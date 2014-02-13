@@ -19,10 +19,8 @@ app.directive('chat', ["DataManager", "$http", "LoginManager",
 							angular.forEach(data, function(msg, key) {
 								scope.msgs.push(msg.emotion);								
 							});
-							console.log(scope.msgs)
 						} else {
 							scope.msgs.push(data);
-							console.log(data)
 						}
 					});
 

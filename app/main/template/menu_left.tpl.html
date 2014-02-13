@@ -17,7 +17,7 @@
 			<a class="quiz_page red" ui-sref="main.quiz"></a>
 		</li>
 		<li class="nav-tab">
-			<a class="quiz_page red" ui-sref="main.player"></a>
+			<a class="player_page grey" ui-sref="main.player"></a>
 		</li>
 	</ul>
 <!-- 		<ul class="nav ace-nav">
@@ -30,11 +30,12 @@
 	</div>
 	<div class="navbar-header pull-right white bigger-120">
 		<!-- 		<span class="align-middle"><input type="button" class="btn quiz_page" style="background-color: rgba(255, 255, 255, 0);"></span> -->
-
-			<div class="v-line btn inline nav-tab" ng-show="isTeacher" ng-click="record()">
-				<i class="icon-off no-margin"></i>
+		<span ng-show="isTeacher">
+			<div class="v-line btn btn-inverse inline nav-tab" ng-click="record()">
+				<i class="no-margin" style="color:red;" ng-class="{'icon-pause': isRecord,'icon-circle': !isRecord}"></i>
 				<!-- <span class="bigger-110">logout</span> -->
 			</div>
+		</span>
 
 		<span class="align-middle">{{roomName}}</span>
 		<span class="v-line align-middle"></span>

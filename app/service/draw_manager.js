@@ -53,9 +53,10 @@ app.service("DrawManager", ["Canvas", "$rootScope",
 			};
 		}
 		this.init = function(name) {
-			Canvas.init(name);
-			Canvas.getCanvas().then(function(cs) {
-				canvas = cs;
+			canvas = Canvas.init(name);
+			// Canvas.init(name);
+			// Canvas.getCanvas().then(function(cs) {
+			// 	canvas = cs;
 				canvas.selection = false;
 				canvas.defaultCursor = "crosshair";
 				canvas.on("object:selected", function(e) {
@@ -69,7 +70,7 @@ app.service("DrawManager", ["Canvas", "$rootScope",
 					obj.set('hasRotatingPoint', false);
 				});
 				self.newObject(name);
-			});
+			// });
 		};
 		this.newObject = function(name) {
 			id = name;

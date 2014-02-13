@@ -16,7 +16,7 @@ server.on('request', function(request, response) {
 	response.writeHead(200, {
 		'Content-Type': 'text/plain',
 		'Access-Control-Allow-Origin': '*',
-		'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE'
+		'Access-Control-Allow-Methods': 'GET,POST'
 	});
 
 	form.on('error', function(err) {
@@ -26,16 +26,32 @@ server.on('request', function(request, response) {
 		response.end('error:\n\n' + util.inspect(err));
 	});
 
+	form.on('field', function(field, value) {
+		if (field == "init") {
+			var path = form.uploadDir + value;
 
+			function removeDir(path) {
+				if (fs.existsSync(path)) {
+					fs.readdirSync(path).forEach(function(file, index) {
+						var curPath = path + "/" + file;
+						if (fs.statSync(curPath).isDirectory()) {
+							removeDir(curPath);
+						} else {
+							fs.unlinkSync(curPath);
+						}
+					});
+					fs.rmdirSync(path);
+				}
+			};
+			removeDir(path);
+		}
+	});
 	form.on('file', function(field, file) {
 		var path = form.uploadDir + field;
-		console.log(path);
 		fs.mkdir(path, function(e) {
 			fs.rename(file.path, path + '/' + file.name, function(err) {
 				if (err) {
-					console.log("error");
-				} else {
-					console.log("success");
+					console.log("error " + err);
 				}
 			});
 		});
@@ -130,31 +146,26 @@ var Logger = function() {
 			if (quiz.node) {
 				data[room].quiz = {
 					node: quiz.node,
-					data: []
+					data: {}
 				}
 			} else {
 				// data[room].quiz.data.push(quiz);
 
-				data[room].quiz.data[quiz.question] = data[room].quiz.data[quiz.question] || {
-					question: quiz.question,
-					answer: []
-				};
-				var question = data[room].quiz.data[quiz.question];
-				question.answer[quiz.answer] = question.answer[quiz.answer] || [];
-				var answer = question.answer[quiz.answer];
-				answer.push(quiz.user);
-				// console.log(answer)
-				console.log(data[room].quiz.data)
+				// data[room].quiz.data[quiz.question] = data[room].quiz.data[quiz.question] || {
+				// 	question: quiz.question,
+				// 	answer: []
+				// };
+				// var question = data[room].quiz.data[quiz.question];
+				// question.answer[quiz.answer] = question.answer[quiz.answer] || [];
+				// var answer = question.answer[quiz.answer];
+				// answer.push(quiz.user);
+				// // console.log(answer)
+				// console.log(data[room].quiz.data)
 
-
-
-				// if (!question) {
-				// 	data[room].quiz.data[quiz.question] = {
-				// 		answer: []
-				// 	};
-				// } else {
-				// 	data[room].quiz.data[quiz.question].answer[quiz.answer].push(quiz.user)
-				// }
+				data[room].quiz.data[quiz.user] = data[room].quiz.data[quiz.user] || [];
+				var user = data[room].quiz.data[quiz.user];
+				user[quiz.question] = quiz.answer + 1;
+				// console.log(user);
 			}
 		}
 	}
@@ -426,13 +437,6 @@ io.sockets.on('connection', function(socket) {
 		});
 	});
 
-	socket.on('list:slideshow', function(data) {
-		socket.get('roomName', function(err, room) {
-			if (room != null) {
-
-			}
-		});
-	});
 	socket.on('load:slideshow', function(data, callback) {
 		if (data != null) {
 			fs.readdir(config.audio_path + data, function(err, files) {
@@ -450,13 +454,12 @@ io.sockets.on('connection', function(socket) {
 					list: []
 				};
 				var total = files.length;
-				// var i = 1;
-				files.forEach(function(file, i) {
+				files.forEach(function(file, index) {
 					fs.lstat(config.audio_path + file, function(err, stats) {
 						if (stats.isDirectory()) {
 							result.list.push(file);
 						}
-						if (i >= total - 1) {
+						if (index >= total - 1) {
 							callback(result);
 						}
 					});
