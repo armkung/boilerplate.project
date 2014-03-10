@@ -1,5 +1,5 @@
-app.directive('chat', ["DataManager", "$http", "LoginManager",
-	function(DataManager, $http, LoginManager) {
+app.directive('chat', ["DataManager", "$http", "LoginManager", "$rootScope",
+	function(DataManager, $http, LoginManager, $rootScope) {
 		return {
 			restrict: 'E',
 			templateUrl: 'menu_right/template/chat.tpl.html',
@@ -7,7 +7,7 @@ app.directive('chat', ["DataManager", "$http", "LoginManager",
 				var type = DataManager.types.MSG;
 
 				scope.url = "assets/emoticon/";
-				scope.msgs = [];
+				$rootScope.msgs = [];
 				scope.emotions = [];
 
 				$http.get(scope.url + 'index.json').then(function(data) {
@@ -17,22 +17,22 @@ app.directive('chat', ["DataManager", "$http", "LoginManager",
 					DataManager.getData(type, function(data) {
 						if (angular.isArray(data)) {
 							angular.forEach(data, function(msg, key) {
-								scope.msgs.push(msg.emotion);								
+								$rootScope.msgs.push(msg.emotion);
 							});
 						} else {
-							scope.msgs.push(data);
+							$rootScope.msgs.push(data);
 						}
 					});
 
 					DataManager.initData(type);
 					scope.select = function(index) {
 						var emotion = scope.url + scope.emotions[index];
-						scope.msgs.push(emotion);
+						$rootScope.msgs.push(emotion);
 						// LoginManager.getUser().then(function(user) {
-							DataManager.setData(type, {
-								msg: emotion
-								// user: user.username
-							});
+						DataManager.setData(type, {
+							msg: emotion
+							// user: user.username
+						});
 						// });
 					};
 				});

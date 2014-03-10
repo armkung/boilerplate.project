@@ -366,7 +366,7 @@ io.sockets.on('connection', function(socket) {
 				var data = logger.logData[room];
 				if (data) {
 					var msg = data.msg
-					console.log("load " + msg);
+					// console.log("load " + msg);
 					socket.emit('send:msg', msg);
 				}
 				// console.log(getId() + " Init slide");
