@@ -41,23 +41,28 @@ app.directive('slidePlayer', ["PlayerManager",
 				// }
 
 				// setPlayer(0, false);
-				PlayerManager.setAudio(function(audio) {
-					fotorama.show(1);
+				PlayerManager.setAudio(control, function(audio, i) {
+					fotorama.show(i);
+					// PlayerManager.setSource(list[i-1], control);
 				});
-				player.on('fotorama:ready fotorama:showend', function(e, fotorama, extra) {
-					var index = fotorama.activeFrame.i - 1;
-					if (PlayerManager.index != index || PlayerManager.index == 0) {
-						console.log('index', index);
-						// setPlayer(index, true);
-						list[PlayerManager.index].stop();
-						list[PlayerManager.index].load();
+				PlayerManager.setSource(list[0], control);
+				player.on('fotorama:showend', function(e, fotorama, extra) {
+					var index = fotorama.activeFrame.i;
+					// if (PlayerManager.index != index || PlayerManager.index == 1) {
+					console.log('index', index);
+					PlayerManager.index = index;
+					PlayerManager.setSource(list[index - 1], control);
 
-						PlayerManager.index = index;
-						list[index].play();
-						PlayerManager.setAudio(function(audio) {
-							fotorama.show(index + 1);
-						});
-					}
+					// setPlayer(index, true);
+					// list[PlayerManager.index].stop();
+
+					// PlayerManager.index = index;
+					// list[index].load();
+					// list[index].play();
+					// PlayerManager.setAudio(function(audio, i) {
+					// 	fotorama.show(i);
+					// });
+					// }
 				});
 
 			}
