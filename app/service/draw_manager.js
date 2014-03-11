@@ -57,19 +57,19 @@ app.service("DrawManager", ["Canvas", "$rootScope",
 			// Canvas.init(name);
 			// Canvas.getCanvas().then(function(cs) {
 			// 	canvas = cs;
-				canvas.selection = false;
-				canvas.defaultCursor = "crosshair";
-				canvas.on("object:selected", function(e) {
-					var obj = e.target;
-					obj.set('hasControls', true);
-					obj.set('hasRotatingPoint', true);
-				});
-				canvas.on("selection:created", function(e) {
-					var obj = e.target;
-					obj.set('hasControls', false);
-					obj.set('hasRotatingPoint', false);
-				});
-				self.newObject(name);
+			canvas.selection = false;
+			canvas.defaultCursor = "crosshair";
+			canvas.on("object:selected", function(e) {
+				var obj = e.target;
+				obj.set('hasControls', true);
+				obj.set('hasRotatingPoint', true);
+			});
+			canvas.on("selection:created", function(e) {
+				var obj = e.target;
+				obj.set('hasControls', false);
+				obj.set('hasRotatingPoint', false);
+			});
+			self.newObject(name);
 			// });
 		};
 		this.newObject = function(name) {
@@ -296,7 +296,11 @@ app.service("DrawManager", ["Canvas", "$rootScope",
 					// 		"moveY": e.target.getTop() - groups[id].get("initY")
 					// 	});
 					// });
-
+					groups[id].set({
+						originX: 'center',
+						originY: 'center',
+						"id": id
+					});
 					self.disableMove(groups[id]);
 					canvas.add(groups[id]);
 				}

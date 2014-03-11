@@ -61,8 +61,8 @@ app.config(["$stateProvider", "$urlRouterProvider",
 		});
 
 	}
-]).run(["$rootScope", "$modal", "LoginManager", "cfpLoadingBar",
-	function($rootScope, $modal, LoginManager, cfpLoadingBar) {
+]).run(["$rootScope", "$modal", "LoginManager", "cfpLoadingBar", "Socket",
+	function($rootScope, $modal, LoginManager, cfpLoadingBar, Socket) {
 		$rootScope.$on("$stateChangeSuccess", function($currentRoute, $previousRoute) {
 			if (LoginManager.hasLogin()) {
 				$modal.open({
@@ -71,6 +71,7 @@ app.config(["$stateProvider", "$urlRouterProvider",
 				});
 			}
 			cfpLoadingBar.complete();
+			Socket.remove();
 		});
 	}
 ]);
@@ -99,7 +100,11 @@ app.factory('Socket', ["$rootScope", "host_node",
 				socket.disconnect();
 			},
 			remove: function(event) {
-				socket.removeAllListeners(event);
+				if (event) {
+					socket.removeAllListeners(event);
+				} else {
+					socket.removeAllListeners();
+				}
 			}
 		};
 	}

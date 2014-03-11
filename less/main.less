@@ -166,16 +166,20 @@ body{
 	overflow-y: hidden;
 }
 .pad{
-	height: 100%;
+	
+	position: absolute;
+	top: 0;
+	bottom: @toolbar_height*2;	
+	width: 100%;
 }
 .toolbar{
 	position: absolute;
-	z-index: 9;
 	width: 100%;
-	bottom: 18-@toolbar_height;
 	left: 0;
+	bottom: @toolbar_height;
 	background-color: @toolbar_color;
 	/*position: relative;
+	z-index: 9;
 	width: 100%;
 	bottom: 0;
 	height: 5%;*/
@@ -195,13 +199,13 @@ body{
 .slide-pad{
 	/*position: relative;*/
 	position: absolute;
-	z-index: 0;
+	z-index: -1;
 	/*top: -28px;*/
 	overflow: hidden;
 }
 .mirror{
 	position: absolute;
-	z-index: 1;
+	z-index: 0;
 	width: 100%;
 	left: 0;
 }

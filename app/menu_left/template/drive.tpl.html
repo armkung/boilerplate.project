@@ -1,33 +1,35 @@
-<div class="card">
-	<div class="widget-box transparent">
-		<div class="widget-header">
-			<div class="inline" ng-init="tab = 'slide'">
-				<button class="btn btn-app btn-xs no-radius btn-light" ng-click="tab = 'slide'">
-					Slide
-				</button>
-				<button class="btn btn-app btn-xs no-radius btn-light" ng-click="tab = 'quiz'" ng-show="hasQuiz">
-					Quiz
-				</button>
-				<button class="btn btn-app btn-xs no-radius btn-light" ng-click="tab = 'player'">
-					Video
-				</button>
+<div class="well">
+	<div class="card">
+		<div class="widget-box transparent">
+			<div class="widget-header">
+				<div class="inline" ng-init="tab = 'slide'">
+					<button class="btn btn-app btn-xs no-radius btn-light" ng-click="tab = 'slide'">
+						Slide
+					</button>
+					<button class="btn btn-app btn-xs no-radius btn-light" ng-click="tab = 'quiz'" ng-show="hasQuiz">
+						Quiz
+					</button>
+					<button class="btn btn-app btn-xs no-radius btn-light" ng-click="tab = 'player'">
+						Video
+					</button>
+				</div>
+				<div class="widget-toolbar">
+					<button class="btn btn-xs btn-yellow bigger" ng-click="saveSlide()">
+						<i class="icon-save bigger-180"></i>
+						<span class="bigger-140"> Slide</span>
+					</button>
+					<button class="btn btn-xs btn-yellow bigger" ng-click="saveDraw()">
+						<i class="icon-save bigger-180"></i>
+						<span class="bigger-140"> Draw</span>
+					</button>
+				</div>
 			</div>
-			<div class="widget-toolbar">
-				<button class="btn btn-xs btn-yellow bigger" ng-click="saveSlide()">
-					<i class="icon-save bigger-180"></i>
-					<span class="bigger-140"> Slide</span>
-				</button>
-				<button class="btn btn-xs btn-yellow bigger" ng-click="saveDraw()">
-					<i class="icon-save bigger-180"></i>
-					<span class="bigger-140"> Draw</span>
-				</button>
-			</div>
-		</div>
 
-		<div class="widget-body" ng-switch on="tab">
-			<drive-slide ng-switch-when="slide"></drive-slide>
-			<drive-quiz ng-switch-when="quiz"></drive-quiz>
-			<drive-player ng-switch-when="player"></drive-player>
-		</div>
-	</div> 
+			<div class="widget-body" ng-switch on="tab">
+				<drive-slide ng-switch-when="slide"></drive-slide>
+				<drive-quiz ng-switch-when="quiz"></drive-quiz>
+				<drive-player ng-switch-when="player"></drive-player>
+			</div>
+		</div> 
+	</div>
 </div>

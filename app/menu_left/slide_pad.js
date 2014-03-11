@@ -12,7 +12,7 @@ app.directive('slidePad', ["$q", "$sce", "$state", "cfpLoadingBar", "DrawManager
 				cfpLoadingBar.start();
 
 				var iframe = $('#slide');
-				iframe.height(iframe.height() + 12);
+				iframe.height(iframe.height() + 28);
 				iframe.bind('load', function() {
 					cfpLoadingBar.complete();
 				});

@@ -3,18 +3,19 @@
 	<div is-visible="isDesktop" class="visible-lg"></div>
 
 	<div class="row">
-		<div class="pad col-lg-10">
+		<div class="col-lg-10 fit-height">
 			<!-- <audio id="recorded-audio" controls="controls"></audio> -->
-			
-			<div class="control-area" ng-show="isShow" ng-click="prevIndex(false)"></div>
-			<div class="control-area" ng-show="isShow" ng-click="nextIndex(false)"></div>
-			<div class="mirror">
-				<canvas id="{{id}}" draw-pad text="{{text}}" send="isSend">
-				</canvas>
-				<input type="text" id="textbox" ng-model="text">
-			</div>
-			<div class="slide-pad" fit-size>
-				<slide-pad send="isSend"></slide-pad>
+			<div class="pad ">
+				<div class="control-area" ng-show="isShow" ng-click="prevIndex(false)"></div>
+				<div class="control-area" ng-show="isShow" ng-click="nextIndex(false)"></div>
+				<div class="mirror">
+					<canvas id="{{id}}" draw-pad text="{{text}}" send="isSend">
+					</canvas>
+					<input type="text" id="textbox" ng-model="text">
+				</div>
+				<div class="slide-pad" fit-size>
+					<slide-pad send="isSend"></slide-pad>
+				</div>
 			</div>
 			<tool-bar class="toolbar" tool="tool" is-hide="{{hideTool&&!isDesktop}}"></tool-bar>
 		</div>
