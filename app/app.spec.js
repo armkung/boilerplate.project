@@ -3,12 +3,12 @@
 describe('Socket', function() {
 
 	beforeEach(function() {
-		browser().navigateTo('/a');
-		// console.log(browser().location().url());
+		browser().navigateTo('/');
 	});
 
 	it('should redirect to Draw', function() {
-		// expect(browser().window().path()).toBe("/home");
+		// console.log(browser().window().path());
+		expect(browser().window().path()).toBe("/");		 
 	});
 
 

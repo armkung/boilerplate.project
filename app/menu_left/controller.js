@@ -257,7 +257,7 @@ app.controller('HomeTeacherCtrl', ["$scope", "$modal", "$rootScope", "Room", "So
 				}
 			});
 			$scope.create = function() {
-				if ($scope.room.name != "" && $scope.room.display != "") {
+				if ($scope.room.name != "") {
 					Room.room = $scope.room.name;
 					Room.user = $scope.user.username;
 					Socket.emit("create:room", {

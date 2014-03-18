@@ -102,7 +102,7 @@ var Logger = function() {
 				room: rm,
 				users: {},
 				msg: [],
-				pos: []
+				pos: {}
 			};
 		}
 	}
@@ -131,7 +131,19 @@ var Logger = function() {
 
 	this.logPos = function(pos) {
 		if (data[room]) {
-			data[room].pos.push(pos);
+			if (data[room].pos[pos.name]) {
+				data[room].pos[pos.name].push(pos);
+			} else {
+				data[room].pos[pos.name] = [];
+			}
+			if (pos.type == 'clear') {
+				var obj = data[room].pos[pos.name];
+				for (var i = obj.length - 1; i >= 0; i--) {
+					if (obj[i].user.id == pos.user.id) {
+						data[room].pos[pos.name].splice(i, 1);
+					}
+				}
+			}
 		}
 	}
 
@@ -308,19 +320,21 @@ io.sockets.on('connection', function(socket) {
 		});
 	});
 
-	socket.on('init:pos', function() {
+	socket.on('init:pos', function(name) {
 		socket.get('roomName', function(err, room) {
 			if (room != null) {
 				var data = logger.logData[room];
 				if (data) {
-					var pos = data.pos;
-					var list = [];
-					for (var i = 0; i < pos.length; i++) {
-						if (pos[i].user.id != getId()) {
-							list.push(pos[i]);
+					var pos = data.pos[name];
+					if (pos) {
+						var list = [];
+						for (var i = 0; i < pos.length; i++) {
+							if (pos[i].user.id != getId()) {
+								list.push(pos[i]);
+							}
 						}
+						socket.emit('send:pos', list);
 					}
-					socket.emit('send:pos', list);
 				}
 
 				// console.log(getId() + " Init pos");

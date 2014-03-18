@@ -125,8 +125,8 @@ app.factory("DataManager", ["Canvas", "Socket",
 				QUIZ: "quiz",
 				MSG: "msg"
 			},
-			initData: function(type) {
-				Socket.emit("init:" + type);
+			initData: function(type, data) {
+				Socket.emit("init:" + type, data);
 			},
 			setData: function(type, data) {
 				if (data && data.pos) {
