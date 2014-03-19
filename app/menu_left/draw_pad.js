@@ -50,34 +50,26 @@ app.directive("drawPad", ["$rootScope", "DrawManager", "DrawFactory", "Input", "
 						}
 
 						function draw(data) {
-							var pos = data.pos;
-							setId(data.user);
 							setCurrent(data.user);
-
-							DrawManager.setStrokeColor(pos.color);
-							DrawManager.setStrokeSize(pos.size);
-							DrawManager.draw(data.data, pos.x, pos.y, data.scale);
+							DrawManager.draw(data.data);
 						}
 
 						function line(data) {
 							var pos = data.pos;
-							setId(data.user);
 							setCurrent(data.user);
 
 							DrawManager.setStrokeColor(pos.color);
 							DrawManager.setStrokeSize(pos.size);
-							DrawManager.drawLine(pos.x, pos.y, pos.isSeed, pos.isUp);
-
+							return DrawManager.drawLine(pos.x, pos.y, pos.isSeed, pos.isUp);
 						}
 
 						function text(data) {
 							var pos = data.pos;
-							setId(data.user);
 							setCurrent(data.user);
 
 							DrawManager.setFillColor(pos.color);
 							DrawManager.setFontSize(pos.size);
-							DrawManager.drawText(pos.text, pos.x, pos.y);
+							return DrawManager.drawText(pos.text, pos.x, pos.y);
 						}
 
 						function drag(data) {
@@ -109,22 +101,7 @@ app.directive("drawPad", ["$rootScope", "DrawManager", "DrawFactory", "Input", "
 						var strokeColor, fillColor, strokeSize, fontSize;
 						DataManager.getData(type, function(data) {
 							function addData(data) {
-								if (data.pos) {
-									strokeColor = DrawManager.getStrokeColor();
-									fillColor = DrawManager.getFillColor();
-									strokeSize = DrawManager.getStrokeSize();
-									fontSize = DrawManager.getFontSize();
-								}
 								switch (data.type) {
-									case DrawFactory.tools.DRAW:
-										draw(data);
-										break;
-									case DrawFactory.tools.LINE:
-										line(data);
-										break;
-									case DrawFactory.tools.TEXT:
-										text(data);
-										break;
 									case DrawFactory.tools.DRAG_OBJECT:
 										drag(data);
 										break;
@@ -134,28 +111,29 @@ app.directive("drawPad", ["$rootScope", "DrawManager", "DrawFactory", "Input", "
 									case DrawFactory.tools.CLEAR:
 										clear(data);
 										break;
+									default:
+										DrawManager.loadData(data.data);
 								}
-								if (data.pos) {
-									DrawManager.setStrokeColor(strokeColor);
-									DrawManager.setFillColor(fillColor);
-									DrawManager.setStrokeSize(strokeSize);
-									DrawManager.setFontSize(fontSize);
-								}
-								if (scope.tool == DrawFactory.tools.DRAG_GROUP) {
-									DrawManager.canGroupDrag(true);
-								}
-								if (data && data.user.name != Room.user) {
-									$rootScope.$broadcast('group');
-								}
-
 							}
+							console.log(data);
 							if (angular.isArray(data)) {
+								if (data.length > 0) {
+									setId(data[0].user);
+									setCurrent(data[0].user);
+									console.log(data[0].user);
+								}
 								angular.forEach(data, function(value, key) {
 									addData(value);
 								});
 							} else {
+								setId(data.user);
+								setCurrent(data.user);
 								addData(data);
 							}
+							if (scope.tool == DrawFactory.tools.DRAG_GROUP) {
+								DrawManager.canGroupDrag(true);
+							}
+							DrawManager.update();
 						});
 						DataManager.initData(type, DrawManager.getName());
 
@@ -170,7 +148,8 @@ app.directive("drawPad", ["$rootScope", "DrawManager", "DrawFactory", "Input", "
 								obj.type = DrawFactory.tools.TEXT;
 								obj.pos.color = DrawManager.getFillColor();
 								obj.pos.size = DrawManager.getFontSize();
-								text(obj);
+								var data = text(obj);
+								obj.data = DrawManager.toObject(data);
 								sendData(obj);
 
 								Input.hide();
@@ -213,6 +192,7 @@ app.directive("drawPad", ["$rootScope", "DrawManager", "DrawFactory", "Input", "
 							obj.pos.size = DrawManager.getStrokeSize();
 
 							draw(obj);
+							obj.data = DrawManager.toObject(data);
 							sendData(obj);
 						});
 						DrawFactory.setText(function(data) {
@@ -230,9 +210,9 @@ app.directive("drawPad", ["$rootScope", "DrawManager", "DrawFactory", "Input", "
 							obj.type = DrawFactory.tools.LINE;
 							obj.pos.color = DrawManager.getStrokeColor();
 							obj.pos.size = DrawManager.getStrokeSize();
-
-							line(obj);
+							var data = line(obj);
 							if (pos.isSeed || pos.isUp) {
+								obj.data = DrawManager.toObject(data);
 								sendData(obj);
 							}
 						});

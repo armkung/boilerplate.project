@@ -131,11 +131,10 @@ var Logger = function() {
 
 	this.logPos = function(pos) {
 		if (data[room]) {
-			if (data[room].pos[pos.name]) {
-				data[room].pos[pos.name].push(pos);
-			} else {
+			if (!data[room].pos[pos.name]) {
 				data[room].pos[pos.name] = [];
 			}
+			data[room].pos[pos.name].push(pos);
 			if (pos.type == 'clear') {
 				var obj = data[room].pos[pos.name];
 				for (var i = obj.length - 1; i >= 0; i--) {
