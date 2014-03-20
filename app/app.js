@@ -3,8 +3,8 @@ var app = angular.module('socket', ['templates-app', 'templates-common',
 	'colorpicker.module', 'highcharts-ng'
 ]);
 
-app.constant('host_node', 'http://localhost:8080');
-app.constant('host_server', 'http://localhost/wbl/server');
+app.constant('host_node', 'http://science.kmutt.ac.th:8080');
+app.constant('host_server', 'http://science.kmutt.ac.th/wbl/server');
 app.constant('host_drupal', 'http://science.kmutt.ac.th/backend');
 
 app.config(["cfpLoadingBarProvider",

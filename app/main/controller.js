@@ -130,32 +130,32 @@ app.controller('AccessCtrl', ["$state", "LoginManager",
 		});
 	}
 ]);
-app.controller('MenuRightCtrl', ["$scope", "$rootScope", "$state",
-	function($scope, $rootScope, $state) {
-		// var menu = ["Chat", "Group"];
-		var types = {
-			GROUP: "group",
-			CHAT: "chat"
-		};
-		// checkRoute();
-		$rootScope.$on("$stateChangeSuccess", function($currentRoute, $previousRoute) {
-			checkRoute();
-		});
-		$scope.setCurrent = function(index) {
-			$scope.current = $scope.menus[index];
-		};
+// app.controller('MenuRightCtrl', ["$scope", "$rootScope", "$state",
+// 	function($scope, $rootScope, $state) {
+// 		// var menu = ["Chat", "Group"];
+// 		var types = {
+// 			GROUP: "group",
+// 			CHAT: "chat"
+// 		};
+// 		// checkRoute();
+// 		$rootScope.$on("$stateChangeSuccess", function($currentRoute, $previousRoute) {
+// 			checkRoute();
+// 		});
+// 		$scope.setCurrent = function(index) {
+// 			$scope.current = $scope.menus[index];
+// 		};
 
-		function checkRoute() {
-			var route = $state.current.url;
-			console.log(route)
-			// $scope.isHide = route == "/home/teacher" || route == "/home/student";
-			switch (route) {
-				case "/draw":
-					$scope.current = types.GROUP;
-					break;
-				default:
-					$scope.current = types.CHAT;
-			}
-		}
-	}
-]);
+// 		function checkRoute() {
+// 			var route = $state.current.url;
+// 			console.log(route)
+// 			// $scope.isHide = route == "/home/teacher" || route == "/home/student";
+// 			switch (route) {
+// 				case "/draw":
+// 					$scope.current = types.GROUP;
+// 					break;
+// 				default:
+// 					$scope.current = types.CHAT;
+// 			}
+// 		}
+// 	}
+// ]);

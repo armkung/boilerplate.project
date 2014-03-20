@@ -52,9 +52,14 @@ app.service('GroupManager', ["Canvas", "DrawManager",
 			var canvas = Canvas.newCanvas("data", Canvas.width, Canvas.height);
 			canvas.setBackgroundColor("white");
 			canvas.add(obj);
-			canvas.renderAll();
-
-			return canvas.toDataURL();
+			// return canvas.toDataURLWithMultiplier("jpg",0.5);
+			return canvas.toDataURL({
+				quality: 0.6,
+				// multiplier: 0.5,
+				// width: Canvas.width * 0.5,
+				// height: Canvas.height * 0.5,
+				format: 'jpeg'
+			});
 		}
 		this.showAll = function() {
 			angular.forEach(groups, function(group, key) {

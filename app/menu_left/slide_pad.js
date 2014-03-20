@@ -63,9 +63,9 @@ app.directive('slidePad', ["$q", "$sce", "$state", "cfpLoadingBar", "DrawManager
 								max: 0
 							});
 						}
-						DataManager.initData(DataManager.types.POS);
 
 						var name = id + "-";
+						DataManager.initData(DataManager.types.POS, name + newV);
 						if (oldV) {
 							DrawManager.saveData(name + oldV);
 						}

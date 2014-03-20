@@ -125,10 +125,16 @@ app.directive("drawPad", ["$rootScope", "DrawManager", "DrawFactory", "Input", "
 								angular.forEach(data, function(value, key) {
 									addData(value);
 								});
+								if (data.length > 0) {
+									$rootScope.$broadcast('group');
+								}
 							} else {
 								setId(data.user);
 								setCurrent(data.user);
 								addData(data);
+								if (data) {
+									$rootScope.$broadcast('group');
+								}
 							}
 							if (scope.tool == DrawFactory.tools.DRAG_GROUP) {
 								DrawManager.canGroupDrag(true);
