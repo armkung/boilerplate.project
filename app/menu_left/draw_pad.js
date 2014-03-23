@@ -115,14 +115,11 @@ app.directive("drawPad", ["$rootScope", "DrawManager", "DrawFactory", "Input", "
 										DrawManager.loadData(data.data);
 								}
 							}
-							console.log(data);
+							DrawManager.lazyUpdate(true);
 							if (angular.isArray(data)) {
-								if (data.length > 0) {
-									setId(data[0].user);
-									setCurrent(data[0].user);
-									console.log(data[0].user);
-								}
 								angular.forEach(data, function(value, key) {
+									setId(value.user);
+									setCurrent(value.user);
 									addData(value);
 								});
 								if (data.length > 0) {
@@ -140,6 +137,7 @@ app.directive("drawPad", ["$rootScope", "DrawManager", "DrawFactory", "Input", "
 								DrawManager.canGroupDrag(true);
 							}
 							DrawManager.update();
+							DrawManager.lazyUpdate(false);
 						});
 						DataManager.initData(type, DrawManager.getName());
 

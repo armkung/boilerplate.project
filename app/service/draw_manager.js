@@ -82,6 +82,9 @@ app.service("DrawManager", ["Canvas", "$rootScope",
 			})(obj.toObject);
 			return obj.toObject();
 		}
+		this.lazyUpdate = function(isLazy){
+			canvas.renderOnAddRemove = !isLazy;
+		}
 		this.update = function() {
 			canvas.renderAll();
 		}

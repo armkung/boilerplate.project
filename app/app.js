@@ -129,9 +129,9 @@ app.factory("DataManager", ["Canvas", "Socket",
 				Socket.emit("init:" + type, data);
 			},
 			setData: function(type, data) {
-				if (data && data.pos) {
-					data.pos.x /= Canvas.width;
-					data.pos.y /= Canvas.height;
+				if (data && data.data) {
+					data.data.left /= Canvas.width;
+					data.data.top /= Canvas.height;
 				}
 				Socket.emit("send:" + type, data);
 			},
@@ -143,13 +143,13 @@ app.factory("DataManager", ["Canvas", "Socket",
 					case "pos":
 						Socket.on("send:" + type, function(data) {
 							function scalePos(data) {
-								if (data && data.pos) {
-									data.pos.x *= Canvas.width;
-									data.pos.y *= Canvas.height;
+								if (data && data.data) {
+									data.data.left *= Canvas.width;
+									data.data.top *= Canvas.height;
 								}
 							}
 
-							if (angular.isArray(data)) {
+							if (angular.isArray(data)) {		
 								angular.forEach(data, function(value, key) {
 									scalePos(value);
 								});
