@@ -226,8 +226,9 @@ app.service("DrawFactory", ["Canvas", "DrawManager",
 					setBind(listener.remove);
 					break;
 				default:
-					DrawManager.canDrag(false);
+					DrawManager.setCursor('default');
 					DrawManager.canGroupDrag(false);
+					DrawManager.canDrag(false);
 			}
 		};
 		this.setAttr = function(attr, data) {

@@ -67,6 +67,8 @@ app.config(["$stateProvider", "$urlRouterProvider",
 			if (LoginManager.hasLogin()) {
 				$modal.open({
 					templateUrl: 'main/template/login.tpl.html',
+					keyboard: false,
+					backdrop: 'static',
 					controller: 'LoginCtrl'
 				});
 			}
@@ -144,12 +146,16 @@ app.factory("DataManager", ["Canvas", "Socket",
 						Socket.on("send:" + type, function(data) {
 							function scalePos(data) {
 								if (data && data.data) {
+									var ratioX = Canvas.width/data.data.canvasWidth;									
+									var ratioY = Canvas.height/data.data.canvasHeight;
+									data.data.scaleX *= ratioX;
+									data.data.scaleY *= ratioY;
 									data.data.left *= Canvas.width;
 									data.data.top *= Canvas.height;
 								}
 							}
 
-							if (angular.isArray(data)) {		
+							if (angular.isArray(data)) {
 								angular.forEach(data, function(value, key) {
 									scalePos(value);
 								});

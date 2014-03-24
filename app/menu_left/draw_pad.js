@@ -15,7 +15,8 @@ app.directive("drawPad", ["$rootScope", "DrawManager", "DrawFactory", "Input", "
 					if (id != "") {
 
 						DrawManager.init(id);
-
+						DrawFactory.setTool(DrawFactory.tools.MODE);
+						
 						function sendData(obj) {
 							if (scope.send) {
 								obj.name = DrawManager.getName();

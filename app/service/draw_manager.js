@@ -43,6 +43,9 @@ app.service("DrawManager", ["Canvas", "$rootScope",
 				"id": n
 			});
 		}
+		this.setCursor = function(css) {
+			canvas.defaultCursor = css;
+		}
 		this.loadData = function(data) {
 			function setObject(obj) {
 				self.disableMove(obj);
@@ -76,13 +79,15 @@ app.service("DrawManager", ["Canvas", "$rootScope",
 			obj.toObject = (function(toObject) {
 				return function() {
 					return fabric.util.object.extend(toObject.call(this), {
-						id: this.id
+						id: this.id,
+						canvasWidth: canvas.getWidth(),
+						canvasHeight: canvas.getHeight()
 					});
 				};
 			})(obj.toObject);
 			return obj.toObject();
 		}
-		this.lazyUpdate = function(isLazy){
+		this.lazyUpdate = function(isLazy) {
 			canvas.renderOnAddRemove = !isLazy;
 		}
 		this.update = function() {
@@ -160,9 +165,9 @@ app.service("DrawManager", ["Canvas", "$rootScope",
 			obj.set('selectable', true);
 			obj.set('hasRotatingPoint', true);
 			obj.set('hasBorders', true);
-			// if (!(obj instanceof fabric.Group)) {
-			obj.set('hasControls', true);
-			// }
+			if (!(obj instanceof fabric.Group)) {
+				obj.set('hasControls', true);
+			}
 		};
 		this.remove = function(indexs) {
 			angular.forEach(indexs, function(index, key) {
