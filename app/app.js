@@ -146,8 +146,8 @@ app.factory("DataManager", ["Canvas", "Socket",
 						Socket.on("send:" + type, function(data) {
 							function scalePos(data) {
 								if (data && data.data) {
-									var ratioX = Canvas.width/data.data.canvasWidth;									
-									var ratioY = Canvas.height/data.data.canvasHeight;
+									var ratioX = Canvas.width / data.data.canvasWidth;
+									var ratioY = Canvas.height / data.data.canvasHeight;
 									data.data.scaleX *= ratioX;
 									data.data.scaleY *= ratioY;
 									data.data.left *= Canvas.width;
@@ -226,14 +226,8 @@ app.service("Canvas", ["$q",
 			return canvas;
 		};
 		this.setSize = function(w, h) {
-			// if (canvas) {
-			// 	canvas.setDimensions({
-			// 		width: w,
-			// 		height: h
-			// 	})
-			// 	self.width = w;
-			// 	self.height = h;
-			// }
+			self.width = w;
+			self.height = h;
 		}
 		this.getCanvas = function() {
 			// if (canvas) {

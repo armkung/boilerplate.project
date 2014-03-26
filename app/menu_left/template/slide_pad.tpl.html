@@ -8,10 +8,12 @@
 			<div class="pad ">
 				<div class="control-area" ng-show="isShow" ng-click="prevIndex(false)"></div>
 				<div class="control-area" ng-show="isShow" ng-click="nextIndex(false)"></div>
-				<div class="mirror">
-					<canvas id="{{id}}" draw-pad text="{{text}}" send="isSend">
-					</canvas>
-					<input type="text" id="textbox" ng-model="text">
+				<div class="mirror center">
+					<div class="inline">
+						<canvas id="{{id}}" draw-pad text="{{text}}" init="false" send="isSend">
+						</canvas>
+						<input type="text" id="textbox" ng-model="text">
+					</div>
 				</div>
 				<div class="slide-pad" fit-size>
 					<slide-pad send="isSend"></slide-pad>

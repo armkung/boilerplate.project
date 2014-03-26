@@ -5,6 +5,7 @@ app.directive("drawPad", ["$rootScope", "DrawManager", "DrawFactory", "Input", "
 			scope: {
 				id: '@',
 				text: '@',
+				init: '=',
 				send: '='
 			},
 			link: function(scope, iElement, iAttr) {
@@ -16,7 +17,7 @@ app.directive("drawPad", ["$rootScope", "DrawManager", "DrawFactory", "Input", "
 
 						DrawManager.init(id);
 						DrawFactory.setTool(DrawFactory.tools.MODE);
-						
+
 						function sendData(obj) {
 							if (scope.send) {
 								obj.name = DrawManager.getName();
@@ -101,6 +102,7 @@ app.directive("drawPad", ["$rootScope", "DrawManager", "DrawFactory", "Input", "
 
 						var strokeColor, fillColor, strokeSize, fontSize;
 						DataManager.getData(type, function(data) {
+
 							function addData(data) {
 								switch (data.type) {
 									case DrawFactory.tools.DRAG_OBJECT:
@@ -140,7 +142,9 @@ app.directive("drawPad", ["$rootScope", "DrawManager", "DrawFactory", "Input", "
 							DrawManager.update();
 							DrawManager.lazyUpdate(false);
 						});
-						DataManager.initData(type, DrawManager.getName());
+						if (scope.init) {
+							DataManager.initData(type, DrawManager.getName());
+						}
 
 						function drawText() {
 							if (scope.text != "") {
@@ -233,7 +237,7 @@ app.directive("drawPad", ["$rootScope", "DrawManager", "DrawFactory", "Input", "
 						$rootScope.$on('attr', function(e, obj) {
 							DrawFactory.setAttr(obj.attr, obj.data);
 						});
-						$rootScope.$on("$stateChangeSuccess", function($currentRoute, $previousRoute) {
+						$rootScope.$on("$stateChangeStart", function($currentRoute, $previousRoute) {
 							DrawManager.saveData();
 						});
 					}

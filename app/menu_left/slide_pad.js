@@ -1,5 +1,5 @@
-app.directive('slidePad', ["$q", "$sce", "$state", "cfpLoadingBar", "DrawManager", "SlideManager", "DataManager",
-	function($q, $sce, $state, cfpLoadingBar, DrawManager, SlideManager, DataManager) {
+app.directive('slidePad', ["$q", "$sce", "$state", "cfpLoadingBar", "DrawManager", "SlideManager", "DataManager", "PDFService",
+	function($q, $sce, $state, cfpLoadingBar, DrawManager, SlideManager, DataManager, PDFService) {
 		return {
 			restrict: 'E',
 			template: '<iframe id="slide" ng-src="{{url}}"></iframe>',
@@ -9,6 +9,7 @@ app.directive('slidePad', ["$q", "$sce", "$state", "cfpLoadingBar", "DrawManager
 			link: function(scope, iElement, iAttr) {
 				var id = "mirror";
 				var type = DataManager.types.SLIDE;
+				// var deferred = $q.defer();
 				cfpLoadingBar.start();
 
 				var iframe = $('#slide');
@@ -17,63 +18,47 @@ app.directive('slidePad', ["$q", "$sce", "$state", "cfpLoadingBar", "DrawManager
 					cfpLoadingBar.complete();
 				});
 
+				scope.isInit = false;
 				scope.slide = SlideManager;
-				// var deferred;
-				// if (angular.isUndefined(SlideManager.slide) && angular.isUndefined(SlideManager.max)) {
-				// 	deferred = $q.defer();
-				// 	SlideManager.setMax(deferred);
-				// }
 				DataManager.getData(type, function(data) {
 					if (data) {
-						// if (data.slide != SlideManager.slide && angular.isDefined(SlideManager.slide)) {
-						// 	data.slide = SlideManager.slide;
-						// }
 						SlideManager.setSlide(data.slide, data.index);
-						changeSlide();
+						// changeSlide();
 						if (data.max) {
 							SlideManager.max = data.max;
 						}
-
 					} else {
 						if (angular.isUndefined(SlideManager.slide)) {
 							$state.go('main.drive');
 						}
 					}
 				});
+
 				if (angular.isDefined(SlideManager.slide)) {
+					// initSlide();
 					changeSlide();
 				} else {
 					DataManager.initData(type);
 				}
-
-				SlideManager.getMax().then(function(max) {
-					SlideManager.max = max;
-					DataManager.setData(type, {
-						slide: SlideManager.slide,
-						index: SlideManager.index,
-						max: SlideManager.max
-					});
-				});
 				scope.$watch('slide.index', function(newV, oldV) {
 					if (angular.isDefined(SlideManager.slide) && angular.isDefined(SlideManager.index)) {
 						if (scope.send) {
 							DataManager.setData(type, {
 								slide: SlideManager.slide,
 								index: SlideManager.index,
-								max: 0
+								max: SlideManager.max
 							});
 						}
-
-						var name = id + "-";
-						DataManager.initData(DataManager.types.POS, name + newV);
-						if (oldV) {
-							DrawManager.saveData(name + oldV);
-						}
-						if (newV) {
-							DrawManager.newObject(name + newV);
-						}
-
 						changeSlide();
+						if (!scope.isInit) {
+							scope.$emit('load_slide', SlideManager.slide);
+							initSlide(function() {
+								initCanvas(newV, oldV);
+							});
+						} else {
+							initCanvas(newV, oldV);
+						}
+
 					}
 				});
 
@@ -84,7 +69,32 @@ app.directive('slidePad', ["$q", "$sce", "$state", "cfpLoadingBar", "DrawManager
 						scope.url = $sce.trustAsResourceUrl(url);
 					}
 				}
+
+				function initSlide(callback) {
+					scope.isInit = true;
+					SlideManager.getMax().then(function(pdf, max) {
+						SlideManager.max = max;
+						var scale = DrawManager.getScale();
+						PDFService.getScale(pdf, scale.x, scale.y).then(function(scale) {
+							DrawManager.setSize(scale.x, scale.y)
+							if (callback) {
+								callback();
+							}
+						});
+					});
+				}
+
+				function initCanvas(newV, oldV) {
+					var name = id + "-";
+					DataManager.initData(DataManager.types.POS, name + newV);
+					if (oldV) {
+						DrawManager.saveData(name + oldV);
+					}
+					if (newV) {
+						DrawManager.newObject(name + newV);
+					}
+				}
 			}
-		};
+		}
 	}
 ]);

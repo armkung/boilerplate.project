@@ -1,11 +1,18 @@
-app.controller('MainCtrl', ["$scope", "Canvas", "DrawManager", "SlideManager", "PDFService",
-	function($scope, Canvas, DrawManager, SlideManager, PDFService) {
+app.controller('MainCtrl', ["$q", "$scope", "Canvas", "DrawManager", "SlideManager", "PDFService",
+	function($q, $scope, Canvas, DrawManager, SlideManager, PDFService) {
 		function loadCanvas(name) {
 			var id = "data";
 			var cs = Canvas.newCanvas(id, Canvas.width, Canvas.height);
 			DrawManager.getObject(cs, name);
 			return cs;
 		}
+		$scope.$on('load_slide', function(e, id) {
+			var deferred = $q.defer();
+			SlideManager.setMax(deferred);
+			PDFService.getPdf(id).then(function(pdf) {
+				deferred.resolve(pdf, pdf.pdfInfo.numPages);
+			});
+		});
 		$scope.$on('save_slide', function(e, obj) {
 			var id = SlideManager.slide;
 			if (id) {

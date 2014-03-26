@@ -43,6 +43,12 @@ app.service("DrawManager", ["Canvas", "$rootScope",
 				"id": n
 			});
 		}
+		this.setSize = function(w, h) {
+			canvas.setWidth(w);
+			canvas.setHeight(h);
+			canvas.renderAll();
+			Canvas.setSize(w, h)
+		}
 		this.setCursor = function(css) {
 			canvas.defaultCursor = css;
 		}
