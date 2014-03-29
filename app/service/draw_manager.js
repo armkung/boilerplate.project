@@ -99,6 +99,11 @@ app.service("DrawManager", ["Canvas", "$rootScope",
 		this.update = function() {
 			canvas.renderAll();
 		}
+		this.clearAll = function() {
+			group = {};
+			obj = {};
+			n = 0;
+		}
 		this.getName = function() {
 			return id;
 		};

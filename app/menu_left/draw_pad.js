@@ -237,8 +237,9 @@ app.directive("drawPad", ["$rootScope", "DrawManager", "DrawFactory", "Input", "
 						$rootScope.$on('attr', function(e, obj) {
 							DrawFactory.setAttr(obj.attr, obj.data);
 						});
-						$rootScope.$on("$stateChangeStart", function($currentRoute, $previousRoute) {
+						var listener = $rootScope.$on("$stateChangeSuccess", function($currentRoute, $previousRoute) {
 							DrawManager.saveData();
+							listener();
 						});
 					}
 				});

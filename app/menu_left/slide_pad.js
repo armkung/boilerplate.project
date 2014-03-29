@@ -4,18 +4,19 @@ app.directive('slidePad', ["$q", "$sce", "$state", "cfpLoadingBar", "DrawManager
 			restrict: 'E',
 			template: '<iframe id="slide" ng-src="{{url}}"></iframe>',
 			scope: {
-				send: '='
+				send: '=',
+				load: '='
 			},
 			link: function(scope, iElement, iAttr) {
 				var id = "mirror";
 				var type = DataManager.types.SLIDE;
 				// var deferred = $q.defer();
-				cfpLoadingBar.start();
-
+				// cfpLoadingBar.start();
+				scope.load = true;
 				var iframe = $('#slide');
 				iframe.height(iframe.height() + 28);
 				iframe.bind('load', function() {
-					cfpLoadingBar.complete();
+					// cfpLoadingBar.complete();
 				});
 
 				scope.isInit = false;
@@ -35,30 +36,33 @@ app.directive('slidePad', ["$q", "$sce", "$state", "cfpLoadingBar", "DrawManager
 				});
 
 				if (angular.isDefined(SlideManager.slide)) {
-					// initSlide();
+					scope.isInit = true;
 					changeSlide();
+					initSlide();
 				} else {
 					DataManager.initData(type);
 				}
 				scope.$watch('slide.index', function(newV, oldV) {
-					if (angular.isDefined(SlideManager.slide) && angular.isDefined(SlideManager.index)) {
-						if (scope.send) {
-							DataManager.setData(type, {
-								slide: SlideManager.slide,
-								index: SlideManager.index,
-								max: SlideManager.max
-							});
-						}
-						changeSlide();
-						if (!scope.isInit) {
-							scope.$emit('load_slide', SlideManager.slide);
-							initSlide(function() {
+					if (newV != oldV) {
+						if (angular.isDefined(SlideManager.slide) && angular.isDefined(SlideManager.index)) {
+							if (scope.send) {
+								DataManager.setData(type, {
+									slide: SlideManager.slide,
+									index: SlideManager.index,
+									max: SlideManager.max
+								});
+							}
+							changeSlide();
+							if (!scope.isInit) {
+								scope.$emit('load_slide', SlideManager.slide);
+								initSlide(function() {
+									initCanvas(newV, oldV);
+								});
+							} else {
 								initCanvas(newV, oldV);
-							});
-						} else {
-							initCanvas(newV, oldV);
-						}
+							}
 
+						}
 					}
 				});
 
@@ -75,8 +79,11 @@ app.directive('slidePad', ["$q", "$sce", "$state", "cfpLoadingBar", "DrawManager
 					SlideManager.getMax().then(function(pdf, max) {
 						SlideManager.max = max;
 						var scale = DrawManager.getScale();
+						cfpLoadingBar.start();
 						PDFService.getScale(pdf, scale.x, scale.y).then(function(scale) {
 							DrawManager.setSize(scale.x, scale.y)
+							cfpLoadingBar.complete();
+							scope.load = false;
 							if (callback) {
 								callback();
 							}
@@ -86,7 +93,7 @@ app.directive('slidePad', ["$q", "$sce", "$state", "cfpLoadingBar", "DrawManager
 
 				function initCanvas(newV, oldV) {
 					var name = id + "-";
-					DataManager.initData(DataManager.types.POS, name + newV);
+					// DataManager.initData(DataManager.types.POS, name + newV);
 					if (oldV) {
 						DrawManager.saveData(name + oldV);
 					}

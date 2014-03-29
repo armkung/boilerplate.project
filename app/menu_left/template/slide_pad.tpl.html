@@ -1,7 +1,7 @@
 <div ng-swipe-up="checkToolSwipe(false)" ng-swipe-down="checkToolSwipe(true)" ng-swipe-left="checkMenuSwipe(true)" ng-swipe-right="checkMenuSwipe(false)">
 
 	<div is-visible="isDesktop" class="visible-lg"></div>
-
+	<div modal-backdrop ng-show="isLoad"></div>
 	<div class="row">
 		<div class="col-lg-10 fit-height">
 			<!-- <audio id="recorded-audio" controls="controls"></audio> -->
@@ -16,7 +16,7 @@
 					</div>
 				</div>
 				<div class="slide-pad" fit-size>
-					<slide-pad send="isSend"></slide-pad>
+					<slide-pad send="isSend" load="isLoad"></slide-pad>
 				</div>
 			</div>
 			<tool-bar class="toolbar" tool="tool" is-hide="{{hideTool&&!isDesktop}}"></tool-bar>

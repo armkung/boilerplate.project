@@ -7,6 +7,8 @@ app.controller('MainCtrl', ["$q", "$scope", "Canvas", "DrawManager", "SlideManag
 			return cs;
 		}
 		$scope.$on('load_slide', function(e, id) {
+			DrawManager.clearAll();
+			
 			var deferred = $q.defer();
 			SlideManager.setMax(deferred);
 			PDFService.getPdf(id).then(function(pdf) {
