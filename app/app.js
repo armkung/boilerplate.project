@@ -113,6 +113,7 @@ app.factory('Socket', ["$rootScope", "host_node",
 ]);
 app.factory("Room", function() {
 	return {
+		id:"",
 		room: "",
 		users: [],
 		groups: {}

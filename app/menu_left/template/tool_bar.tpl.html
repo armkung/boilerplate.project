@@ -1,7 +1,7 @@
 <div ng-hide="isHide">	
 
 	<div class="width-40 pull-left">
-		<div class="tool inline btn btn-xs btn-primary width-25" ng-repeat="tool in toolLeft" ng-click="changeToolLeft($index)" ng-class="{active: leftSelected==$index}">
+		<div class="tool inline btn btn-xs btn-primary width-25" ng-repeat="tool in toolLeft" ng-click="changeToolLeft($index)" ng-class="{selected: leftSelected==$index}">
 			<span class="tool" ng-class="{'icon-{{tool}}': true}"></span>
 		</div>
 	</div>
@@ -9,7 +9,7 @@
 	<selector class="width-20 pull-left attr"></selector>		
 
 	<div class="width-40 pull-left">
-		<div class="tool inline btn btn-xs btn-primary width-25" ng-repeat="tool in toolRight" ng-click="changeToolRight($index)" ng-class="{active: rightSelected==$index}">
+		<div class="tool inline btn btn-xs btn-primary width-25" ng-repeat="tool in toolRight" ng-click="changeToolRight($index)" ng-class="{selected: rightSelected==$index}">
 			<span class="tool" ng-class="{'icon-{{tool}}': true}"></span>
 		</div>
 	</div>

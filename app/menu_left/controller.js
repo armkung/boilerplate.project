@@ -242,6 +242,7 @@ app.controller('HomeTeacherCtrl', ["$scope", "$modal", "$rootScope", "Room", "So
 		LoginManager.getUser().then(function(user) {
 			if (angular.isUndefined($rootScope.room)) {
 				$rootScope.room = {
+					id: "",
 					name: "",
 					display: "",
 					description: ""
@@ -262,6 +263,7 @@ app.controller('HomeTeacherCtrl', ["$scope", "$modal", "$rootScope", "Room", "So
 					Room.user = $scope.user.username;
 					Socket.emit("create:room", {
 						room: {
+							id: $scope.room.id,
 							name: $scope.room.name,
 							owner: $scope.user.username,
 							display: $scope.room.display,
@@ -284,7 +286,6 @@ app.controller('HomeTeacherCtrl', ["$scope", "$modal", "$rootScope", "Room", "So
 					controller: 'DisplayCtrl'
 				});
 				modal.result.then(function(url) {
-					console.log()
 					$scope.room.display = url;
 				});
 			};
@@ -326,6 +327,7 @@ app.controller('HomeStudentCtrl', ["$scope", "$rootScope", "$modal", "Room", "So
 					}, function(id) {
 
 					});
+					Room.id = $scope.room.id;
 					Room.room = $scope.room.name;
 					Room.user = $scope.user.username;
 				} else {

@@ -189,26 +189,30 @@ app.service("DrawFactory", ["Canvas", "DrawManager",
 					setBind(listener.draw);
 					break;
 				case self.tools.LINE:
+					DrawManager.setCursor('crosshair');
 					DrawManager.canDrag(false);
 					DrawManager.canGroupDrag(false);
 					setBind(listener.line);
 					break;
 				case self.tools.TEXT:
+					DrawManager.setCursor('text');
 					DrawManager.canDrag(false);
 					DrawManager.canGroupDrag(false);
 					setBind(listener.text);
 					break;
 				case self.tools.ANIMATE:
-					if (listener.animate && listener.animate.call) {
-						listener.animate.call();
-					}
-					setBind(listener.animate);
+					// if (listener.animate && listener.animate.call) {
+					// 	listener.animate.call();
+					// }
+					// setBind(listener.animate);
 					break;
 				case self.tools.DRAG_GROUP:
+					DrawManager.setCursor('pointer');
 					DrawManager.canDrag(false);
 					DrawManager.canGroupDrag(true);
 					break;
 				case self.tools.DRAG_OBJECT:
+					DrawManager.setCursor('pointer');
 					DrawManager.canGroupDrag(false);
 					DrawManager.canDrag(true);
 
@@ -216,10 +220,12 @@ app.service("DrawFactory", ["Canvas", "DrawManager",
 					// });
 					break;
 				case self.tools.CLEAR:
+					DrawManager.setCursor('default');
 					DrawManager.clear();
 					setBind(listener.clear);
 					break;
 				case self.tools.DELETE:
+					DrawManager.setCursor('pointer');
 					DrawManager.canGroupDrag(false);
 					DrawManager.canDrag(true);
 

@@ -3,8 +3,14 @@
 		<div class="inline">
 			<img class="display pull-left" ng-src="{{room.display}}" ng-click="selectDisplay()"/>
 			<div class="margin-30 pull-left">
-				<label class="bigger-180 bolder">Name : </label>
-				<input type="text" maxlength="18" ng-model="room.name">
+				<!-- <div class="align-left">
+					<label class="bigger-180 bolder">ID : </label>
+					<input type="text" maxlength="18" ng-model="room.id">
+				</div> -->
+				<div class="align-left">
+					<label class="bigger-180 bolder">Name : </label>
+					<input type="text" maxlength="18" ng-model="room.name">
+				</div>
 				<hr>
 				<button class="btn btn-info icon-plus bigger-130" ng-click="create()"> Create Room</button>
 				<button class="btn btn-warning icon-remove bigger-130" ng-click="close()"> Close Room</button>
