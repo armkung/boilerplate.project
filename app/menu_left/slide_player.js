@@ -23,22 +23,16 @@ app.directive('slidePlayer', ["PlayerManager",
 					list.push(data.audio);
 				});
 
-				// function setPlayer(index, isPlay) {
-				// 	audio = list[index];
-				// 	if (audio) {
-				// 		audio.unbind("ended");
-				// 		audio.stop();
-				// 		audio.load();
-				// 	}
-				// 	audio.bindOnce("ended", function() {
-				// 		if (index < list.length - 1) {
-				// 			fotorama.show('>');
-				// 		}
-				// 	})
-				// 	if (isPlay) {
-				// 		audio.play();
-				// 	}
-				// }
+				control.volume = 0;
+				control.addEventListener('pause', function() {
+					list[PlayerManager.index-1].pause();
+				});
+				control.addEventListener('play', function() {
+					list[PlayerManager.index-1].play();
+				});
+				control.addEventListener('seeking', function() {
+					list[PlayerManager.index-1].setTime(control.currentTime);
+				});
 
 				// setPlayer(0, false);
 				PlayerManager.setAudio(control, function(audio, i) {
@@ -52,17 +46,7 @@ app.directive('slidePlayer', ["PlayerManager",
 					console.log('index', index);
 					PlayerManager.index = index;
 					PlayerManager.setSource(list[index - 1], control);
-
-					// setPlayer(index, true);
-					// list[PlayerManager.index].stop();
-
-					// PlayerManager.index = index;
-					// list[index].load();
-					// list[index].play();
-					// PlayerManager.setAudio(function(audio, i) {
-					// 	fotorama.show(i);
-					// });
-					// }
+					control.play();
 				});
 
 			}

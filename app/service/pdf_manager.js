@@ -61,6 +61,7 @@ app.service('PDFService', ["$q", "$timeout", "GoogleService",
 		}
 		this.renderImage = function(pdf, n, callback) {
 			var deferred = $q.defer();
+			i = 1;
 			var render = function() {
 				pdf.getPage(i).then(function(page) {
 					var drawCanvas = mirrors[i - 1];
@@ -78,7 +79,6 @@ app.service('PDFService', ["$q", "$timeout", "GoogleService",
 
 					var w = view.width,
 						h = view.height;
-
 					page.render(renderContext).then(function() {
 						fabric.Image.fromURL(slideCanvas.toDataURL(), function(img) {
 							drawCanvas.add(img);

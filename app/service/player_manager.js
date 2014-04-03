@@ -22,20 +22,13 @@ app.service("PlayerManager", ["$q", "$rootScope", "host_server",
 			var path = host_server + "/" + url + title + "/" + self.index + "." + AUDIO_TYPE;
 			control.src = path;
 			control.load();
-			control.play();
-			audio.play();
+			// control.play();
+			// audio.play();
 		}
 		this.setAudio = function(control, callback) {
 			// self.setSource(list[0].audio, control, 1);
 			for (var i = 0; i < list.length; i++) {
 				var audio = list[i].audio;
-				audio.bind("timeupdate", function(e) {
-					if (control.currentTime != this.getTime()) {
-						this.setTime(control.currentTime);
-					}
-					// control.current = this.getTime();
-					// console.log(this.getTime());
-				});
 				audio.bind("ended", function() {
 					if (self.index < list.length) {
 						callback(audio, self.index);
@@ -54,7 +47,7 @@ app.service("PlayerManager", ["$q", "$rootScope", "host_server",
 					img: path + "." + IMAGE_TYPE,
 					thumb: path + "." + IMAGE_TYPE
 				};
-				console.log(path)
+				// console.log(path)
 				var audio = new buzz.sound(path, {
 					// document: control,
 					formats: [AUDIO_TYPE]

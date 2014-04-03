@@ -31,7 +31,7 @@ app.service("VoiceManager", ["$q", "$rootScope", "Room", "host_node",
 						});
 						$rootScope.$broadcast('voice', recorder);
 
-						isRecord = true;
+						// isRecord = true;
 					},
 					function(err) {
 						isRecord = false;
@@ -65,6 +65,10 @@ app.service("VoiceManager", ["$q", "$rootScope", "Room", "host_node",
 			if (isRecord) {
 				isRecord = false;
 				recorder.stop();
+				var reader = new FileReader();
+				reader.addEventListener("loadend", function(e) {
+					console.log(reader.result)
+				});
 
 				recorder.exportWAV(function(wav) {
 					// var url = (window.URL || window.webkitURL).createObjectURL(wav);
@@ -87,17 +91,13 @@ app.service("VoiceManager", ["$q", "$rootScope", "Room", "host_node",
 						processData: false,
 						contentType: false,
 						success: function(response) {
-							console.log(response);
+							// console.log(response);
 						},
 						error: function(jqXHR, textStatus, errorMessage) {
-							console.log(errorMessage);
+							// console.log(errorMessage);
 						}
 					});
 
-					var reader = new FileReader();
-					reader.addEventListener("loadend", function(e) {
-						console.log(reader.result)
-					});
 					reader.readAsDataURL(wav);
 				});
 			}

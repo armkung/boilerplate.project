@@ -12,7 +12,7 @@ app.directive('drivePlayer', ["$rootScope", "cfpLoadingBar", "DataManager", "Pla
 							title: name
 						});
 					});
-					console.log(scope.datas);
+					// console.log(scope.datas);
 				})
 				$rootScope.$watch('playerSelected', function() {
 					scope.selected = $rootScope.playerSelected;

@@ -191,8 +191,10 @@ app.controller('SlideCtrl', ["$scope", "$rootScope", "LoginManager", "GoogleServ
 
 			$scope.nextIndex = function(isSwipe) {
 				if ($scope.tool == DrawFactory.tools.MODE || isSwipe) {
-					VoiceManager.stop(SlideManager.index);
-					VoiceManager.start();
+					if (VoiceManager.isRecord()) {
+						VoiceManager.stop(SlideManager.index);
+						VoiceManager.start();
+					}
 					SlideManager.next();
 					$scope.isStart = SlideManager.isStart();
 					$scope.isEnd = SlideManager.isEnd();

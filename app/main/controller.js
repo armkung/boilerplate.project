@@ -8,41 +8,38 @@ app.controller('MainCtrl', ["$q", "$scope", "Canvas", "DrawManager", "SlideManag
 		}
 		$scope.$on('load_slide', function(e, id) {
 			DrawManager.clearAll();
-			
+
 			var deferred = $q.defer();
 			SlideManager.setMax(deferred);
 			PDFService.getPdf(id).then(function(pdf) {
+				$scope.pdf = pdf;
 				deferred.resolve(pdf, pdf.pdfInfo.numPages);
 			});
 		});
 		$scope.$on('save_slide', function(e, obj) {
-			var id = SlideManager.slide;
-			if (id) {
-				PDFService.getPdf(id).then(function(pdf) {
+			var pdf = $scope.pdf;
+			var n = obj.n || pdf.pdfInfo.numPages;
+			var mirrors = [];
+			for (var i = 1; i <= n; i++) {
+				var cs = loadCanvas(Canvas.types.MIRROR + "-" + i);
+				mirrors.push(cs);
+			}
 
-					var n = obj.n || pdf.pdfInfo.numPages;
-					var mirrors = [];
-					for (var i = 1; i <= n; i++) {
-						var cs = loadCanvas(Canvas.types.MIRROR + "-" + i);
-						mirrors.push(cs);
+			PDFService.init(mirrors);
+			if (obj.type == 'image') {
+				PDFService.renderImage(pdf, n, function(data, index) {
+					if (obj.callback) {
+						obj.callback(data, index);
 					}
-
-					PDFService.init(mirrors);
-					if (obj.type == 'image') {
-						PDFService.renderImage(pdf, n, function(data, index) {
-							if (obj.callback) {
-								obj.callback(data, index);
-							}
-						});
-					} else {
-						PDFService.renderPdf(pdf, n).then(function(data) {
-							if (obj.callback) {
-								obj.callback(data);
-							}
-						});
+				});
+			} else {
+				PDFService.renderPdf(pdf, n).then(function(data) {
+					if (obj.callback) {
+						obj.callback(data);
 					}
 				});
 			}
+
 		});
 	}
 ]);
@@ -100,7 +97,7 @@ app.controller('MenuLeftCtrl', ["$scope", "$sce", "$timeout", "$window", "Room",
 					});
 				}
 				VoiceManager.stop(SlideManager.index);
-				SlideManager.index++;
+				// SlideManager.index++;
 				cfpLoadingBar.start();
 				$scope.$broadcast('save_slide', {
 					type: 'image',
