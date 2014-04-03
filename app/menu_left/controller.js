@@ -188,7 +188,6 @@ app.controller('SlideCtrl', ["$scope", "$rootScope", "LoginManager", "GoogleServ
 			$scope.isStart = true;
 			$scope.isEnd = false;
 			$scope.id = "mirror-" + SlideManager.index;
-
 			$scope.nextIndex = function(isSwipe) {
 				if ($scope.tool == DrawFactory.tools.MODE || isSwipe) {
 					if (VoiceManager.isRecord()) {

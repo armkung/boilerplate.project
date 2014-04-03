@@ -29,9 +29,9 @@ app.directive('slidePad', ["$q", "$sce", "$state", "cfpLoadingBar", "DrawManager
 							SlideManager.max = data.max;
 						}
 					} else {
-						if (angular.isUndefined(SlideManager.slide)) {
-							$state.go('main.drive');
-						}
+						// if (angular.isUndefined(SlideManager.slide)) {
+						// 	$state.go('main.drive');
+						// }
 					}
 				});
 
@@ -39,8 +39,18 @@ app.directive('slidePad', ["$q", "$sce", "$state", "cfpLoadingBar", "DrawManager
 					scope.isInit = true;
 					changeSlide();
 					initSlide();
+					var unbind =scope.$watch(scope.send, function() {
+						if (scope.send) {
+							DataManager.setData(type, {
+								slide: SlideManager.slide,
+								index: 0,
+							});
+						}
+						unbind();
+					})
 				} else {
 					DataManager.initData(type);
+					initCanvas(SlideManager.index);
 				}
 				scope.$watch('slide.index', function(newV, oldV) {
 					if (newV != oldV) {
@@ -93,7 +103,7 @@ app.directive('slidePad', ["$q", "$sce", "$state", "cfpLoadingBar", "DrawManager
 
 				function initCanvas(newV, oldV) {
 					var name = id + "-";
-					// DataManager.initData(DataManager.types.POS, name + newV);
+					DataManager.initData(DataManager.types.POS, name + newV);
 					if (oldV) {
 						DrawManager.saveData(name + oldV);
 					}
