@@ -118,6 +118,7 @@ var Logger = function() {
 	this.logUser = function(id, user) {
 		if (data[room]) {
 			data[room].users[user.username] = {
+				display: user.display,
 				id: id,
 				email: user.email
 			}

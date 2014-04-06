@@ -41,6 +41,7 @@ app.service('GoogleService', ["$q",
 				}).execute(function(data) {
 					var username = data.displayName;
 					deferred.resolve({
+						display: data.image.url,
 						email: email,
 						username: username
 					});

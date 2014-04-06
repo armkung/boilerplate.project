@@ -278,7 +278,7 @@ app.controller('HomeTeacherCtrl', ["$scope", "$modal", "$rootScope", "Room", "So
 			};
 			$scope.close = function() {
 				Socket.emit("close:room", {}, function(emails) {
-					console.log(emails);
+					// console.log(emails);
 				});
 			};
 			$scope.selectDisplay = function() {
