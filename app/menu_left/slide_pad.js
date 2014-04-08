@@ -39,7 +39,7 @@ app.directive('slidePad', ["$q", "$sce", "$state", "cfpLoadingBar", "DrawManager
 					scope.isInit = true;
 					changeSlide();
 					initSlide();
-					var unbind =scope.$watch(scope.send, function() {
+					var unbind = scope.$watch(scope.send, function() {
 						if (scope.send) {
 							DataManager.setData(type, {
 								slide: SlideManager.slide,
@@ -48,10 +48,10 @@ app.directive('slidePad', ["$q", "$sce", "$state", "cfpLoadingBar", "DrawManager
 						}
 						unbind();
 					})
-				} else {
-					DataManager.initData(type);
-					initCanvas(SlideManager.index);
 				}
+				DataManager.initData(type);
+				initCanvas(SlideManager.index);
+
 				scope.$watch('slide.index', function(newV, oldV) {
 					if (newV != oldV) {
 						if (angular.isDefined(SlideManager.slide) && angular.isDefined(SlideManager.index)) {
